@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RPG do Cavaleiro</title>
+    <title>knight of valor</title>
     <style>
         * {
             margin: 0;
@@ -25,17 +25,14 @@
         }
         
         .game-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
-            max-width: 1000px;
+            position: relative;
             width: 100%;
+            max-width: 1000px;
         }
         
         .game-header {
             text-align: center;
-            margin-bottom: 10px;
+            margin-bottom: 20px;
         }
         
         h1 {
@@ -45,18 +42,10 @@
             text-shadow: 0 0 10px rgba(248, 197, 85, 0.5);
         }
         
-        .game-area {
-            display: flex;
-            gap: 20px;
-            width: 100%;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-        
         .game-board {
             position: relative;
-            width: 640px;
-            height: 480px;
+            width: 100%;
+            height: 600px;
             border: 4px solid #f8c555;
             border-radius: 8px;
             overflow: hidden;
@@ -68,39 +57,42 @@
             background-color: #0f3460;
         }
         
-        .game-ui {
+        .ui-overlay {
+            position: absolute;
+            top: 10px;
+            left: 10px;
             background: rgba(15, 52, 96, 0.8);
             border: 2px solid #f8c555;
             border-radius: 8px;
-            padding: 15px;
-            width: 300px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
-        }
-        
-        .player-stats {
-            margin-bottom: 20px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            min-width: 200px;
         }
         
         .stat-bar {
-            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         
         .stat-label {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 5px;
+            width: 60px;
+            font-weight: bold;
         }
         
         .bar-container {
-            height: 20px;
+            flex: 1;
+            height: 16px;
             background: rgba(0, 0, 0, 0.3);
-            border-radius: 10px;
+            border-radius: 8px;
             overflow: hidden;
         }
         
         .bar-fill {
             height: 100%;
-            border-radius: 10px;
+            border-radius: 8px;
             transition: width 0.3s ease;
         }
         
@@ -112,170 +104,416 @@
             background: linear-gradient(90deg, #3498db, #9b59b6);
         }
         
-        .controls {
+        .money-display {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 5px;
+        }
+        
+        .inventory-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(15, 52, 96, 0.8);
+            border: 2px solid #f8c555;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .inventory-btn:hover {
+            background: rgba(248, 197, 85, 0.2);
+            transform: scale(1.1);
+        }
+        
+        /* Tela de Combate */
+        .battle-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+        
+        .battle-container {
+            width: 90%;
+            height: 90%;
+            background: #1a3a5f;
+            border: 4px solid #f8c555;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+        
+        .battle-scene {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            position: relative;
+        }
+        
+        .battle-character {
+            text-align: center;
+        }
+        
+        .battle-stats {
+            position: absolute;
+            top: 10px;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 20px;
+        }
+        
+        .player-stats, .enemy-stats {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 5px;
+            min-width: 150px;
+        }
+        
+        .battle-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
             margin-top: 20px;
         }
         
-        .controls h3 {
-            margin-bottom: 10px;
-            color: #f8c555;
-        }
-        
-        .control-keys {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            text-align: center;
-        }
-        
-        .key {
-            background: rgba(248, 197, 85, 0.2);
-            border: 1px solid #f8c555;
+        .battle-btn {
+            background: #f8c555;
+            color: #1a1a2e;
+            border: none;
             border-radius: 5px;
-            padding: 8px;
+            padding: 10px 20px;
+            font-size: 1rem;
             font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
         }
         
-        .key.active {
-            background: rgba(248, 197, 85, 0.5);
-            transform: scale(0.95);
+        .battle-btn:hover {
+            background: #ffd700;
+            transform: scale(1.05);
         }
         
-        .center-key {
-            grid-column: 2;
+        .battle-log {
+            height: 100px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 5px;
+            padding: 10px;
+            margin-top: 20px;
+            overflow-y: auto;
+            font-size: 0.9rem;
         }
         
-        .game-info {
-            background: rgba(15, 52, 96, 0.8);
-            border: 2px solid #f8c555;
-            border-radius: 8px;
-            padding: 15px;
+        .attack-options {
+            display: none;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        
+        .inventory-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
-            margin-top: 10px;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 20;
+        }
+        
+        .inventory-container {
+            background: #1a3a5f;
+            border: 4px solid #f8c555;
+            border-radius: 8px;
+            padding: 20px;
+            width: 80%;
+            max-width: 600px;
+            max-height: 80%;
+            overflow-y: auto;
+        }
+        
+        .inventory-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .close-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 5px;
+        }
+        
+        .upgrade-points {
+            margin: 10px 0;
             text-align: center;
+        }
+        
+        .upgrade-btn {
+            background: #2ecc71;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            margin-left: 10px;
+            cursor: pointer;
+        }
+        
+        .cooldown-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            z-index: 5;
         }
         
         .instructions {
             margin-top: 15px;
-            font-size: 0.9rem;
+            text-align: center;
             color: #ccc;
-        }
-        
-        @media (max-width: 1000px) {
-            .game-area {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .game-board {
-                width: 100%;
-                max-width: 640px;
-            }
-            
-            .game-ui {
-                width: 100%;
-                max-width: 640px;
-            }
         }
     </style>
 </head>
 <body>
     <div class="game-container">
         <div class="game-header">
-            <h1>RPG do Cavaleiro</h1>
-            <p>Explore um mundo gerado proceduralmente!</p>
+            <h1>Knight of Valor</h1>
         </div>
         
-        <div class="game-area">
-            <div class="game-board">
-                <canvas id="gameCanvas" width="640" height="480"></canvas>
-            </div>
+        <div class="game-board">
+            <canvas id="gameCanvas" width="1000" height="600"></canvas>
             
-            <div class="game-ui">
-                <div class="player-stats">
-                    <h2>Status do Cavaleiro</h2>
-                    <div class="stat-bar">
-                        <div class="stat-label">
-                            <span>Nível: <span id="level">1</span></span>
-                            <span>Saúde: <span id="health">100</span>/<span id="maxHealth">100</span></span>
-                        </div>
-                        <div class="bar-container">
-                            <div id="healthBar" class="bar-fill health-bar" style="width: 100%"></div>
-                        </div>
+            <div class="ui-overlay">
+                <div class="stat-bar">
+                    <div class="stat-label">HP:</div>
+                    <div class="bar-container">
+                        <div id="healthBar" class="bar-fill health-bar" style="width: 100%"></div>
                     </div>
-                    
-                    <div class="stat-bar">
-                        <div class="stat-label">
-                            <span>Experiência</span>
-                            <span><span id="exp">0</span>/<span id="expToNext">100</span></span>
-                        </div>
-                        <div class="bar-container">
-                            <div id="expBar" class="bar-fill exp-bar" style="width: 0%"></div>
-                        </div>
-                    </div>
-                    
-                    <div class="stat-bar">
-                        <div class="stat-label">
-                            <span>Ataque: <span id="attack">10</span></span>
-                            <span>Defesa: <span id="defense">5</span></span>
-                        </div>
-                    </div>
+                    <span id="healthText">100/100</span>
                 </div>
                 
-                <div class="controls">
-                    <h3>Controles</h3>
-                    <div class="control-keys">
-                        <div class="key" id="keyW">W</div>
-                        <div class="key" id="keyA">A</div>
-                        <div class="key" id="keyS">S</div>
-                        <div class="key" id="keyD">D</div>
-                        <div class="key center-key" id="keyUp">↑</div>
-                        <div class="key" id="keyLeft">←</div>
-                        <div class="key" id="keyDown">↓</div>
-                        <div class="key" id="keyRight">→</div>
+                <div class="stat-bar">
+                    <div class="stat-label">EXP:</div>
+                    <div class="bar-container">
+                        <div id="expBar" class="bar-fill exp-bar" style="width: 0%"></div>
+                    </div>
+                    <span id="expText">0/100</span>
+                </div>
+                
+                <div class="money-display">
+                    <span>💰</span>
+                    <span id="moneyText">100</span>
+                </div>
+            </div>
+            
+            <div class="inventory-btn" id="inventoryBtn">
+                🎒
+            </div>
+            
+            <div class="cooldown-overlay" id="cooldownOverlay">
+                Aguarde...
+            </div>
+            
+            <!-- Tela de Combate -->
+            <div class="battle-screen" id="battleScreen">
+                <div class="battle-container">
+                    <div class="battle-stats">
+                        <div class="player-stats">
+                            <div>Jogador - Nível <span id="battlePlayerLevel">1</span></div>
+                            <div>HP: <span id="battlePlayerHealth">100</span>/<span id="battlePlayerMaxHealth">100</span></div>
+                        </div>
+                        <div class="enemy-stats">
+                            <div id="enemyName">Monstro</div>
+                            <div>Nível: <span id="battleEnemyLevel">1</span></div>
+                            <div>HP: <span id="battleEnemyHealth">20</span>/<span id="battleEnemyMaxHealth">20</span></div>
+                        </div>
+                    </div>
+                    
+                    <div class="battle-scene">
+                        <div class="battle-character">
+                            <div id="playerBattleSprite"></div>
+                            <div>Jogador</div>
+                        </div>
+                        <div class="battle-character">
+                            <div id="enemyBattleSprite"></div>
+                            <div id="enemyBattleName">Monstro</div>
+                        </div>
+                    </div>
+                    
+                    <div class="battle-log" id="battleLog">
+                        Uma batalha começou!
+                    </div>
+                    
+                    <div class="battle-actions" id="battleActions">
+                        <button class="battle-btn" id="attackBtn">ATACAR</button>
+                        <button class="battle-btn" id="itemsBtn">ITENS</button>
+                        <button class="battle-btn" id="actBtn">AGIR</button>
+                    </div>
+                    
+                    <div class="attack-options" id="attackOptions">
+                        <button class="battle-btn" id="swordAttackBtn">ESPAÇADA</button>
+                        <button class="battle-btn" id="magicAttackBtn">PODER MÁGICO</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tela de Inventário -->
+            <div class="inventory-screen" id="inventoryScreen">
+                <div class="inventory-container">
+                    <div class="inventory-header">
+                        <h2>Inventário e Status</h2>
+                        <button class="close-btn" id="closeInventoryBtn">Fechar</button>
+                    </div>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <span>Nível:</span>
+                            <span id="inventoryLevel">1</span>
+                        </div>
+                        <div class="stat-item">
+                            <span>Experiência:</span>
+                            <span id="inventoryExp">0/100</span>
+                        </div>
+                        <div class="stat-item">
+                            <span>Dinheiro:</span>
+                            <span id="inventoryMoney">100</span>
+                        </div>
+                        <div class="stat-item">
+                            <span>Pontos de Upgrade:</span>
+                            <span id="upgradePoints">0</span>
+                        </div>
+                    </div>
+                    
+                    <div class="upgrade-points" id="upgradeSection">
+                        <h3>Atributos</h3>
+                        <div class="stat-item">
+                            <span>HP: <span id="statHp">10</span></span>
+                            <button class="upgrade-btn" data-stat="hp">+</button>
+                        </div>
+                        <div class="stat-item">
+                            <span>Força: <span id="statStr">10</span></span>
+                            <button class="upgrade-btn" data-stat="str">+</button>
+                        </div>
+                        <div class="stat-item">
+                            <span>Agilidade: <span id="statAgi">10</span></span>
+                            <button class="upgrade-btn" data-stat="agi">+</button>
+                        </div>
+                        <div class="stat-item">
+                            <span>Defesa: <span id="statDef">10</span></span>
+                            <button class="upgrade-btn" data-stat="def">+</button>
+                        </div>
+                        <div class="stat-item">
+                            <span>Magia: <span id="statMag">10</span></span>
+                            <button class="upgrade-btn" data-stat="mag">+</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
         
-        <div class="game-info">
-            <p>Use as teclas WASD ou as setas do teclado para mover o cavaleiro pelo mundo.</p>
-            <p class="instructions">O mapa é gerado proceduralmente - cada movimento revela novas áreas!</p>
+        <div class="instructions">
+            <p>Use as teclas WASD ou setas para mover o cavaleiro. Cada movimento tem um tempo de recarga.</p>
         </div>
     </div>
 
     <script>
         // Configurações do jogo
         const TILE_SIZE = 64;
-        const MAP_WIDTH = 10;  // Largura do mapa visível
-        const MAP_HEIGHT = 8;  // Altura do mapa visível
-        const WORLD_SIZE = 100; // Tamanho do mundo (100x100 tiles)
+        const MAP_WIDTH = 16;  // Largura do mapa visível
+        const MAP_HEIGHT = 10; // Altura do mapa visível
+        const WORLD_SIZE = 200; // Tamanho do mundo (200x200 tiles)
+        const MOVE_COOLDOWN = 600; // 0.6 segundos entre movimentos
+        const MONSTER_SPAWN_CHANCE = 0.3; // 30% de chance de spawnar monstro a cada 3 tiles
 
         // Elementos do DOM
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
         
         // Elementos de UI
-        const levelElement = document.getElementById('level');
-        const healthElement = document.getElementById('health');
-        const maxHealthElement = document.getElementById('maxHealth');
         const healthBar = document.getElementById('healthBar');
-        const expElement = document.getElementById('exp');
-        const expToNextElement = document.getElementById('expToNext');
+        const healthText = document.getElementById('healthText');
         const expBar = document.getElementById('expBar');
-        const attackElement = document.getElementById('attack');
-        const defenseElement = document.getElementById('defense');
+        const expText = document.getElementById('expText');
+        const moneyText = document.getElementById('moneyText');
         
-        // Elementos de controle
-        const keyW = document.getElementById('keyW');
-        const keyA = document.getElementById('keyA');
-        const keyS = document.getElementById('keyS');
-        const keyD = document.getElementById('keyD');
-        const keyUp = document.getElementById('keyUp');
-        const keyLeft = document.getElementById('keyLeft');
-        const keyDown = document.getElementById('keyDown');
-        const keyRight = document.getElementById('keyRight');
-
+        // Elementos de batalha
+        const battleScreen = document.getElementById('battleScreen');
+        const battlePlayerLevel = document.getElementById('battlePlayerLevel');
+        const battlePlayerHealth = document.getElementById('battlePlayerHealth');
+        const battlePlayerMaxHealth = document.getElementById('battlePlayerMaxHealth');
+        const battleEnemyLevel = document.getElementById('battleEnemyLevel');
+        const battleEnemyHealth = document.getElementById('battleEnemyHealth');
+        const battleEnemyMaxHealth = document.getElementById('battleEnemyMaxHealth');
+        const enemyName = document.getElementById('enemyName');
+        const battleLog = document.getElementById('battleLog');
+        const battleActions = document.getElementById('battleActions');
+        const attackOptions = document.getElementById('attackOptions');
+        const attackBtn = document.getElementById('attackBtn');
+        const swordAttackBtn = document.getElementById('swordAttackBtn');
+        const magicAttackBtn = document.getElementById('magicAttackBtn');
+        
+        // Elementos de inventário
+        const inventoryScreen = document.getElementById('inventoryScreen');
+        const inventoryBtn = document.getElementById('inventoryBtn');
+        const closeInventoryBtn = document.getElementById('closeInventoryBtn');
+        const inventoryLevel = document.getElementById('inventoryLevel');
+        const inventoryExp = document.getElementById('inventoryExp');
+        const inventoryMoney = document.getElementById('inventoryMoney');
+        const upgradePoints = document.getElementById('upgradePoints');
+        const cooldownOverlay = document.getElementById('cooldownOverlay');
+        
+        // Elementos de status
+        const statHp = document.getElementById('statHp');
+        const statStr = document.getElementById('statStr');
+        const statAgi = document.getElementById('statAgi');
+        const statDef = document.getElementById('statDef');
+        const statMag = document.getElementById('statMag');
+        
         // Cores
         const COLORS = {
             GRASS: '#2ecc71',
@@ -287,7 +525,10 @@
             MOUNTAIN: '#95a5a6',
             MOUNTAIN_DARK: '#7f8c8d',
             PATH: '#d35400',
-            PATH_DARK: '#ba4a00'
+            PATH_DARK: '#ba4a00',
+            FLOWER1: '#e74c3c',
+            FLOWER2: '#9b59b6',
+            FLOWER3: '#f1c40f'
         };
 
         // Classe do Jogador
@@ -296,45 +537,67 @@
                 this.level = 1;
                 this.x = WORLD_SIZE / 2;
                 this.y = WORLD_SIZE / 2;
-                this.health = 100;
-                this.maxHealth = 100;
-                this.attack = 10;
-                this.defense = 5;
+                this.money = 100;
                 this.exp = 0;
                 this.expToNextLevel = 100;
+                this.upgradePoints = 0;
+                
+                // Atributos base
+                this.baseHp = 10;
+                this.baseStr = 10;
+                this.baseAgi = 10;
+                this.baseDef = 10;
+                this.baseMag = 10;
+                
+                // Atributos atuais (com multiplicadores)
+                this.maxHealth = Math.floor(this.baseHp * 10);
+                this.health = this.maxHealth;
+                this.strength = this.baseStr;
+                this.agility = this.baseAgi;
+                this.defense = this.baseDef;
+                this.magic = this.baseMag;
+                
+                this.dodgeChance = 0.004; // 0.4% base
+                this.moveCooldown = 0;
+                this.stepsTaken = 0;
             }
             
             draw() {
                 const centerX = canvas.width / 2;
                 const centerY = canvas.height / 2;
                 
-                // Desenhar o cavaleiro
-                ctx.fillStyle = '#7f8c8d'; // Cor da armadura
-                ctx.fillRect(centerX - TILE_SIZE/2, centerY - TILE_SIZE/2, TILE_SIZE, TILE_SIZE);
+                // Desenhar o cavaleiro melhorado
+                // Corpo
+                ctx.fillStyle = '#34495e';
+                ctx.fillRect(centerX - 20, centerY - 15, 40, 30);
+                
+                // Cabeça
+                ctx.fillStyle = '#ecf0f1';
+                ctx.fillRect(centerX - 10, centerY - 25, 20, 10);
                 
                 // Capacete
                 ctx.fillStyle = '#95a5a6';
-                ctx.fillRect(centerX - TILE_SIZE/4, centerY - TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/3);
+                ctx.fillRect(centerX - 12, centerY - 27, 24, 5);
+                ctx.fillRect(centerX - 15, centerY - 22, 30, 3);
                 
                 // Escudo
-                ctx.fillStyle = '#34495e';
-                ctx.fillRect(centerX - TILE_SIZE/2 + 5, centerY - TILE_SIZE/4, TILE_SIZE/4, TILE_SIZE/2);
+                ctx.fillStyle = '#2c3e50';
+                ctx.fillRect(centerX - 25, centerY - 10, 8, 20);
                 
                 // Espada
-                ctx.strokeStyle = '#ecf0f1';
-                ctx.lineWidth = 5;
-                ctx.beginPath();
-                ctx.moveTo(centerX + TILE_SIZE/4, centerY - TILE_SIZE/4);
-                ctx.lineTo(centerX + TILE_SIZE/2, centerY + TILE_SIZE/4);
-                ctx.stroke();
+                ctx.fillStyle = '#bdc3c7';
+                ctx.fillRect(centerX + 15, centerY - 12, 3, 24);
+                ctx.fillRect(centerX + 10, centerY - 15, 13, 6);
                 
                 // Detalhes da armadura
                 ctx.strokeStyle = '#2c3e50';
                 ctx.lineWidth = 2;
-                ctx.strokeRect(centerX - TILE_SIZE/2, centerY - TILE_SIZE/2, TILE_SIZE, TILE_SIZE);
+                ctx.strokeRect(centerX - 20, centerY - 15, 40, 30);
             }
             
             move(dx, dy, worldMap) {
+                if (this.moveCooldown > 0) return false;
+                
                 const newX = this.x + dx;
                 const newY = this.y + dy;
                 
@@ -344,69 +607,224 @@
                     if (worldMap[Math.floor(newY)][Math.floor(newX)] !== 1) {
                         this.x = newX;
                         this.y = newY;
+                        this.moveCooldown = MOVE_COOLDOWN;
+                        this.stepsTaken++;
+                        
+                        // Verificar se deve spawnar um monstro (a cada 3 passos)
+                        if (this.stepsTaken % 3 === 0 && Math.random() < MONSTER_SPAWN_CHANCE) {
+                            return 'monster';
+                        }
+                        
                         return true;
                     }
                 }
                 return false;
             }
             
+            update(deltaTime) {
+                if (this.moveCooldown > 0) {
+                    this.moveCooldown -= deltaTime;
+                    if (this.moveCooldown < 0) this.moveCooldown = 0;
+                }
+            }
+            
             updateUI() {
-                levelElement.textContent = this.level;
-                healthElement.textContent = this.health;
-                maxHealthElement.textContent = this.maxHealth;
                 healthBar.style.width = `${(this.health / this.maxHealth) * 100}%`;
-                expElement.textContent = this.exp;
-                expToNextElement.textContent = this.expToNextLevel;
+                healthText.textContent = `${this.health}/${this.maxHealth}`;
                 expBar.style.width = `${(this.exp / this.expToNextLevel) * 100}%`;
-                attackElement.textContent = this.attack;
-                defenseElement.textContent = this.defense;
+                expText.textContent = `${this.exp}/${this.expToNextLevel}`;
+                moneyText.textContent = this.money;
+                
+                // Atualizar inventário
+                inventoryLevel.textContent = this.level;
+                inventoryExp.textContent = `${this.exp}/${this.expToNextLevel}`;
+                inventoryMoney.textContent = this.money;
+                upgradePoints.textContent = this.upgradePoints;
+                
+                statHp.textContent = this.baseHp;
+                statStr.textContent = this.baseStr;
+                statAgi.textContent = this.baseAgi;
+                statDef.textContent = this.baseDef;
+                statMag.textContent = this.baseMag;
+                
+                // Atualizar tela de batalha
+                battlePlayerLevel.textContent = this.level;
+                battlePlayerHealth.textContent = this.health;
+                battlePlayerMaxHealth.textContent = this.maxHealth;
+            }
+            
+            takeDamage(damage) {
+                // Calcular dano com defesa
+                const actualDamage = Math.max(1, Math.floor(damage - (this.defense * 0.1)));
+                this.health -= actualDamage;
+                if (this.health < 0) this.health = 0;
+                return actualDamage;
+            }
+            
+            addExp(amount) {
+                this.exp += amount;
+                if (this.exp >= this.expToNextLevel) {
+                    this.levelUp();
+                }
+            }
+            
+            levelUp() {
+                this.level++;
+                this.exp -= this.expToNextLevel;
+                this.expToNextLevel = Math.floor(this.expToNextLevel * 1.5);
+                this.upgradePoints += 1;
+                
+                // Aumentar stats base ao subir de nível
+                this.baseHp += 1;
+                this.baseStr += 1;
+                this.baseAgi += 1;
+                this.baseDef += 1;
+                this.baseMag += 1;
+                
+                this.recalculateStats();
+            }
+            
+            upgradeStat(stat) {
+                if (this.upgradePoints > 0) {
+                    this.upgradePoints--;
+                    
+                    switch(stat) {
+                        case 'hp':
+                            this.baseHp += 1;
+                            break;
+                        case 'str':
+                            this.baseStr += 1;
+                            break;
+                        case 'agi':
+                            this.baseAgi += 1;
+                            break;
+                        case 'def':
+                            this.baseDef += 1;
+                            break;
+                        case 'mag':
+                            this.baseMag += 1;
+                            break;
+                    }
+                    
+                    this.recalculateStats();
+                }
+            }
+            
+            recalculateStats() {
+                // Recalcular stats com multiplicadores
+                this.maxHealth = Math.floor(this.baseHp * 10);
+                this.strength = this.baseStr;
+                this.agility = this.baseAgi;
+                this.defense = this.baseDef;
+                this.magic = this.baseMag;
+                
+                // Recalcular chance de esquiva baseada na agilidade
+                this.dodgeChance = 0.004 + (this.baseAgi - 10) * 0.003;
+            }
+            
+            swordAttack() {
+                const baseDamage = 5 + Math.floor(this.strength * 0.5);
+                const isCritical = Math.random() < 0.05; // 5% de chance de crítico
+                
+                if (isCritical) {
+                    return Math.floor(baseDamage * 2);
+                }
+                
+                return baseDamage;
             }
         }
 
-        // Gerar mapa procedural
+        // Classe do Monstro
+        class Monster {
+            constructor(type) {
+                this.type = type;
+                
+                if (type === 'weak') {
+                    this.name = "Goblin Fraco";
+                    this.maxHealth = 17;
+                    this.health = this.maxHealth;
+                    this.attack = 3;
+                    this.level = 1;
+                } else if (type === 'strong') {
+                    this.name = "Orc Forte";
+                    this.maxHealth = 35;
+                    this.health = this.maxHealth;
+                    this.attack = 10;
+                    this.level = 3;
+                } else if (type === 'elite') {
+                    this.name = "Dragão de Elite";
+                    this.maxHealth = 100;
+                    this.health = this.maxHealth;
+                    this.attack = 25;
+                    this.level = 5;
+                }
+                
+                // Atributos aleatórios
+                this.defense = Math.floor(Math.random() * 5) + 1;
+                this.agility = Math.floor(Math.random() * 5) + 1;
+                this.magic = Math.floor(Math.random() * 5) + 1;
+            }
+            
+            takeDamage(damage) {
+                const actualDamage = Math.max(1, Math.floor(damage - (this.defense * 0.1)));
+                this.health -= actualDamage;
+                if (this.health < 0) this.health = 0;
+                return actualDamage;
+            }
+            
+            attackPlayer(player) {
+                return this.attack;
+            }
+        }
+
+        // Gerar mapa procedural melhorado
         function generateWorldMap() {
             const map = Array(WORLD_SIZE).fill().map(() => Array(WORLD_SIZE).fill(0));
             
-            // Adicionar corpos de água
-            for (let i = 0; i < 5; i++) {
+            // Adicionar corpos de água melhorados
+            for (let i = 0; i < 8; i++) {
                 const x = Math.floor(Math.random() * WORLD_SIZE);
                 const y = Math.floor(Math.random() * WORLD_SIZE);
                 addWaterBody(map, x, y);
             }
             
-            // Adicionar florestas
-            for (let i = 0; i < 10; i++) {
+            // Adicionar florestas com mais árvores
+            for (let i = 0; i < 15; i++) {
                 const x = Math.floor(Math.random() * WORLD_SIZE);
                 const y = Math.floor(Math.random() * WORLD_SIZE);
                 addForest(map, x, y);
             }
             
-            // Adicionar montanhas
-            for (let i = 0; i < 8; i++) {
+            // Adicionar montanhas melhoradas
+            for (let i = 0; i < 12; i++) {
                 const x = Math.floor(Math.random() * WORLD_SIZE);
                 const y = Math.floor(Math.random() * WORLD_SIZE);
                 addMountain(map, x, y);
             }
             
             // Adicionar caminhos
-            for (let i = 0; i < 3; i++) {
+            for (let i = 0; i < 5; i++) {
                 const x = Math.floor(Math.random() * WORLD_SIZE);
                 const y = Math.floor(Math.random() * WORLD_SIZE);
                 addPath(map, x, y);
             }
             
+            // Adicionar flores na grama
+            addFlowers(map);
+            
             return map;
         }
         
         function addWaterBody(map, x, y) {
-            const size = 3 + Math.floor(Math.random() * 5);
+            const size = 4 + Math.floor(Math.random() * 6);
             for (let i = -size; i < size; i++) {
                 for (let j = -size; j < size; j++) {
                     const newX = x + i;
                     const newY = y + j;
                     if (newX >= 0 && newX < WORLD_SIZE && newY >= 0 && newY < WORLD_SIZE) {
                         const dist = Math.sqrt(i*i + j*j);
-                        if (dist < size && Math.random() < 0.7) {
+                        // Criar formas mais orgânicas para a água
+                        if (dist < size * (0.7 + Math.random() * 0.3)) {
                             map[newY][newX] = 1; // Água
                         }
                     }
@@ -415,14 +833,14 @@
         }
         
         function addForest(map, x, y) {
-            const size = 4 + Math.floor(Math.random() * 6);
+            const size = 5 + Math.floor(Math.random() * 8);
             for (let i = -size; i < size; i++) {
                 for (let j = -size; j < size; j++) {
                     const newX = x + i;
                     const newY = y + j;
                     if (newX >= 0 && newX < WORLD_SIZE && newY >= 0 && newY < WORLD_SIZE) {
                         const dist = Math.sqrt(i*i + j*j);
-                        if (dist < size && Math.random() < 0.6 && map[newY][newX] === 0) {
+                        if (dist < size && Math.random() < 0.7 && map[newY][newX] === 0) {
                             map[newY][newX] = 2; // Floresta
                         }
                     }
@@ -431,14 +849,15 @@
         }
         
         function addMountain(map, x, y) {
-            const size = 3 + Math.floor(Math.random() * 4);
+            const size = 4 + Math.floor(Math.random() * 5);
             for (let i = -size; i < size; i++) {
                 for (let j = -size; j < size; j++) {
                     const newX = x + i;
                     const newY = y + j;
                     if (newX >= 0 && newX < WORLD_SIZE && newY >= 0 && newY < WORLD_SIZE) {
                         const dist = Math.sqrt(i*i + j*j);
-                        if (dist < size && Math.random() < 0.7 && map[newY][newX] === 0) {
+                        // Criar montanhas mais realistas
+                        if (dist < size * (0.8 + Math.random() * 0.2) && Math.random() < 0.8 && map[newY][newX] === 0) {
                             map[newY][newX] = 3; // Montanha
                         }
                     }
@@ -447,7 +866,7 @@
         }
         
         function addPath(map, x, y) {
-            const length = 10 + Math.floor(Math.random() * 20);
+            const length = 15 + Math.floor(Math.random() * 25);
             let dirX = Math.random() < 0.5 ? 1 : -1;
             let dirY = Math.random() < 0.5 ? 1 : -1;
             
@@ -460,14 +879,14 @@
                         map[y][x] = 4; // Caminho
                     }
                     
-                    // Ocasionalmente mudar direção
-                    if (Math.random() < 0.2) {
+                    // Mudar direção ocasionalmente de forma mais suave
+                    if (Math.random() < 0.15) {
                         if (dirX !== 0) {
-                            dirX = 0;
                             dirY = Math.random() < 0.5 ? 1 : -1;
+                            dirX = 0;
                         } else {
-                            dirY = 0;
                             dirX = Math.random() < 0.5 ? 1 : -1;
+                            dirY = 0;
                         }
                     }
                     
@@ -476,8 +895,19 @@
                 }
             }
         }
+        
+        function addFlowers(map) {
+            // Adicionar flores aleatórias na grama
+            for (let y = 0; y < WORLD_SIZE; y++) {
+                for (let x = 0; x < WORLD_SIZE; x++) {
+                    if (map[y][x] === 0 && Math.random() < 0.02) { // 2% de chance em tiles de grama
+                        map[y][x] = 5; // Flor
+                    }
+                }
+            }
+        }
 
-        // Desenhar o mapa
+        // Desenhar o mapa melhorado
         function drawMap(worldMap, player) {
             const offsetX = player.x - MAP_WIDTH / 2;
             const offsetY = player.y - MAP_HEIGHT / 2;
@@ -511,6 +941,9 @@
                         case 4: // Caminho
                             color = COLORS.PATH;
                             break;
+                        case 5: // Flor
+                            color = COLORS.GRASS; // Base é grama
+                            break;
                     }
                     
                     // Desenhar o tile
@@ -518,64 +951,249 @@
                     ctx.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
                     
                     // Adicionar detalhes aos tiles
-                    ctx.fillStyle = color === COLORS.GRASS ? COLORS.GRASS_DARK : 
-                                   color === COLORS.WATER ? COLORS.WATER_DARK :
-                                   color === COLORS.FOREST ? COLORS.FOREST_DARK :
-                                   color === COLORS.MOUNTAIN ? COLORS.MOUNTAIN_DARK :
-                                   COLORS.PATH_DARK;
-                    
-                    // Padrões diferentes para cada tipo de tile
                     if (tileType === 0) { // Grama
-                        for (let i = 0; i < 3; i++) {
-                            const detailX = x * TILE_SIZE + 5 + Math.random() * (TILE_SIZE - 10);
-                            const detailY = y * TILE_SIZE + 5 + Math.random() * (TILE_SIZE - 10);
+                        // Mais detalhes na grama
+                        ctx.fillStyle = COLORS.GRASS_DARK;
+                        for (let i = 0; i < 5; i++) {
+                            const detailX = x * TILE_SIZE + 3 + Math.random() * (TILE_SIZE - 6);
+                            const detailY = y * TILE_SIZE + 3 + Math.random() * (TILE_SIZE - 6);
                             ctx.fillRect(detailX, detailY, 2, 2);
                         }
                     } else if (tileType === 1) { // Água
-                        for (let i = 0; i < 2; i++) {
+                        // Ondas mais realistas
+                        ctx.fillStyle = COLORS.WATER_DARK;
+                        for (let i = 0; i < 4; i++) {
                             const waveX = x * TILE_SIZE + 10 + Math.random() * (TILE_SIZE - 20);
                             const waveY = y * TILE_SIZE + 10 + Math.random() * (TILE_SIZE - 20);
                             ctx.beginPath();
-                            ctx.ellipse(waveX, waveY, 8, 4, 0, 0, Math.PI * 2);
+                            ctx.ellipse(waveX, waveY, 10, 5, Math.random() * Math.PI, 0, Math.PI * 2);
                             ctx.fill();
                         }
                     } else if (tileType === 2) { // Floresta
+                        // Árvores mais detalhadas
                         const treeX = x * TILE_SIZE + TILE_SIZE / 2;
                         const treeY = y * TILE_SIZE + TILE_SIZE / 2;
                         
                         // Tronco
                         ctx.fillStyle = '#8B4513';
-                        ctx.fillRect(treeX - 3, treeY, 6, TILE_SIZE / 2);
+                        ctx.fillRect(treeX - 4, treeY, 8, TILE_SIZE / 2);
                         
-                        // Copa
+                        // Copa da árvore com múltiplas camadas
                         ctx.fillStyle = COLORS.FOREST_DARK;
                         ctx.beginPath();
-                        ctx.arc(treeX, treeY - 5, TILE_SIZE / 3, 0, Math.PI * 2);
+                        ctx.arc(treeX, treeY - 8, TILE_SIZE / 3, 0, Math.PI * 2);
+                        ctx.fill();
+                        
+                        ctx.fillStyle = '#229954';
+                        ctx.beginPath();
+                        ctx.arc(treeX - 5, treeY - 10, TILE_SIZE / 4, 0, Math.PI * 2);
+                        ctx.arc(treeX + 5, treeY - 10, TILE_SIZE / 4, 0, Math.PI * 2);
                         ctx.fill();
                     } else if (tileType === 3) { // Montanha
-                        for (let i = 0; i < 3; i++) {
+                        // Montanhas mais realistas
+                        ctx.fillStyle = COLORS.MOUNTAIN_DARK;
+                        for (let i = 0; i < 5; i++) {
                             const rockX = x * TILE_SIZE + 5 + Math.random() * (TILE_SIZE - 10);
                             const rockY = y * TILE_SIZE + 5 + Math.random() * (TILE_SIZE - 10);
                             ctx.beginPath();
-                            ctx.ellipse(rockX, rockY, 6, 4, 0, 0, Math.PI * 2);
+                            ctx.ellipse(rockX, rockY, 8, 5, Math.random() * Math.PI, 0, Math.PI * 2);
+                            ctx.fill();
+                        }
+                        
+                        // Neve no topo (para montanhas altas)
+                        if (Math.random() < 0.3) {
+                            ctx.fillStyle = '#ecf0f1';
+                            ctx.beginPath();
+                            ctx.moveTo(x * TILE_SIZE + 10, y * TILE_SIZE + 15);
+                            ctx.lineTo(x * TILE_SIZE + TILE_SIZE - 10, y * TILE_SIZE + 15);
+                            ctx.lineTo(x * TILE_SIZE + TILE_SIZE / 2, y * TILE_SIZE + 5);
+                            ctx.closePath();
                             ctx.fill();
                         }
                     } else if (tileType === 4) { // Caminho
-                        for (let i = 0; i < 2; i++) {
+                        // Detalhes do caminho
+                        ctx.fillStyle = COLORS.PATH_DARK;
+                        for (let i = 0; i < 4; i++) {
                             const stoneX = x * TILE_SIZE + 5 + Math.random() * (TILE_SIZE - 10);
                             const stoneY = y * TILE_SIZE + 5 + Math.random() * (TILE_SIZE - 10);
                             ctx.beginPath();
-                            ctx.ellipse(stoneX, stoneY, 4, 3, 0, 0, Math.PI * 2);
+                            ctx.ellipse(stoneX, stoneY, 6, 4, 0, 0, Math.PI * 2);
                             ctx.fill();
                         }
+                    } else if (tileType === 5) { // Flor
+                        // Desenhar flor
+                        const flowerX = x * TILE_SIZE + TILE_SIZE / 2;
+                        const flowerY = y * TILE_SIZE + TILE_SIZE / 2;
+                        
+                        // Caule
+                        ctx.fillStyle = '#27ae60';
+                        ctx.fillRect(flowerX - 1, flowerY, 2, TILE_SIZE / 3);
+                        
+                        // Pétalas
+                        const flowerColor = [COLORS.FLOWER1, COLORS.FLOWER2, COLORS.FLOWER3][Math.floor(Math.random() * 3)];
+                        ctx.fillStyle = flowerColor;
+                        ctx.beginPath();
+                        ctx.arc(flowerX, flowerY - 5, 5, 0, Math.PI * 2);
+                        ctx.fill();
+                        
+                        // Centro da flor
+                        ctx.fillStyle = '#f1c40f';
+                        ctx.beginPath();
+                        ctx.arc(flowerX, flowerY - 5, 2, 0, Math.PI * 2);
+                        ctx.fill();
                     }
                 }
+            }
+        }
+
+        // Sistema de Batalha
+        let currentMonster = null;
+        let isPlayerTurn = true;
+        let battleAnimation = null;
+        
+        function startBattle(monsterType) {
+            currentMonster = new Monster(monsterType);
+            isPlayerTurn = true;
+            battleAnimation = null;
+            
+            // Atualizar UI da batalha
+            battleEnemyLevel.textContent = currentMonster.level;
+            battleEnemyHealth.textContent = currentMonster.health;
+            battleEnemyMaxHealth.textContent = currentMonster.maxHealth;
+            enemyName.textContent = currentMonster.name;
+            
+            battleLog.textContent = `Um ${currentMonster.name} apareceu!`;
+            battleActions.style.display = 'flex';
+            attackOptions.style.display = 'none';
+            
+            // Mostrar tela de batalha
+            battleScreen.style.display = 'flex';
+            
+            // Criar sprites simples para a batalha
+            document.getElementById('playerBattleSprite').innerHTML = '⚔️';
+            document.getElementById('enemyBattleSprite').innerHTML = getMonsterEmoji(monsterType);
+            document.getElementById('enemyBattleName').textContent = currentMonster.name;
+        }
+        
+        function getMonsterEmoji(type) {
+            switch(type) {
+                case 'weak': return '👹';
+                case 'strong': return '👺';
+                case 'elite': return '🐉';
+                default: return '👻';
+            }
+        }
+        
+        function playerAttack(attackType) {
+            if (!isPlayerTurn || battleAnimation) return;
+            
+            let damage = 0;
+            let isCritical = false;
+            
+            if (attackType === 'sword') {
+                damage = player.swordAttack();
+                isCritical = damage > (5 + Math.floor(player.strength * 0.5));
+                
+                battleLog.textContent = "O cavaleiro usa sua espada para atacar seu oponente!";
+                
+                // Animação de ataque
+                battleAnimation = {
+                    type: 'playerAttack',
+                    step: 0,
+                    maxSteps: 20
+                };
+            }
+            
+            // Esperar animação para aplicar dano
+            setTimeout(() => {
+                const actualDamage = currentMonster.takeDamage(damage);
+                
+                if (isCritical) {
+                    battleLog.textContent += ` CRÍTICO! Causou ${actualDamage} de dano ao inimigo!`;
+                } else {
+                    battleLog.textContent += ` Causou ${actualDamage} de dano ao inimigo!`;
+                }
+                
+                battleEnemyHealth.textContent = currentMonster.health;
+                
+                // Verificar se o monstro morreu
+                if (currentMonster.health <= 0) {
+                    endBattle(true);
+                    return;
+                }
+                
+                // Passar a vez para o monstro
+                isPlayerTurn = false;
+                setTimeout(monsterTurn, 1000);
+            }, 800);
+        }
+        
+        function monsterTurn() {
+            if (isPlayerTurn) return;
+            
+            const damage = currentMonster.attackPlayer(player);
+            battleLog.textContent = `O ${currentMonster.name} ataca o cavaleiro!`;
+            
+            // Animação de ataque do monstro
+            battleAnimation = {
+                type: 'monsterAttack',
+                step: 0,
+                maxSteps: 20
+            };
+            
+            // Esperar animação para aplicar dano
+            setTimeout(() => {
+                // Verificar se o jogador desviou
+                if (Math.random() < player.dodgeChance) {
+                    battleLog.textContent += " Mas o cavaleiro desviou do ataque!";
+                } else {
+                    const actualDamage = player.takeDamage(damage);
+                    battleLog.textContent += ` Causou ${actualDamage} de dano ao cavaleiro!`;
+                    player.updateUI();
+                    
+                    // Verificar se o jogador morreu
+                    if (player.health <= 0) {
+                        endBattle(false);
+                        return;
+                    }
+                }
+                
+                // Passar a vez para o jogador
+                isPlayerTurn = true;
+                battleActions.style.display = 'flex';
+            }, 800);
+        }
+        
+        function endBattle(playerWon) {
+            if (playerWon) {
+                const expGained = currentMonster.level * 10;
+                const moneyGained = currentMonster.level * 5;
+                
+                player.addExp(expGained);
+                player.money += moneyGained;
+                
+                battleLog.textContent += `\nVocê venceu! Ganhou ${expGained} de EXP e ${moneyGained} de dinheiro.`;
+                
+                setTimeout(() => {
+                    battleScreen.style.display = 'none';
+                    player.updateUI();
+                }, 3000);
+            } else {
+                battleLog.textContent += "\nVocê foi derrotado!";
+                
+                setTimeout(() => {
+                    battleScreen.style.display = 'none';
+                    // Resetar saúde do jogador
+                    player.health = player.maxHealth;
+                    player.updateUI();
+                }, 3000);
             }
         }
 
         // Inicialização do jogo
         const player = new Player();
         const worldMap = generateWorldMap();
+        let lastTime = 0;
         
         // Atualizar UI inicial
         player.updateUI();
@@ -584,57 +1202,92 @@
         const keys = {};
         
         document.addEventListener('keydown', (e) => {
-            keys[e.key.toLowerCase()] = true;
+            if (battleScreen.style.display === 'flex') return;
+            if (inventoryScreen.style.display === 'flex') return;
             
-            // Atualizar aparência das teclas
-            updateKeyAppearance(e.key, true);
+            keys[e.key.toLowerCase()] = true;
         });
         
         document.addEventListener('keyup', (e) => {
             keys[e.key.toLowerCase()] = false;
-            
-            // Atualizar aparência das teclas
-            updateKeyAppearance(e.key, false);
         });
         
-        function updateKeyAppearance(key, isPressed) {
-            const keyElement = 
-                key === 'w' ? keyW :
-                key === 'a' ? keyA :
-                key === 's' ? keyS :
-                key === 'd' ? keyD :
-                key === 'arrowup' ? keyUp :
-                key === 'arrowleft' ? keyLeft :
-                key === 'arrowdown' ? keyDown :
-                key === 'arrowright' ? keyRight : null;
-                
-            if (keyElement) {
-                if (isPressed) {
-                    keyElement.classList.add('active');
-                } else {
-                    keyElement.classList.remove('active');
-                }
-            }
-        }
+        // Event listeners para batalha
+        attackBtn.addEventListener('click', () => {
+            battleActions.style.display = 'none';
+            attackOptions.style.display = 'flex';
+        });
+        
+        swordAttackBtn.addEventListener('click', () => {
+            attackOptions.style.display = 'none';
+            playerAttack('sword');
+        });
+        
+        magicAttackBtn.addEventListener('click', () => {
+            // Futuramente implementar magia
+            battleLog.textContent = "Poder mágico ainda não implementado!";
+            attackOptions.style.display = 'none';
+            battleActions.style.display = 'flex';
+        });
+        
+        // Event listeners para inventário
+        inventoryBtn.addEventListener('click', () => {
+            inventoryScreen.style.display = 'flex';
+        });
+        
+        closeInventoryBtn.addEventListener('click', () => {
+            inventoryScreen.style.display = 'none';
+        });
+        
+        // Event listeners para upgrades de status
+        document.querySelectorAll('.upgrade-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const stat = btn.getAttribute('data-stat');
+                player.upgradeStat(stat);
+            });
+        });
         
         // Loop do jogo
-        function gameLoop() {
-            // Limpar o canvas
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        function gameLoop(timestamp) {
+            const deltaTime = timestamp - lastTime;
+            lastTime = timestamp;
+            
+            // Atualizar jogador
+            player.update(deltaTime);
+            
+            // Mostrar/ocultar overlay de cooldown
+            if (player.moveCooldown > 0) {
+                cooldownOverlay.style.display = 'flex';
+            } else {
+                cooldownOverlay.style.display = 'none';
+            }
             
             // Processar movimentos
-            if (keys['w'] || keys['arrowup']) {
-                player.move(0, -1, worldMap);
+            if (player.moveCooldown === 0) {
+                let moveResult = false;
+                
+                if (keys['w'] || keys['arrowup']) {
+                    moveResult = player.move(0, -1, worldMap);
+                } else if (keys['s'] || keys['arrowdown']) {
+                    moveResult = player.move(0, 1, worldMap);
+                } else if (keys['a'] || keys['arrowleft']) {
+                    moveResult = player.move(-1, 0, worldMap);
+                } else if (keys['d'] || keys['arrowright']) {
+                    moveResult = player.move(1, 0, worldMap);
+                }
+                
+                if (moveResult === 'monster') {
+                    // Determinar tipo de monstro baseado no nível do jogador
+                    let monsterType = 'weak';
+                    if (player.level >= 3) monsterType = 'strong';
+                    if (player.level >= 5) monsterType = 'elite';
+                    
+                    startBattle(monsterType);
+                }
             }
-            if (keys['s'] || keys['arrowdown']) {
-                player.move(0, 1, worldMap);
-            }
-            if (keys['a'] || keys['arrowleft']) {
-                player.move(-1, 0, worldMap);
-            }
-            if (keys['d'] || keys['arrowright']) {
-                player.move(1, 0, worldMap);
-            }
+            
+            // Limpar o canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
             
             // Desenhar o mapa
             drawMap(worldMap, player);
@@ -642,15 +1295,12 @@
             // Desenhar o jogador
             player.draw();
             
-            // Atualizar a UI
-            player.updateUI();
-            
             // Chamar o próximo frame
             requestAnimationFrame(gameLoop);
         }
         
         // Iniciar o jogo
-        gameLoop();
+        requestAnimationFrame(gameLoop);
     </script>
 </body>
 </html>
