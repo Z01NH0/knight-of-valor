@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RPG do Cavaleiro</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+            overflow: hidden;
+        }
+        
+        .game-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            max-width: 1000px;
+            width: 100%;
+        }
+        
+        .game-header {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: #f8c555;
+            text-shadow: 0 0 10px rgba(248, 197, 85, 0.5);
+        }
+        
+        .game-area {
+            display: flex;
+            gap: 20px;
+            width: 100%;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .game-board {
+            position: relative;
+            width: 640px;
+            height: 480px;
+            border: 4px solid #f8c555;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+        
+        canvas {
+            display: block;
+            background-color: #0f3460;
+        }
+        
+        .game-ui {
+            background: rgba(15, 52, 96, 0.8);
+            border: 2px solid #f8c555;
+            border-radius: 8px;
+            padding: 15px;
+            width: 300px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+        }
+        
+        .player-stats {
+            margin-bottom: 20px;
+        }
+        
+        .stat-bar {
+            margin-bottom: 10px;
+        }
+        
+        .stat-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+        
+        .bar-container {
+            height: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .bar-fill {
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+        
+        .health-bar {
+            background: linear-gradient(90deg, #e74c3c, #f39c12);
+        }
+        
+        .exp-bar {
+            background: linear-gradient(90deg, #3498db, #9b59b6);
+        }
+        
+        .controls {
+            margin-top: 20px;
+        }
+        
+        .controls h3 {
+            margin-bottom: 10px;
+            color: #f8c555;
+        }
+        
+        .control-keys {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            text-align: center;
+        }
+        
+        .key {
+            background: rgba(248, 197, 85, 0.2);
+            border: 1px solid #f8c555;
+            border-radius: 5px;
+            padding: 8px;
+            font-weight: bold;
+        }
+        
+        .key.active {
+            background: rgba(248, 197, 85, 0.5);
+            transform: scale(0.95);
+        }
+        
+        .center-key {
+            grid-column: 2;
+        }
+        
+        .game-info {
+            background: rgba(15, 52, 96, 0.8);
+            border: 2px solid #f8c555;
+            border-radius: 8px;
+            padding: 15px;
+            width: 100%;
+            margin-top: 10px;
+            text-align: center;
+        }
+        
+        .instructions {
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: #ccc;
+        }
+        
+        @media (max-width: 1000px) {
+            .game-area {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .game-board {
+                width: 100%;
+                max-width: 640px;
+            }
+            
+            .game-ui {
+                width: 100%;
+                max-width: 640px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <div class="game-header">
+            <h1>RPG do Cavaleiro</h1>
+            <p>Explore um mundo gerado proceduralmente!</p>
+        </div>
+        
+        <div class="game-area">
+            <div class="game-board">
+                <canvas id="gameCanvas" width="640" height="480"></canvas>
+            </div>
+            
+            <div class="game-ui">
+                <div class="player-stats">
+                    <h2>Status do Cavaleiro</h2>
+                    <div class="stat-bar">
+                        <div class="stat-label">
+                            <span>Nível: <span id="level">1</span></span>
+                            <span>Saúde: <span id="health">100</span>/<span id="maxHealth">100</span></span>
+                        </div>
+                        <div class="bar-container">
+                            <div id="healthBar" class="bar-fill health-bar" style="width: 100%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-bar">
+                        <div class="stat-label">
+                            <span>Experiência</span>
+                            <span><span id="exp">0</span>/<span id="expToNext">100</span></span>
+                        </div>
+                        <div class="bar-container">
+                            <div id="expBar" class="bar-fill exp-bar" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-bar">
+                        <div class="stat-label">
+                            <span>Ataque: <span id="attack">10</span></span>
+                            <span>Defesa: <span id="defense">5</span></span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="controls">
+                    <h3>Controles</h3>
+                    <div class="control-keys">
+                        <div class="key" id="keyW">W</div>
+                        <div class="key" id="keyA">A</div>
+                        <div class="key" id="keyS">S</div>
+                        <div class="key" id="keyD">D</div>
+                        <div class="key center-key" id="keyUp">↑</div>
+                        <div class="key" id="keyLeft">←</div>
+                        <div class="key" id="keyDown">↓</div>
+                        <div class="key" id="keyRight">→</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="game-info">
+            <p>Use as teclas WASD ou as setas do teclado para mover o cavaleiro pelo mundo.</p>
+            <p class="instructions">O mapa é gerado proceduralmente - cada movimento revela novas áreas!</p>
+        </div>
+    </div>
+
+    <script>
+        // Configurações do jogo
+        const TILE_SIZE = 64;
+        const MAP_WIDTH = 10;  // Largura do mapa visível
+        const MAP_HEIGHT = 8;  // Altura do mapa visível
+        const WORLD_SIZE = 100; // Tamanho do mundo (100x100 tiles)
+
+        // Elementos do DOM
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Elementos de UI
+        const levelElement = document.getElementById('level');
+        const healthElement = document.getElementById('health');
+        const maxHealthElement = document.getElementById('maxHealth');
+        const healthBar = document.getElementById('healthBar');
+        const expElement = document.getElementById('exp');
+        const expToNextElement = document.getElementById('expToNext');
+        const expBar = document.getElementById('expBar');
+        const attackElement = document.getElementById('attack');
+        const defenseElement = document.getElementById('defense');
+        
+        // Elementos de controle
+        const keyW = document.getElementById('keyW');
+        const keyA = document.getElementById('keyA');
+        const keyS = document.getElementById('keyS');
+        const keyD = document.getElementById('keyD');
+        const keyUp = document.getElementById('keyUp');
+        const keyLeft = document.getElementById('keyLeft');
+        const keyDown = document.getElementById('keyDown');
+        const keyRight = document.getElementById('keyRight');
+
+        // Cores
+        const COLORS = {
+            GRASS: '#2ecc71',
+            GRASS_DARK: '#27ae60',
+            WATER: '#3498db',
+            WATER_DARK: '#2980b9',
+            FOREST: '#27ae60',
+            FOREST_DARK: '#229954',
+            MOUNTAIN: '#95a5a6',
+            MOUNTAIN_DARK: '#7f8c8d',
+            PATH: '#d35400',
+            PATH_DARK: '#ba4a00'
+        };
+
+        // Classe do Jogador
+        class Player {
+            constructor() {
+                this.level = 1;
+                this.x = WORLD_SIZE / 2;
+                this.y = WORLD_SIZE / 2;
+                this.health = 100;
+                this.maxHealth = 100;
+                this.attack = 10;
+                this.defense = 5;
+                this.exp = 0;
+                this.expToNextLevel = 100;
+            }
+            
+            draw() {
+                const centerX = canvas.width / 2;
+                const centerY = canvas.height / 2;
+                
+                // Desenhar o cavaleiro
+                ctx.fillStyle = '#7f8c8d'; // Cor da armadura
+                ctx.fillRect(centerX - TILE_SIZE/2, centerY - TILE_SIZE/2, TILE_SIZE, TILE_SIZE);
+                
+                // Capacete
+                ctx.fillStyle = '#95a5a6';
+                ctx.fillRect(centerX - TILE_SIZE/4, centerY - TILE_SIZE/2, TILE_SIZE/2, TILE_SIZE/3);
+                
+                // Escudo
+                ctx.fillStyle = '#34495e';
+                ctx.fillRect(centerX - TILE_SIZE/2 + 5, centerY - TILE_SIZE/4, TILE_SIZE/4, TILE_SIZE/2);
+                
+                // Espada
+                ctx.strokeStyle = '#ecf0f1';
+                ctx.lineWidth = 5;
+                ctx.beginPath();
+                ctx.moveTo(centerX + TILE_SIZE/4, centerY - TILE_SIZE/4);
+                ctx.lineTo(centerX + TILE_SIZE/2, centerY + TILE_SIZE/4);
+                ctx.stroke();
+                
+                // Detalhes da armadura
+                ctx.strokeStyle = '#2c3e50';
+                ctx.lineWidth = 2;
+                ctx.strokeRect(centerX - TILE_SIZE/2, centerY - TILE_SIZE/2, TILE_SIZE, TILE_SIZE);
+            }
+            
+            move(dx, dy, worldMap) {
+                const newX = this.x + dx;
+                const newY = this.y + dy;
+                
+                // Verificar se a nova posição está dentro dos limites do mundo
+                if (newX >= 0 && newX < WORLD_SIZE && newY >= 0 && newY < WORLD_SIZE) {
+                    // Verificar se a nova posição não é água (intransponível)
+                    if (worldMap[Math.floor(newY)][Math.floor(newX)] !== 1) {
+                        this.x = newX;
+                        this.y = newY;
+                        return true;
+                    }
+                }
+                return false;
+            }
+            
+            updateUI() {
+                levelElement.textContent = this.level;
+                healthElement.textContent = this.health;
+                maxHealthElement.textContent = this.maxHealth;
+                healthBar.style.width = `${(this.health / this.maxHealth) * 100}%`;
+                expElement.textContent = this.exp;
+                expToNextElement.textContent = this.expToNextLevel;
+                expBar.style.width = `${(this.exp / this.expToNextLevel) * 100}%`;
+                attackElement.textContent = this.attack;
+                defenseElement.textContent = this.defense;
+            }
+        }
+
+        // Gerar mapa procedural
+        function generateWorldMap() {
+            const map = Array(WORLD_SIZE).fill().map(() => Array(WORLD_SIZE).fill(0));
+            
+            // Adicionar corpos de água
+            for (let i = 0; i < 5; i++) {
+                const x = Math.floor(Math.random() * WORLD_SIZE);
+                const y = Math.floor(Math.random() * WORLD_SIZE);
+                addWaterBody(map, x, y);
+            }
+            
+            // Adicionar florestas
+            for (let i = 0; i < 10; i++) {
+                const x = Math.floor(Math.random() * WORLD_SIZE);
+                const y = Math.floor(Math.random() * WORLD_SIZE);
+                addForest(map, x, y);
+            }
+            
+            // Adicionar montanhas
+            for (let i = 0; i < 8; i++) {
+                const x = Math.floor(Math.random() * WORLD_SIZE);
+                const y = Math.floor(Math.random() * WORLD_SIZE);
+                addMountain(map, x, y);
+            }
+            
+            // Adicionar caminhos
+            for (let i = 0; i < 3; i++) {
+                const x = Math.floor(Math.random() * WORLD_SIZE);
+                const y = Math.floor(Math.random() * WORLD_SIZE);
+                addPath(map, x, y);
+            }
+            
+            return map;
+        }
+        
+        function addWaterBody(map, x, y) {
+            const size = 3 + Math.floor(Math.random() * 5);
+            for (let i = -size; i < size; i++) {
+                for (let j = -size; j < size; j++) {
+                    const newX = x + i;
+                    const newY = y + j;
+                    if (newX >= 0 && newX < WORLD_SIZE && newY >= 0 && newY < WORLD_SIZE) {
+                        const dist = Math.sqrt(i*i + j*j);
+                        if (dist < size && Math.random() < 0.7) {
+                            map[newY][newX] = 1; // Água
+                        }
+                    }
+                }
+            }
+        }
+        
+        function addForest(map, x, y) {
+            const size = 4 + Math.floor(Math.random() * 6);
+            for (let i = -size; i < size; i++) {
+                for (let j = -size; j < size; j++) {
+                    const newX = x + i;
+                    const newY = y + j;
+                    if (newX >= 0 && newX < WORLD_SIZE && newY >= 0 && newY < WORLD_SIZE) {
+                        const dist = Math.sqrt(i*i + j*j);
+                        if (dist < size && Math.random() < 0.6 && map[newY][newX] === 0) {
+                            map[newY][newX] = 2; // Floresta
+                        }
+                    }
+                }
+            }
+        }
+        
+        function addMountain(map, x, y) {
+            const size = 3 + Math.floor(Math.random() * 4);
+            for (let i = -size; i < size; i++) {
+                for (let j = -size; j < size; j++) {
+                    const newX = x + i;
+                    const newY = y + j;
+                    if (newX >= 0 && newX < WORLD_SIZE && newY >= 0 && newY < WORLD_SIZE) {
+                        const dist = Math.sqrt(i*i + j*j);
+                        if (dist < size && Math.random() < 0.7 && map[newY][newX] === 0) {
+                            map[newY][newX] = 3; // Montanha
+                        }
+                    }
+                }
+            }
+        }
+        
+        function addPath(map, x, y) {
+            const length = 10 + Math.floor(Math.random() * 20);
+            let dirX = Math.random() < 0.5 ? 1 : -1;
+            let dirY = Math.random() < 0.5 ? 1 : -1;
+            
+            if (Math.random() < 0.5) dirY = 0;
+            else dirX = 0;
+            
+            for (let i = 0; i < length; i++) {
+                if (x >= 0 && x < WORLD_SIZE && y >= 0 && y < WORLD_SIZE) {
+                    if (map[y][x] === 0) {
+                        map[y][x] = 4; // Caminho
+                    }
+                    
+                    // Ocasionalmente mudar direção
+                    if (Math.random() < 0.2) {
+                        if (dirX !== 0) {
+                            dirX = 0;
+                            dirY = Math.random() < 0.5 ? 1 : -1;
+                        } else {
+                            dirY = 0;
+                            dirX = Math.random() < 0.5 ? 1 : -1;
+                        }
+                    }
+                    
+                    x += dirX;
+                    y += dirY;
+                }
+            }
+        }
+
+        // Desenhar o mapa
+        function drawMap(worldMap, player) {
+            const offsetX = player.x - MAP_WIDTH / 2;
+            const offsetY = player.y - MAP_HEIGHT / 2;
+            
+            for (let y = 0; y < MAP_HEIGHT; y++) {
+                for (let x = 0; x < MAP_WIDTH; x++) {
+                    const mapX = Math.floor(offsetX + x);
+                    const mapY = Math.floor(offsetY + y);
+                    
+                    let tileType = 0; // Grama por padrão
+                    let color = COLORS.GRASS;
+                    
+                    if (mapX >= 0 && mapX < WORLD_SIZE && mapY >= 0 && mapY < WORLD_SIZE) {
+                        tileType = worldMap[mapY][mapX];
+                    }
+                    
+                    // Determinar a cor baseada no tipo de tile
+                    switch (tileType) {
+                        case 0: // Grama
+                            color = COLORS.GRASS;
+                            break;
+                        case 1: // Água
+                            color = COLORS.WATER;
+                            break;
+                        case 2: // Floresta
+                            color = COLORS.FOREST;
+                            break;
+                        case 3: // Montanha
+                            color = COLORS.MOUNTAIN;
+                            break;
+                        case 4: // Caminho
+                            color = COLORS.PATH;
+                            break;
+                    }
+                    
+                    // Desenhar o tile
+                    ctx.fillStyle = color;
+                    ctx.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+                    
+                    // Adicionar detalhes aos tiles
+                    ctx.fillStyle = color === COLORS.GRASS ? COLORS.GRASS_DARK : 
+                                   color === COLORS.WATER ? COLORS.WATER_DARK :
+                                   color === COLORS.FOREST ? COLORS.FOREST_DARK :
+                                   color === COLORS.MOUNTAIN ? COLORS.MOUNTAIN_DARK :
+                                   COLORS.PATH_DARK;
+                    
+                    // Padrões diferentes para cada tipo de tile
+                    if (tileType === 0) { // Grama
+                        for (let i = 0; i < 3; i++) {
+                            const detailX = x * TILE_SIZE + 5 + Math.random() * (TILE_SIZE - 10);
+                            const detailY = y * TILE_SIZE + 5 + Math.random() * (TILE_SIZE - 10);
+                            ctx.fillRect(detailX, detailY, 2, 2);
+                        }
+                    } else if (tileType === 1) { // Água
+                        for (let i = 0; i < 2; i++) {
+                            const waveX = x * TILE_SIZE + 10 + Math.random() * (TILE_SIZE - 20);
+                            const waveY = y * TILE_SIZE + 10 + Math.random() * (TILE_SIZE - 20);
+                            ctx.beginPath();
+                            ctx.ellipse(waveX, waveY, 8, 4, 0, 0, Math.PI * 2);
+                            ctx.fill();
+                        }
+                    } else if (tileType === 2) { // Floresta
+                        const treeX = x * TILE_SIZE + TILE_SIZE / 2;
+                        const treeY = y * TILE_SIZE + TILE_SIZE / 2;
+                        
+                        // Tronco
+                        ctx.fillStyle = '#8B4513';
+                        ctx.fillRect(treeX - 3, treeY, 6, TILE_SIZE / 2);
+                        
+                        // Copa
+                        ctx.fillStyle = COLORS.FOREST_DARK;
+                        ctx.beginPath();
+                        ctx.arc(treeX, treeY - 5, TILE_SIZE / 3, 0, Math.PI * 2);
+                        ctx.fill();
+                    } else if (tileType === 3) { // Montanha
+                        for (let i = 0; i < 3; i++) {
+                            const rockX = x * TILE_SIZE + 5 + Math.random() * (TILE_SIZE - 10);
+                            const rockY = y * TILE_SIZE + 5 + Math.random() * (TILE_SIZE - 10);
+                            ctx.beginPath();
+                            ctx.ellipse(rockX, rockY, 6, 4, 0, 0, Math.PI * 2);
+                            ctx.fill();
+                        }
+                    } else if (tileType === 4) { // Caminho
+                        for (let i = 0; i < 2; i++) {
+                            const stoneX = x * TILE_SIZE + 5 + Math.random() * (TILE_SIZE - 10);
+                            const stoneY = y * TILE_SIZE + 5 + Math.random() * (TILE_SIZE - 10);
+                            ctx.beginPath();
+                            ctx.ellipse(stoneX, stoneY, 4, 3, 0, 0, Math.PI * 2);
+                            ctx.fill();
+                        }
+                    }
+                }
+            }
+        }
+
+        // Inicialização do jogo
+        const player = new Player();
+        const worldMap = generateWorldMap();
+        
+        // Atualizar UI inicial
+        player.updateUI();
+        
+        // Controles
+        const keys = {};
+        
+        document.addEventListener('keydown', (e) => {
+            keys[e.key.toLowerCase()] = true;
+            
+            // Atualizar aparência das teclas
+            updateKeyAppearance(e.key, true);
+        });
+        
+        document.addEventListener('keyup', (e) => {
+            keys[e.key.toLowerCase()] = false;
+            
+            // Atualizar aparência das teclas
+            updateKeyAppearance(e.key, false);
+        });
+        
+        function updateKeyAppearance(key, isPressed) {
+            const keyElement = 
+                key === 'w' ? keyW :
+                key === 'a' ? keyA :
+                key === 's' ? keyS :
+                key === 'd' ? keyD :
+                key === 'arrowup' ? keyUp :
+                key === 'arrowleft' ? keyLeft :
+                key === 'arrowdown' ? keyDown :
+                key === 'arrowright' ? keyRight : null;
+                
+            if (keyElement) {
+                if (isPressed) {
+                    keyElement.classList.add('active');
+                } else {
+                    keyElement.classList.remove('active');
+                }
+            }
+        }
+        
+        // Loop do jogo
+        function gameLoop() {
+            // Limpar o canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Processar movimentos
+            if (keys['w'] || keys['arrowup']) {
+                player.move(0, -1, worldMap);
+            }
+            if (keys['s'] || keys['arrowdown']) {
+                player.move(0, 1, worldMap);
+            }
+            if (keys['a'] || keys['arrowleft']) {
+                player.move(-1, 0, worldMap);
+            }
+            if (keys['d'] || keys['arrowright']) {
+                player.move(1, 0, worldMap);
+            }
+            
+            // Desenhar o mapa
+            drawMap(worldMap, player);
+            
+            // Desenhar o jogador
+            player.draw();
+            
+            // Atualizar a UI
+            player.updateUI();
+            
+            // Chamar o próximo frame
+            requestAnimationFrame(gameLoop);
+        }
+        
+        // Iniciar o jogo
+        gameLoop();
+    </script>
+</body>
+</html>
