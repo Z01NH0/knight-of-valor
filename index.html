@@ -260,6 +260,31 @@
             gap: 10px;
             justify-content: center;
             margin-top: 20px;
+            position: relative;
+        }
+        
+        .back-btn {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: linear-gradient(to bottom, #95a5a6, #7f8c8d);
+            color: #1a1a2e;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 12px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            font-family: 'MedievalSharp', cursive;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .back-btn:hover {
+            background: linear-gradient(to bottom, #bdc3c7, #95a5a6);
+            transform: translateY(-50%) scale(1.05);
         }
         
         .battle-btn {
@@ -309,12 +334,13 @@
             background: rgba(255, 255, 255, 0.05);
         }
         
-        .attack-options, .magic-options, .act-options {
+        .attack-options, .magic-options, .items-options, .act-options {
             display: none;
             gap: 10px;
             justify-content: center;
             margin-top: 20px;
             flex-wrap: wrap;
+            position: relative;
         }
         
         .inventory-screen {
@@ -338,7 +364,7 @@
             border-radius: 12px;
             padding: 20px;
             width: 80%;
-            max-width: 700px;
+            max-width: 800px;
             max-height: 80%;
             overflow-y: auto;
             box-shadow: 0 0 30px rgba(248, 197, 85, 0.3);
@@ -416,7 +442,83 @@
             transform: none;
         }
         
+        .crafting-section {
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            border: 1px solid rgba(248, 197, 85, 0.2);
+        }
         
+        .crafting-title {
+            text-align: center;
+            margin-bottom: 15px;
+            color: #f8c555;
+        }
+        
+        .crafting-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 5px;
+            width: 150px;
+            margin: 0 auto 15px;
+        }
+        
+        .crafting-slot {
+            width: 40px;
+            height: 40px;
+            border: 2px solid #f8c555;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.5);
+            font-size: 1.2rem;
+        }
+        
+        .crafting-result {
+            width: 60px;
+            height: 60px;
+            border: 3px solid #f8c555;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.5);
+            margin: 0 auto;
+            font-size: 1.5rem;
+            position: relative;
+        }
+        
+        .crafting-pulse {
+            animation: pulse 1s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(231, 76, 60, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0); }
+        }
+        
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .item-slot {
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 5px;
+            border: 1px solid rgba(248, 197, 85, 0.2);
+            text-align: center;
+        }
+        
+        .item-icon {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
         
         .instructions {
             margin-top: 15px;
@@ -442,6 +544,7 @@
         .burn { background: rgba(231, 76, 60, 0.7); }
         .slow { background: rgba(52, 152, 219, 0.7); }
         .stun { background: rgba(155, 89, 182, 0.7); }
+        .strength-potion { background: rgba(230, 126, 34, 0.7); }
         
         @media (max-width: 768px) {
             .game-board {
@@ -461,6 +564,10 @@
             
             .player-stats, .enemy-stats {
                 min-width: 90%;
+            }
+            
+            .items-grid {
+                grid-template-columns: repeat(2, 1fr);
             }
         }
     </style>
@@ -509,8 +616,6 @@
             <div class="inventory-btn" id="inventoryBtn">
                 🎒
             </div>
-            
-            
             
             <!-- Tela de Combate -->
             <div class="battle-screen" id="battleScreen">
@@ -568,23 +673,49 @@
                     </div>
                     
                     <div class="battle-actions" id="battleActions">
+                        <button class="back-btn" id="backBtn" style="display: none;">← Voltar</button>
                         <button class="battle-btn" id="attackBtn">ATACAR</button>
-                        <button class="battle-btn" id="magicBtn">MAGIA</button>
+                        <button class="battle-btn" id="magicBtn">PODER MÁGICO</button>
+                        <button class="battle-btn" id="itemsBtn">ITENS</button>
                         <button class="battle-btn" id="actBtn">AGIR</button>
                     </div>
                     
                     <div class="attack-options" id="attackOptions">
+                        <button class="back-btn" id="backFromAttackBtn">← Voltar</button>
                         <button class="battle-btn" id="swordAttackBtn">ESPADADA</button>
                         <button class="battle-btn" id="magicAttackBtn">PODER MÁGICO</button>
                     </div>
                     
                     <div class="magic-options" id="magicOptions">
-                        <button class="battle-btn" id="fireballBtn" disabled>BOLA DE FOGO</button>
-                        <button class="battle-btn" id="freezeBtn" disabled>BRISA CONGELANTE</button>
-                        <button class="battle-btn" id="possessionBtn" disabled>POSSEÇÃO</button>
+                        <button class="back-btn" id="backFromMagicBtn">← Voltar</button>
+                        <button class="battle-btn" id="fireballBtn" disabled>BOLA DE FOGO (Bloqueada)</button>
+                        <button class="battle-btn" id="freezeBtn" disabled>BRISA CONGELANTE (Bloqueada)</button>
+                        <button class="battle-btn" id="possessionBtn" disabled>POSSEÇÃO (Bloqueada)</button>
+                    </div>
+                    
+                    <div class="items-options" id="itemsOptions">
+                        <button class="back-btn" id="backFromItemsBtn">← Voltar</button>
+                        <div class="items-grid">
+                            <div class="item-slot">
+                                <div class="item-icon">🍎</div>
+                                <div>Maçã (x<span id="maceCount">0</span>)</div>
+                                <button class="battle-btn use-item-btn" data-item="mace">Usar</button>
+                            </div>
+                            <div class="item-slot">
+                                <div class="item-icon">🍗</div>
+                                <div>Pernil (x<span id="hamCount">0</span>)</div>
+                                <button class="battle-btn use-item-btn" data-item="ham">Usar</button>
+                            </div>
+                            <div class="item-slot">
+                                <div class="item-icon">🧪</div>
+                                <div>Poção de Força (x<span id="strengthPotionCount">0</span>)</div>
+                                <button class="battle-btn use-item-btn" data-item="strengthPotion">Usar</button>
+                            </div>
+                        </div>
                     </div>
                     
                     <div class="act-options" id="actOptions">
+                        <button class="back-btn" id="backFromActBtn">← Voltar</button>
                         <button class="battle-btn" id="meditateBtn">MEDITAR</button>
                     </div>
                 </div>
@@ -649,6 +780,49 @@
                             <div>Posseção: <span id="possessionStatus">Bloqueada</span></div>
                         </div>
                     </div>
+                    
+                    <div class="upgrade-points">
+                        <h3>Itens</h3>
+                        <div class="items-grid">
+                            <div class="item-slot">
+                                <div class="item-icon">🍎</div>
+                                <div>Maçã: <span id="inventoryMaceCount">0</span></div>
+                            </div>
+                            <div class="item-slot">
+                                <div class="item-icon">🍗</div>
+                                <div>Pernil: <span id="inventoryHamCount">0</span></div>
+                            </div>
+                            <div class="item-slot">
+                                <div class="item-icon">🧪</div>
+                                <div>Poção de Força: <span id="inventoryStrengthPotionCount">0</span></div>
+                            </div>
+                            <div class="item-slot">
+                                <div class="item-icon">🐉</div>
+                                <div>Escamas de Dragão: <span id="inventoryDragonScalesCount">0</span></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="crafting-section">
+                        <h3 class="crafting-title">Crafting - Dragon Slayer</h3>
+                        <div class="crafting-grid">
+                            <div class="crafting-slot" id="craftSlot1"></div>
+                            <div class="crafting-slot" id="craftSlot2"></div>
+                            <div class="crafting-slot" id="craftSlot3"></div>
+                            <div class="crafting-slot" id="craftSlot4"></div>
+                            <div class="crafting-slot" id="craftSlot5"></div>
+                            <div class="crafting-slot" id="craftSlot6"></div>
+                            <div class="crafting-slot" id="craftSlot7"></div>
+                            <div class="crafting-slot" id="craftSlot8"></div>
+                            <div class="crafting-slot" id="craftSlot9"></div>
+                        </div>
+                        <div class="crafting-result" id="craftingResult">
+                            <span>⚔️</span>
+                        </div>
+                        <p style="text-align: center; margin-top: 10px; font-size: 0.9rem;">
+                            Receita: Pernil no centro inferior, Escamas de Dragão nas outras posições
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -696,10 +870,12 @@
         const battleActions = document.getElementById('battleActions');
         const attackOptions = document.getElementById('attackOptions');
         const magicOptions = document.getElementById('magicOptions');
+        const itemsOptions = document.getElementById('itemsOptions');
         const actOptions = document.getElementById('actOptions');
         const attackBtn = document.getElementById('attackBtn');
         const swordAttackBtn = document.getElementById('swordAttackBtn');
         const magicBtn = document.getElementById('magicBtn');
+        const itemsBtn = document.getElementById('itemsBtn');
         const fireballBtn = document.getElementById('fireballBtn');
         const freezeBtn = document.getElementById('freezeBtn');
         const possessionBtn = document.getElementById('possessionBtn');
@@ -708,6 +884,11 @@
         const roundIndicator = document.getElementById('roundIndicator');
         const playerStatusEffects = document.getElementById('playerStatusEffects');
         const enemyStatusEffects = document.getElementById('enemyStatusEffects');
+        const backBtn = document.getElementById('backBtn');
+        const backFromAttackBtn = document.getElementById('backFromAttackBtn');
+        const backFromMagicBtn = document.getElementById('backFromMagicBtn');
+        const backFromItemsBtn = document.getElementById('backFromItemsBtn');
+        const backFromActBtn = document.getElementById('backFromActBtn');
         
         // Elementos de inventário
         const inventoryScreen = document.getElementById('inventoryScreen');
@@ -727,6 +908,29 @@
         const fireballStatus = document.getElementById('fireballStatus');
         const freezeStatus = document.getElementById('freezeStatus');
         const possessionStatus = document.getElementById('possessionStatus');
+        
+        // Elementos de itens
+        const maceCount = document.getElementById('maceCount');
+        const hamCount = document.getElementById('hamCount');
+        const strengthPotionCount = document.getElementById('strengthPotionCount');
+        const inventoryMaceCount = document.getElementById('inventoryMaceCount');
+        const inventoryHamCount = document.getElementById('inventoryHamCount');
+        const inventoryStrengthPotionCount = document.getElementById('inventoryStrengthPotionCount');
+        const inventoryDragonScalesCount = document.getElementById('inventoryDragonScalesCount');
+        
+        // Elementos de crafting
+        const craftingSlots = [
+            document.getElementById('craftSlot1'),
+            document.getElementById('craftSlot2'),
+            document.getElementById('craftSlot3'),
+            document.getElementById('craftSlot4'),
+            document.getElementById('craftSlot5'),
+            document.getElementById('craftSlot6'),
+            document.getElementById('craftSlot7'),
+            document.getElementById('craftSlot8'),
+            document.getElementById('craftSlot9')
+        ];
+        const craftingResult = document.getElementById('craftingResult');
         
         // Cores
         const COLORS = {
@@ -755,7 +959,7 @@
                 this.y = WORLD_SIZE / 2;
                 this.money = 100;
                 this.exp = 0;
-                this.expToNextLevel = 100;
+                this.expToNextLevel = 40;
                 this.upgradePoints = 0;
                 
                 // Atributos base
@@ -781,6 +985,19 @@
                 
                 // Status effects
                 this.statusEffects = [];
+                
+                // Itens
+                this.items = {
+                    mace: 0,
+                    ham: 0,
+                    strengthPotion: 0,
+                    dragonScales: 0
+                };
+                
+                // Crafting
+                this.craftingSlots = Array(9).fill(null);
+                this.hasDragonSlayer = false;
+                this.dragonSlayerMultiplier = 1; // Multiplicador de dano da Dragon Slayer
             }
             
             draw() {
@@ -805,8 +1022,8 @@
                 ctx.fillStyle = '#2c3e50';
                 ctx.fillRect(centerX - 25, centerY - 10, 8, 20);
                 
-                // Espada
-                ctx.fillStyle = '#bdc3c7';
+                // Espada (ou Dragon Slayer)
+                ctx.fillStyle = this.hasDragonSlayer ? '#e74c3c' : '#bdc3c7';
                 ctx.fillRect(centerX + 15, centerY - 12, 3, 24);
                 ctx.fillRect(centerX + 10, centerY - 15, 13, 6);
                 
@@ -861,8 +1078,8 @@
                 ctx.arc(centerX - 33, centerY + 10, 5, 0, Math.PI * 2);
                 ctx.fill();
                 
-                // Espada
-                ctx.fillStyle = '#bdc3c7';
+                // Espada (ou Dragon Slayer)
+                ctx.fillStyle = this.hasDragonSlayer ? '#e74c3c' : '#bdc3c7';
                 // Lâmina
                 ctx.fillRect(centerX + 20, centerY - 15, 5, 40);
                 // Guarda
@@ -956,18 +1173,30 @@
                 statMag.textContent = this.baseMag;
                 
                 // Atualizar status das magias
-                if (this.baseMag >= 2) {
+                if (this.baseMag >= 12) {
                     fireballStatus.textContent = "Desbloqueada";
                     fireballBtn.disabled = false;
+                    fireballBtn.textContent = "BOLA DE FOGO";
                 }
-                if (this.baseMag >= 5) {
+                if (this.baseMag >= 15) {
                     freezeStatus.textContent = "Desbloqueada";
                     freezeBtn.disabled = false;
+                    freezeBtn.textContent = "BRISA CONGELANTE";
                 }
-                if (this.baseMag >= 10) {
+                if (this.baseMag >= 20) {
                     possessionStatus.textContent = "Desbloqueada";
                     possessionBtn.disabled = false;
+                    possessionBtn.textContent = "POSSEÇÃO";
                 }
+                
+                // Atualizar contagem de itens
+                maceCount.textContent = this.items.mace;
+                hamCount.textContent = this.items.ham;
+                strengthPotionCount.textContent = this.items.strengthPotion;
+                inventoryMaceCount.textContent = this.items.mace;
+                inventoryHamCount.textContent = this.items.ham;
+                inventoryStrengthPotionCount.textContent = this.items.strengthPotion;
+                inventoryDragonScalesCount.textContent = this.items.dragonScales;
                 
                 // Atualizar tela de batalha
                 battlePlayerLevel.textContent = this.level;
@@ -978,6 +1207,9 @@
                 
                 // Atualizar status effects na UI de batalha
                 this.updateBattleStatusEffects();
+                
+                // Atualizar crafting
+                this.updateCraftingUI();
             }
             
             updateBattleStatusEffects() {
@@ -1056,6 +1288,11 @@
                 this.defense = this.baseDef;
                 this.magic = this.baseMag;
                 
+                // Aplicar multiplicador da Dragon Slayer
+                if (this.hasDragonSlayer) {
+                    this.strength = Math.floor(this.strength * this.dragonSlayerMultiplier);
+                }
+                
                 // Recalcular chance de esquiva baseada na agilidade
                 this.dodgeChance = 0.04 + (this.baseAgi - 10) * 0.03;
                 
@@ -1087,6 +1324,121 @@
             meditate() {
                 this.mana = Math.min(this.maxMana, this.mana + 20);
                 return "O cavaleiro medita e recupera 20 de mana!";
+            }
+            
+            addItem(item, quantity = 1) {
+                this.items[item] += quantity;
+                this.updateUI();
+            }
+            
+            useItem(item) {
+                if (this.items[item] <= 0) return false;
+                
+                this.items[item]--;
+                
+                switch(item) {
+                    case 'mace':
+                        this.health = Math.min(this.maxHealth, this.health + 10);
+                        return { success: true, message: "Usou a maçã e recuperou 10 de HP!" };
+                    case 'ham':
+                        this.health = Math.min(this.maxHealth, this.health + 25);
+                        return { success: true, message: "Usou o pernil e recuperou 25 de HP!" };
+                    case 'strengthPotion':
+                        this.addStatusEffect({ type: 'strength-potion', duration: 3, multiplier: 1.4 });
+                        return { success: true, message: "Usou a poção de força! Seu ataque aumentou por 3 turnos!" };
+                }
+                
+                this.updateUI();
+                return { success: false, message: "Item não pode ser usado agora." };
+            }
+            
+            updateCraftingUI() {
+                // Atualizar slots de crafting
+                for (let i = 0; i < 9; i++) {
+                    craftingSlots[i].textContent = this.craftingSlots[i] ? 
+                        (this.craftingSlots[i] === 'ham' ? '🍗' : '🐉') : '';
+                }
+                
+                // Verificar se a receita está correta
+                const recipe = [
+                    'dragonScales', 'dragonScales', 'dragonScales',
+                    'dragonScales', 'ham', 'dragonScales',
+                    null, 'dragonScales', null
+                ];
+                
+                let recipeCorrect = true;
+                for (let i = 0; i < 9; i++) {
+                    if (this.craftingSlots[i] !== recipe[i]) {
+                        recipeCorrect = false;
+                        break;
+                    }
+                }
+                
+                // Atualizar resultado do crafting
+                if (recipeCorrect && !this.hasDragonSlayer) {
+                    craftingResult.classList.add('crafting-pulse');
+                    craftingResult.title = "Clique para criar a Dragon Slayer!";
+                } else {
+                    craftingResult.classList.remove('crafting-pulse');
+                    craftingResult.title = this.hasDragonSlayer ? "Você já possui a Dragon Slayer!" : "Receita incompleta";
+                }
+            }
+            
+            craftDragonSlayer() {
+                const recipe = [
+                    'dragonScales', 'dragonScales', 'dragonScales',
+                    'dragonScales', 'ham', 'dragonScales',
+                    null, 'dragonScales', null
+                ];
+                
+                // Verificar se a receita está correta
+                let recipeCorrect = true;
+                for (let i = 0; i < 9; i++) {
+                    if (this.craftingSlots[i] !== recipe[i]) {
+                        recipeCorrect = false;
+                        break;
+                    }
+                }
+                
+                if (recipeCorrect && !this.hasDragonSlayer) {
+                    // Verificar se o jogador tem os itens necessários
+                    if (this.items.ham >= 1 && this.items.dragonScales >= 5) {
+                        this.items.ham -= 1;
+                        this.items.dragonScales -= 5;
+                        this.hasDragonSlayer = true;
+                        this.dragonSlayerMultiplier = 11; // 11x mais dano
+                        this.recalculateStats();
+                        
+                        // Limpar slots de crafting
+                        this.craftingSlots = Array(9).fill(null);
+                        
+                        this.updateUI();
+                        return "Você criou a Dragon Slayer! Seu dano aumentou 11x!";
+                    } else {
+                        return "Você não tem itens suficientes para criar a Dragon Slayer!";
+                    }
+                }
+                
+                return "Receita incorreta ou você já possui a Dragon Slayer!";
+            }
+            
+            addToCraftingSlot(slotIndex, item) {
+                if (this.craftingSlots[slotIndex] === null) {
+                    this.craftingSlots[slotIndex] = item;
+                    this.updateUI();
+                    return true;
+                }
+                return false;
+            }
+            
+            clearCraftingSlot(slotIndex) {
+                this.craftingSlots[slotIndex] = null;
+                this.updateUI();
+            }
+            
+            clearAllCraftingSlots() {
+                this.craftingSlots = Array(9).fill(null);
+                this.updateUI();
             }
         }
 
@@ -1314,6 +1666,56 @@
             
             attackPlayer(player) {
                 return this.attack;
+            }
+            
+            dropItems(player) {
+                let droppedItems = [];
+                
+                if (this.type === 'weak') {
+                    // Goblin Fraco
+                    if (Math.random() < 0.2) { // 20% de chance
+                        player.addItem('mace');
+                        droppedItems.push("maçã");
+                    }
+                    if (Math.random() < 0.05) { // 5% de chance
+                        player.addItem('ham');
+                        droppedItems.push("pernil");
+                    }
+                } else if (this.type === 'strong') {
+                    // Orc Forte
+                    if (Math.random() < 0.1) { // 10% de chance
+                        player.addItem('mace');
+                        droppedItems.push("maçã");
+                    }
+                    if (Math.random() < 0.25) { // 25% de chance
+                        player.addItem('ham');
+                        droppedItems.push("pernil");
+                    }
+                    if (Math.random() < 0.05) { // 5% de chance
+                        player.addItem('strengthPotion');
+                        droppedItems.push("poção de força");
+                    }
+                } else if (this.type === 'elite') {
+                    // Dragão de Elite
+                    if (Math.random() < 0.05) { // 5% de chance
+                        player.addItem('mace');
+                        droppedItems.push("maçã");
+                    }
+                    if (Math.random() < 0.2) { // 20% de chance
+                        player.addItem('ham');
+                        droppedItems.push("pernil");
+                    }
+                    if (Math.random() < 0.1) { // 10% de chance
+                        player.addItem('strengthPotion');
+                        droppedItems.push("poção de força");
+                    }
+                    if (Math.random() < 0.01) { // 1% de chance
+                        player.addItem('dragonScales');
+                        droppedItems.push("escamas de dragão");
+                    }
+                }
+                
+                return droppedItems;
             }
         }
 
@@ -1659,7 +2061,9 @@
             battleActions.style.display = 'flex';
             attackOptions.style.display = 'none';
             magicOptions.style.display = 'none';
+            itemsOptions.style.display = 'none';
             actOptions.style.display = 'none';
+            backBtn.style.display = 'none';
             
             // Mostrar tela de batalha
             battleScreen.style.display = 'flex';
@@ -1740,14 +2144,16 @@
             
             switch(spellType) {
                 case 'fireball':
-                    if (player.baseMag < 2) {
-                        addBattleLog("Você precisa de pelo menos 2 pontos em Magia para usar Bola de Fogo!");
+                    if (player.baseMag < 12) {
+                        addBattleLog("Você precisa de pelo menos 12 pontos em Magia para usar Bola de Fogo!");
+                        showMainActions();
                         return;
                     }
                     
                     manaCost = 30;
                     if (!player.useMana(manaCost)) {
                         addBattleLog("Mana insuficiente para lançar Bola de Fogo!");
+                        showMainActions();
                         return;
                     }
                     
@@ -1757,14 +2163,16 @@
                     break;
                     
                 case 'freeze':
-                    if (player.baseMag < 5) {
-                        addBattleLog("Você precisa de pelo menos 5 pontos em Magia para usar Brisa Congelante!");
+                    if (player.baseMag < 15) {
+                        addBattleLog("Você precisa de pelo menos 15 pontos em Magia para usar Brisa Congelante!");
+                        showMainActions();
                         return;
                     }
                     
                     manaCost = 40;
                     if (!player.useMana(manaCost)) {
                         addBattleLog("Mana insuficiente para lançar Brisa Congelante!");
+                        showMainActions();
                         return;
                     }
                     
@@ -1774,14 +2182,16 @@
                     break;
                     
                 case 'possession':
-                    if (player.baseMag < 10) {
-                        addBattleLog("Você precisa de pelo menos 10 pontos em Magia para usar Posseção!");
+                    if (player.baseMag < 20) {
+                        addBattleLog("Você precisa de pelo menos 20 pontos em Magia para usar Posseção!");
+                        showMainActions();
                         return;
                     }
                     
                     manaCost = 65;
                     if (!player.useMana(manaCost)) {
                         addBattleLog("Mana insuficiente para lançar Posseção!");
+                        showMainActions();
                         return;
                     }
                     
@@ -1837,6 +2247,24 @@
             }, 1000);
         }
         
+        function playerUseItem(itemType) {
+            if (!isPlayerTurn || battleAnimation) return;
+            
+            const result = player.useItem(itemType);
+            
+            if (result.success) {
+                addBattleLog(result.message);
+                player.updateUI();
+                
+                // Passar a vez para o monstro
+                isPlayerTurn = false;
+                setTimeout(monsterTurn, 1000);
+            } else {
+                addBattleLog(result.message);
+                showMainActions();
+            }
+        }
+        
         function playerAct(actionType) {
             if (!isPlayerTurn || battleAnimation) return;
             
@@ -1866,7 +2294,7 @@
                 isPlayerTurn = true;
                 currentRound++;
                 roundIndicator.textContent = `Round ${currentRound}`;
-                battleActions.style.display = 'flex';
+                showMainActions();
                 return;
             }
             
@@ -1907,7 +2335,7 @@
                 isPlayerTurn = true;
                 currentRound++;
                 roundIndicator.textContent = `Round ${currentRound}`;
-                battleActions.style.display = 'flex';
+                showMainActions();
             }, 800);
         }
         
@@ -1974,7 +2402,15 @@
                 player.addExp(expGained);
                 player.money += moneyGained;
                 
-                addBattleLog(`Você venceu! Ganhou ${expGained} de EXP e ${moneyGained} de dinheiro.`);
+                // Dropar itens
+                const droppedItems = currentMonster.dropItems(player);
+                
+                let dropMessage = "";
+                if (droppedItems.length > 0) {
+                    dropMessage = ` e encontrou: ${droppedItems.join(', ')}`;
+                }
+                
+                addBattleLog(`Você venceu! Ganhou ${expGained} de EXP, ${moneyGained} de dinheiro${dropMessage}.`);
                 
                 setTimeout(() => {
                     battleScreen.style.display = 'none';
@@ -1992,6 +2428,39 @@
                     player.updateUI();
                 }, 3000);
             }
+        }
+        
+        function showMainActions() {
+            battleActions.style.display = 'flex';
+            attackOptions.style.display = 'none';
+            magicOptions.style.display = 'none';
+            itemsOptions.style.display = 'none';
+            actOptions.style.display = 'none';
+            backBtn.style.display = 'none';
+        }
+        
+        function showAttackOptions() {
+            battleActions.style.display = 'none';
+            attackOptions.style.display = 'flex';
+            backBtn.style.display = 'inline-block';
+        }
+        
+        function showMagicOptions() {
+            battleActions.style.display = 'none';
+            magicOptions.style.display = 'flex';
+            backBtn.style.display = 'inline-block';
+        }
+        
+        function showItemsOptions() {
+            battleActions.style.display = 'none';
+            itemsOptions.style.display = 'flex';
+            backBtn.style.display = 'inline-block';
+        }
+        
+        function showActOptions() {
+            battleActions.style.display = 'none';
+            actOptions.style.display = 'flex';
+            backBtn.style.display = 'inline-block';
         }
 
         // Inicialização do jogo
@@ -2017,45 +2486,60 @@
         });
         
         // Event listeners para batalha
-        attackBtn.addEventListener('click', () => {
-            battleActions.style.display = 'none';
-            attackOptions.style.display = 'flex';
-        });
+        attackBtn.addEventListener('click', showAttackOptions);
         
         swordAttackBtn.addEventListener('click', () => {
             attackOptions.style.display = 'none';
+            backBtn.style.display = 'none';
             playerAttack('sword');
         });
         
-        magicBtn.addEventListener('click', () => {
-            battleActions.style.display = 'none';
-            magicOptions.style.display = 'flex';
-        });
+        magicBtn.addEventListener('click', showMagicOptions);
         
         fireballBtn.addEventListener('click', () => {
             magicOptions.style.display = 'none';
+            backBtn.style.display = 'none';
             playerMagic('fireball');
         });
         
         freezeBtn.addEventListener('click', () => {
             magicOptions.style.display = 'none';
+            backBtn.style.display = 'none';
             playerMagic('freeze');
         });
         
         possessionBtn.addEventListener('click', () => {
             magicOptions.style.display = 'none';
+            backBtn.style.display = 'none';
             playerMagic('possession');
         });
         
-        actBtn.addEventListener('click', () => {
-            battleActions.style.display = 'none';
-            actOptions.style.display = 'flex';
+        itemsBtn.addEventListener('click', showItemsOptions);
+        
+        // Event listeners para uso de itens
+        document.querySelectorAll('.use-item-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const item = btn.getAttribute('data-item');
+                itemsOptions.style.display = 'none';
+                backBtn.style.display = 'none';
+                playerUseItem(item);
+            });
         });
+        
+        actBtn.addEventListener('click', showActOptions);
         
         meditateBtn.addEventListener('click', () => {
             actOptions.style.display = 'none';
+            backBtn.style.display = 'none';
             playerAct('meditate');
         });
+        
+        // Event listeners para botões de voltar
+        backBtn.addEventListener('click', showMainActions);
+        backFromAttackBtn.addEventListener('click', showMainActions);
+        backFromMagicBtn.addEventListener('click', showMainActions);
+        backFromItemsBtn.addEventListener('click', showMainActions);
+        backFromActBtn.addEventListener('click', showMainActions);
         
         // Event listeners para inventário
         inventoryBtn.addEventListener('click', () => {
@@ -2075,6 +2559,42 @@
             });
         });
         
+        // Event listeners para crafting
+        craftingResult.addEventListener('click', () => {
+            const result = player.craftDragonSlayer();
+            if (result.includes("criou a Dragon Slayer")) {
+                alert(result);
+            }
+        });
+        
+        craftingSlots.forEach((slot, index) => {
+            slot.addEventListener('click', () => {
+                // Se o slot estiver vazio, perguntar qual item adicionar
+                if (player.craftingSlots[index] === null) {
+                    if (player.items.ham > 0 || player.items.dragonScales > 0) {
+                        const itemChoice = prompt("Qual item deseja adicionar? (Digite 'ham' para Pernil ou 'dragonScales' para Escamas de Dragão):");
+                        if (itemChoice === 'ham' && player.items.ham > 0) {
+                            player.addToCraftingSlot(index, 'ham');
+                        } else if (itemChoice === 'dragonScales' && player.items.dragonScales > 0) {
+                            player.addToCraftingSlot(index, 'dragonScales');
+                        } else {
+                            alert("Item inválido ou quantidade insuficiente!");
+                        }
+                    } else {
+                        alert("Você não tem itens para adicionar ao crafting!");
+                    }
+                } else {
+                    // Se o slot estiver ocupado, limpar
+                    player.clearCraftingSlot(index);
+                }
+            });
+            
+            slot.addEventListener('contextmenu', (e) => {
+                e.preventDefault();
+                player.clearCraftingSlot(index);
+            });
+        });
+        
         // Loop do jogo
         function gameLoop(timestamp) {
             const deltaTime = timestamp - lastTime;
@@ -2082,7 +2602,6 @@
             
             // Atualizar jogador
             player.update(deltaTime);
-            
             
             // Processar movimentos
             if (player.moveCooldown === 0) {
