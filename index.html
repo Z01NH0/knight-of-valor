@@ -111,8 +111,12 @@
             background: linear-gradient(90deg, #3498db, #9b59b6);
         }
         
-        .exp-bar {
+        .stamina-bar {
             background: linear-gradient(90deg, #2ecc71, #f1c40f);
+        }
+        
+        .exp-bar {
+            background: linear-gradient(90deg, #9b59b6, #e74c3c);
         }
         
         .money-display {
@@ -474,6 +478,7 @@
             justify-content: center;
             background: rgba(0, 0, 0, 0.5);
             font-size: 1.2rem;
+            cursor: pointer;
         }
         
         .crafting-result {
@@ -488,6 +493,7 @@
             margin: 0 auto;
             font-size: 1.5rem;
             position: relative;
+            cursor: pointer;
         }
         
         .crafting-pulse {
@@ -545,6 +551,195 @@
         .slow { background: rgba(52, 152, 219, 0.7); }
         .stun { background: rgba(155, 89, 182, 0.7); }
         .strength-potion { background: rgba(230, 126, 34, 0.7); }
+        .heavy-armor { background: rgba(149, 165, 166, 0.7); }
+        
+        /* Loja */
+        .shop-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 30;
+            backdrop-filter: blur(5px);
+        }
+        
+        .shop-container {
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%231a3a5f"/><path d="M0,0 L100,100 M100,0 L0,100" stroke="%23f8c555" stroke-width="1" opacity="0.1"/></svg>');
+            border: 4px solid #f8c555;
+            border-radius: 12px;
+            padding: 20px;
+            width: 80%;
+            max-width: 800px;
+            max-height: 80%;
+            overflow-y: auto;
+            box-shadow: 0 0 30px rgba(248, 197, 85, 0.3);
+        }
+        
+        .shop-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid rgba(248, 197, 85, 0.3);
+            padding-bottom: 10px;
+        }
+        
+        .shop-categories {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+        
+        .shop-category {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid rgba(248, 197, 85, 0.2);
+        }
+        
+        .shop-category.active {
+            background: rgba(248, 197, 85, 0.2);
+            border-color: #f8c555;
+        }
+        
+        .shop-items {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+        
+        .shop-item {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid rgba(248, 197, 85, 0.2);
+        }
+        
+        .shop-item-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        
+        .shop-item-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .shop-item-price {
+            color: #f8c555;
+            margin-bottom: 10px;
+        }
+        
+        .shop-buy-btn {
+            background: linear-gradient(to bottom, #2ecc71, #27ae60);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+        }
+        
+        .shop-buy-btn:hover:not(:disabled) {
+            background: linear-gradient(to bottom, #58d68d, #2ecc71);
+        }
+        
+        .shop-buy-btn:disabled {
+            background: #666;
+            cursor: not-allowed;
+        }
+        
+        /* Menu de Equipamentos */
+        .equipment-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 25;
+            backdrop-filter: blur(5px);
+        }
+        
+        .equipment-container {
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%231a3a5f"/><path d="M0,0 L100,100 M100,0 L0,100" stroke="%23f8c555" stroke-width="1" opacity="0.1"/></svg>');
+            border: 4px solid #f8c555;
+            border-radius: 12px;
+            padding: 20px;
+            width: 80%;
+            max-width: 600px;
+            max-height: 80%;
+            overflow-y: auto;
+            box-shadow: 0 0 30px rgba(248, 197, 85, 0.3);
+        }
+        
+        .equipment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid rgba(248, 197, 85, 0.3);
+            padding-bottom: 10px;
+        }
+        
+        .equipment-slots {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+        
+        .equipment-slot {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid rgba(248, 197, 85, 0.2);
+            min-height: 150px;
+        }
+        
+        .equipment-icon {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+        
+        .equipment-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .equipment-stats {
+            font-size: 0.9rem;
+            color: #ccc;
+        }
+        
+        .equipment-btn {
+            background: linear-gradient(to bottom, #3498db, #2980b9);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            margin-top: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .equipment-btn:hover {
+            background: linear-gradient(to bottom, #5dade2, #3498db);
+        }
         
         @media (max-width: 768px) {
             .game-board {
@@ -569,6 +764,10 @@
             .items-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
+            
+            .shop-items {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap" rel="stylesheet">
@@ -576,7 +775,7 @@
 <body>
     <div class="game-container">
         <div class="game-header">
-            <h1>KNIGHT OF VALOR</h1>
+            <h1></h1>
         </div>
         
         <div class="game-board">
@@ -597,6 +796,14 @@
                         <div id="manaBar" class="bar-fill mana-bar" style="width: 100%"></div>
                     </div>
                     <span id="manaText">50/50</span>
+                </div>
+                
+                <div class="stat-bar">
+                    <div class="stat-label">STAMINA:</div>
+                    <div class="bar-container">
+                        <div id="staminaBar" class="bar-fill stamina-bar" style="width: 100%"></div>
+                    </div>
+                    <span id="staminaText">30/30</span>
                 </div>
                 
                 <div class="stat-bar">
@@ -636,6 +843,10 @@
                             <div class="stat-line">
                                 <span>MANA:</span>
                                 <span id="battlePlayerMana">50</span>/<span id="battlePlayerMaxMana">50</span>
+                            </div>
+                            <div class="stat-line">
+                                <span>STAMINA:</span>
+                                <span id="battlePlayerStamina">30</span>/<span id="battlePlayerMaxStamina">30</span>
                             </div>
                             <div id="playerStatusEffects" class="status-effects"></div>
                         </div>
@@ -683,7 +894,8 @@
                     <div class="attack-options" id="attackOptions">
                         <button class="back-btn" id="backFromAttackBtn">← Voltar</button>
                         <button class="battle-btn" id="swordAttackBtn">ESPADADA</button>
-                        <button class="battle-btn" id="magicAttackBtn">PODER MÁGICO</button>
+                        <button class="battle-btn" id="chargeBtn" disabled>INVESTIDA (Bloqueada)</button>
+                        <button class="battle-btn" id="heavyArmorBtn" disabled>ARMADURA PESADA (Bloqueada)</button>
                     </div>
                     
                     <div class="magic-options" id="magicOptions">
@@ -695,22 +907,8 @@
                     
                     <div class="items-options" id="itemsOptions">
                         <button class="back-btn" id="backFromItemsBtn">← Voltar</button>
-                        <div class="items-grid">
-                            <div class="item-slot">
-                                <div class="item-icon">🍎</div>
-                                <div>Maçã (x<span id="maceCount">0</span>)</div>
-                                <button class="battle-btn use-item-btn" data-item="mace">Usar</button>
-                            </div>
-                            <div class="item-slot">
-                                <div class="item-icon">🍗</div>
-                                <div>Pernil (x<span id="hamCount">0</span>)</div>
-                                <button class="battle-btn use-item-btn" data-item="ham">Usar</button>
-                            </div>
-                            <div class="item-slot">
-                                <div class="item-icon">🧪</div>
-                                <div>Poção de Força (x<span id="strengthPotionCount">0</span>)</div>
-                                <button class="battle-btn use-item-btn" data-item="strengthPotion">Usar</button>
-                            </div>
+                        <div class="items-grid" id="battleItemsGrid">
+                            <!-- Itens serão adicionados dinamicamente -->
                         </div>
                     </div>
                     
@@ -773,8 +971,10 @@
                     </div>
                     
                     <div class="upgrade-points">
-                        <h3>Magias Desbloqueadas</h3>
-                        <div id="unlockedSpells">
+                        <h3>Habilidades Desbloqueadas</h3>
+                        <div id="unlockedSkills">
+                            <div>Investida: <span id="chargeStatus">Bloqueada</span></div>
+                            <div>Armadura Pesada: <span id="heavyArmorStatus">Bloqueada</span></div>
                             <div>Bola de Fogo: <span id="fireballStatus">Bloqueada</span></div>
                             <div>Brisa Congelante: <span id="freezeStatus">Bloqueada</span></div>
                             <div>Posseção: <span id="possessionStatus">Bloqueada</span></div>
@@ -823,12 +1023,63 @@
                             Receita: Pernil no centro inferior, Escamas de Dragão nas outras posições
                         </p>
                     </div>
+                    
+                    <div style="text-align: center; margin-top: 20px;">
+                        <button class="battle-btn" id="equipmentBtn">Ver Equipamentos</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tela de Equipamentos -->
+            <div class="equipment-screen" id="equipmentScreen">
+                <div class="equipment-container">
+                    <div class="equipment-header">
+                        <h2>Equipamentos</h2>
+                        <button class="close-btn" id="closeEquipmentBtn">Fechar</button>
+                    </div>
+                    
+                    <div class="equipment-slots">
+                        <div class="equipment-slot">
+                            <div class="equipment-icon">⚔️</div>
+                            <div class="equipment-name" id="weaponName">Espada Básica</div>
+                            <div class="equipment-stats" id="weaponStats">Dano: 1.0x</div>
+                            <div class="equipment-stats" id="weaponDescription">Sua espada inicial</div>
+                        </div>
+                        
+                        <div class="equipment-slot">
+                            <div class="equipment-icon">🛡️</div>
+                            <div class="equipment-name" id="armorName">Armadura Básica</div>
+                            <div class="equipment-stats" id="armorStats">Defesa: 1.0x</div>
+                            <div class="equipment-stats" id="armorDescription">Sua armadura inicial</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tela da Loja -->
+            <div class="shop-screen" id="shopScreen">
+                <div class="shop-container">
+                    <div class="shop-header">
+                        <h2>Loja do Mercador</h2>
+                        <button class="close-btn" id="closeShopBtn">Fechar</button>
+                    </div>
+                    
+                    <div class="shop-categories">
+                        <div class="shop-category active" data-category="food">Comidas</div>
+                        <div class="shop-category" data-category="weapons">Armamentos</div>
+                        <div class="shop-category" data-category="potions">Poções</div>
+                    </div>
+                    
+                    <div class="shop-items" id="shopItems">
+                        <!-- Itens da loja serão carregados dinamicamente -->
+                    </div>
                 </div>
             </div>
         </div>
         
         <div class="instructions">
-            <p>Use as teclas WASD ou setas para mover o cavaleiro. Cada movimento tem um tempo de recarga.</p>
+            <p></p>
+            <p></p>
         </div>
     </div>
 
@@ -838,8 +1089,8 @@
         const MAP_WIDTH = 16;  // Largura do mapa visível
         const MAP_HEIGHT = 10; // Altura do mapa visível
         const WORLD_SIZE = 200; // Tamanho do mundo (200x200 tiles)
-        const MOVE_COOLDOWN = 600; // 0.6 segundos entre movimentos
-        const MONSTER_SPAWN_CHANCE = 0.3; // 30% de chance de spawnar monstro a cada 3 tiles
+        const MOVE_COOLDOWN = 200; // 0.6 segundos entre movimentos
+        const MONSTER_SPAWN_CHANCE = 0.1; // 30% de chance de spawnar monstro a cada 3 tiles
 
         // Elementos do DOM
         const canvas = document.getElementById('gameCanvas');
@@ -850,6 +1101,8 @@
         const healthText = document.getElementById('healthText');
         const manaBar = document.getElementById('manaBar');
         const manaText = document.getElementById('manaText');
+        const staminaBar = document.getElementById('staminaBar');
+        const staminaText = document.getElementById('staminaText');
         const expBar = document.getElementById('expBar');
         const expText = document.getElementById('expText');
         const moneyText = document.getElementById('moneyText');
@@ -861,6 +1114,8 @@
         const battlePlayerMaxHealth = document.getElementById('battlePlayerMaxHealth');
         const battlePlayerMana = document.getElementById('battlePlayerMana');
         const battlePlayerMaxMana = document.getElementById('battlePlayerMaxMana');
+        const battlePlayerStamina = document.getElementById('battlePlayerStamina');
+        const battlePlayerMaxStamina = document.getElementById('battlePlayerMaxStamina');
         const battleEnemyLevel = document.getElementById('battleEnemyLevel');
         const battleEnemyHealth = document.getElementById('battleEnemyHealth');
         const battleEnemyMaxHealth = document.getElementById('battleEnemyMaxHealth');
@@ -874,6 +1129,8 @@
         const actOptions = document.getElementById('actOptions');
         const attackBtn = document.getElementById('attackBtn');
         const swordAttackBtn = document.getElementById('swordAttackBtn');
+        const chargeBtn = document.getElementById('chargeBtn');
+        const heavyArmorBtn = document.getElementById('heavyArmorBtn');
         const magicBtn = document.getElementById('magicBtn');
         const itemsBtn = document.getElementById('itemsBtn');
         const fireballBtn = document.getElementById('fireballBtn');
@@ -889,6 +1146,7 @@
         const backFromMagicBtn = document.getElementById('backFromMagicBtn');
         const backFromItemsBtn = document.getElementById('backFromItemsBtn');
         const backFromActBtn = document.getElementById('backFromActBtn');
+        const battleItemsGrid = document.getElementById('battleItemsGrid');
         
         // Elementos de inventário
         const inventoryScreen = document.getElementById('inventoryScreen');
@@ -905,14 +1163,13 @@
         const statAgi = document.getElementById('statAgi');
         const statDef = document.getElementById('statDef');
         const statMag = document.getElementById('statMag');
+        const chargeStatus = document.getElementById('chargeStatus');
+        const heavyArmorStatus = document.getElementById('heavyArmorStatus');
         const fireballStatus = document.getElementById('fireballStatus');
         const freezeStatus = document.getElementById('freezeStatus');
         const possessionStatus = document.getElementById('possessionStatus');
         
         // Elementos de itens
-        const maceCount = document.getElementById('maceCount');
-        const hamCount = document.getElementById('hamCount');
-        const strengthPotionCount = document.getElementById('strengthPotionCount');
         const inventoryMaceCount = document.getElementById('inventoryMaceCount');
         const inventoryHamCount = document.getElementById('inventoryHamCount');
         const inventoryStrengthPotionCount = document.getElementById('inventoryStrengthPotionCount');
@@ -932,6 +1189,23 @@
         ];
         const craftingResult = document.getElementById('craftingResult');
         
+        // Elementos de equipamentos
+        const equipmentScreen = document.getElementById('equipmentScreen');
+        const equipmentBtn = document.getElementById('equipmentBtn');
+        const closeEquipmentBtn = document.getElementById('closeEquipmentBtn');
+        const weaponName = document.getElementById('weaponName');
+        const weaponStats = document.getElementById('weaponStats');
+        const weaponDescription = document.getElementById('weaponDescription');
+        const armorName = document.getElementById('armorName');
+        const armorStats = document.getElementById('armorStats');
+        const armorDescription = document.getElementById('armorDescription');
+        
+        // Elementos da loja
+        const shopScreen = document.getElementById('shopScreen');
+        const closeShopBtn = document.getElementById('closeShopBtn');
+        const shopCategories = document.querySelectorAll('.shop-category');
+        const shopItems = document.getElementById('shopItems');
+        
         // Cores
         const COLORS = {
             GRASS: '#2ecc71',
@@ -948,7 +1222,9 @@
             FLOWER2: '#9b59b6',
             FLOWER3: '#f1c40f',
             SAND: '#f1c40f',
-            SAND_DARK: '#d4ac0d'
+            SAND_DARK: '#d4ac0d',
+            SHOP: '#8B4513',
+            SHOP_DARK: '#654321'
         };
 
         // Classe do Jogador
@@ -957,7 +1233,7 @@
                 this.level = 1;
                 this.x = WORLD_SIZE / 2;
                 this.y = WORLD_SIZE / 2;
-                this.money = 100;
+                this.money = 0;
                 this.exp = 0;
                 this.expToNextLevel = 40;
                 this.upgradePoints = 0;
@@ -974,6 +1250,8 @@
                 this.health = this.maxHealth;
                 this.maxMana = Math.floor(50 * Math.pow(1.05, this.baseMag - 10));
                 this.mana = this.maxMana;
+                this.maxStamina = 30 + (this.baseAgi - 10) * 2; // Stamina base + 2 por ponto de agilidade
+                this.stamina = this.maxStamina;
                 this.strength = this.baseStr;
                 this.agility = this.baseAgi;
                 this.defense = this.baseDef;
@@ -988,7 +1266,7 @@
                 
                 // Itens
                 this.items = {
-                    mace: 0,
+                    mace: 2,
                     ham: 0,
                     strengthPotion: 0,
                     dragonScales: 0
@@ -998,6 +1276,26 @@
                 this.craftingSlots = Array(9).fill(null);
                 this.hasDragonSlayer = false;
                 this.dragonSlayerMultiplier = 1; // Multiplicador de dano da Dragon Slayer
+                
+                // Equipamentos
+                this.weapon = {
+                    name: "Espada Básica",
+                    damageMultiplier: 1.0,
+                    description: "Sua espada inicial"
+                };
+                
+                this.armor = {
+                    name: "Armadura Básica",
+                    defenseMultiplier: 1.0,
+                    agilityPenalty: 0,
+                    description: "Sua armadura inicial"
+                };
+                
+                // Itens comprados na loja
+                this.purchasedItems = {
+                    stoneSword: false,
+                    chainMail: false
+                };
             }
             
             draw() {
@@ -1005,27 +1303,74 @@
                 const centerY = canvas.height / 2;
                 
                 // Desenhar o cavaleiro melhorado
-                // Corpo
-                ctx.fillStyle = '#34495e';
+                // Corpo com armadura detalhada
+                ctx.fillStyle = this.armor.name === "Armadura de Malha" ? '#7f8c8d' : '#34495e';
                 ctx.fillRect(centerX - 20, centerY - 15, 40, 30);
+                
+                // Detalhes da armadura
+                ctx.fillStyle = '#2c3e50';
+                ctx.fillRect(centerX - 18, centerY - 13, 36, 26);
                 
                 // Cabeça
                 ctx.fillStyle = '#ecf0f1';
                 ctx.fillRect(centerX - 10, centerY - 25, 20, 10);
                 
-                // Capacete
+                // Capacete com detalhes
                 ctx.fillStyle = '#95a5a6';
                 ctx.fillRect(centerX - 12, centerY - 27, 24, 5);
                 ctx.fillRect(centerX - 15, centerY - 22, 30, 3);
+                
+                // Visor do capacete
+                ctx.fillStyle = '#3498db';
+                ctx.fillRect(centerX - 8, centerY - 24, 16, 4);
                 
                 // Escudo
                 ctx.fillStyle = '#2c3e50';
                 ctx.fillRect(centerX - 25, centerY - 10, 8, 20);
                 
+                // Detalhes do escudo
+                ctx.fillStyle = '#f8c555';
+                ctx.fillRect(centerX - 23, centerY - 5, 4, 10);
+                
                 // Espada (ou Dragon Slayer)
-                ctx.fillStyle = this.hasDragonSlayer ? '#e74c3c' : '#bdc3c7';
-                ctx.fillRect(centerX + 15, centerY - 12, 3, 24);
-                ctx.fillRect(centerX + 10, centerY - 15, 13, 6);
+                if (this.hasDragonSlayer) {
+                    // Dragon Slayer - espada épica
+                    ctx.fillStyle = '#e74c3c';
+                    ctx.fillRect(centerX + 15, centerY - 15, 5, 30);
+                    
+                    // Lâmina flamejante
+                    ctx.fillStyle = '#f39c12';
+                    ctx.beginPath();
+                    ctx.moveTo(centerX + 20, centerY - 15);
+                    ctx.lineTo(centerX + 25, centerY - 20);
+                    ctx.lineTo(centerX + 20, centerY - 10);
+                    ctx.closePath();
+                    ctx.fill();
+                    
+                    ctx.beginPath();
+                    ctx.moveTo(centerX + 20, centerY);
+                    ctx.lineTo(centerX + 25, centerY - 5);
+                    ctx.lineTo(centerX + 20, centerY + 5);
+                    ctx.closePath();
+                    ctx.fill();
+                    
+                    ctx.beginPath();
+                    ctx.moveTo(centerX + 20, centerY + 15);
+                    ctx.lineTo(centerX + 25, centerY + 10);
+                    ctx.lineTo(centerX + 20, centerY + 20);
+                    ctx.closePath();
+                    ctx.fill();
+                } else if (this.weapon.name === "Espada de Pedra") {
+                    // Espada de Pedra
+                    ctx.fillStyle = '#95a5a6';
+                    ctx.fillRect(centerX + 15, centerY - 12, 3, 24);
+                    ctx.fillRect(centerX + 10, centerY - 15, 13, 6);
+                } else {
+                    // Espada básica
+                    ctx.fillStyle = '#bdc3c7';
+                    ctx.fillRect(centerX + 15, centerY - 12, 3, 24);
+                    ctx.fillRect(centerX + 10, centerY - 15, 13, 6);
+                }
                 
                 // Detalhes da armadura
                 ctx.strokeStyle = '#2c3e50';
@@ -1033,26 +1378,55 @@
                 ctx.strokeRect(centerX - 20, centerY - 15, 40, 30);
             }
             
-            drawBattle(ctx, isAttacking = false) {
+            drawBattle(ctx, isAttacking = false, attackType = null) {
                 ctx.clearRect(0, 0, 150, 150);
                 
                 // Fundo do personagem
                 ctx.fillStyle = 'rgba(26, 58, 95, 0.5)';
                 ctx.fillRect(0, 0, 150, 150);
                 
-                // Desenhar o cavaleiro em batalha (mais detalhado)
+                // Efeito de ataque
+                if (isAttacking) {
+                    if (attackType === 'sword') {
+                        ctx.fillStyle = 'rgba(255, 215, 0, 0.3)';
+                        ctx.fillRect(0, 0, 150, 150);
+                    } else if (attackType === 'charge') {
+                        // Efeito de investida - rastro de movimento
+                        ctx.fillStyle = 'rgba(255, 165, 0, 0.4)';
+                        ctx.beginPath();
+                        ctx.arc(75, 75, 60, 0, Math.PI * 2);
+                        ctx.fill();
+                    } else if (attackType === 'fireball') {
+                        // Efeito de fogo
+                        ctx.fillStyle = 'rgba(255, 69, 0, 0.5)';
+                        ctx.beginPath();
+                        ctx.arc(75, 75, 70, 0, Math.PI * 2);
+                        ctx.fill();
+                    } else if (attackType === 'freeze') {
+                        // Efeito de gelo
+                        ctx.fillStyle = 'rgba(173, 216, 230, 0.5)';
+                        ctx.beginPath();
+                        ctx.arc(75, 75, 70, 0, Math.PI * 2);
+                        ctx.fill();
+                    } else if (attackType === 'possession') {
+                        // Efeito de possessão
+                        ctx.fillStyle = 'rgba(138, 43, 226, 0.5)';
+                        ctx.beginPath();
+                        ctx.arc(75, 75, 70, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+                }
+                
                 const centerX = 75;
                 const centerY = 75;
                 
-                // Efeito de ataque
-                if (isAttacking) {
-                    ctx.fillStyle = 'rgba(255, 215, 0, 0.3)';
-                    ctx.fillRect(0, 0, 150, 150);
-                }
-                
-                // Corpo
-                ctx.fillStyle = '#2c3e50';
+                // Corpo com armadura detalhada
+                ctx.fillStyle = this.armor.name === "Armadura de Malha" ? '#7f8c8d' : '#2c3e50';
                 ctx.fillRect(centerX - 25, centerY - 10, 50, 40);
+                
+                // Detalhes da armadura
+                ctx.fillStyle = '#34495e';
+                ctx.fillRect(centerX - 23, centerY - 8, 46, 36);
                 
                 // Cabeça
                 ctx.fillStyle = '#ecf0f1';
@@ -1070,6 +1444,7 @@
                 // Escudo
                 ctx.fillStyle = '#34495e';
                 ctx.fillRect(centerX - 40, centerY - 5, 15, 30);
+                
                 // Detalhes do escudo
                 ctx.fillStyle = '#f8c555';
                 ctx.fillRect(centerX - 38, centerY, 11, 20);
@@ -1079,14 +1454,62 @@
                 ctx.fill();
                 
                 // Espada (ou Dragon Slayer)
-                ctx.fillStyle = this.hasDragonSlayer ? '#e74c3c' : '#bdc3c7';
-                // Lâmina
-                ctx.fillRect(centerX + 20, centerY - 15, 5, 40);
-                // Guarda
-                ctx.fillRect(centerX + 15, centerY - 20, 15, 10);
-                // Punho
-                ctx.fillStyle = '#8B4513';
-                ctx.fillRect(centerX + 20, centerY + 25, 5, 15);
+                if (this.hasDragonSlayer) {
+                    // Dragon Slayer - espada épica
+                    ctx.fillStyle = '#e74c3c';
+                    // Lâmina
+                    ctx.fillRect(centerX + 20, centerY - 15, 5, 40);
+                    // Guarda
+                    ctx.fillRect(centerX + 15, centerY - 20, 15, 10);
+                    // Punho
+                    ctx.fillStyle = '#8B4513';
+                    ctx.fillRect(centerX + 20, centerY + 25, 5, 15);
+                    
+                    // Efeito flamejante
+                    if (isAttacking) {
+                        ctx.fillStyle = '#f39c12';
+                        ctx.beginPath();
+                        ctx.moveTo(centerX + 25, centerY - 15);
+                        ctx.lineTo(centerX + 35, centerY - 25);
+                        ctx.lineTo(centerX + 25, centerY - 5);
+                        ctx.closePath();
+                        ctx.fill();
+                        
+                        ctx.beginPath();
+                        ctx.moveTo(centerX + 25, centerY + 5);
+                        ctx.lineTo(centerX + 35, centerY - 5);
+                        ctx.lineTo(centerX + 25, centerY + 15);
+                        ctx.closePath();
+                        ctx.fill();
+                        
+                        ctx.beginPath();
+                        ctx.moveTo(centerX + 25, centerY + 25);
+                        ctx.lineTo(centerX + 35, centerY + 15);
+                        ctx.lineTo(centerX + 25, centerY + 35);
+                        ctx.closePath();
+                        ctx.fill();
+                    }
+                } else if (this.weapon.name === "Espada de Pedra") {
+                    // Espada de Pedra
+                    ctx.fillStyle = '#95a5a6';
+                    // Lâmina
+                    ctx.fillRect(centerX + 20, centerY - 15, 5, 40);
+                    // Guarda
+                    ctx.fillRect(centerX + 15, centerY - 20, 15, 10);
+                    // Punho
+                    ctx.fillStyle = '#8B4513';
+                    ctx.fillRect(centerX + 20, centerY + 25, 5, 15);
+                } else {
+                    // Espada básica
+                    ctx.fillStyle = '#bdc3c7';
+                    // Lâmina
+                    ctx.fillRect(centerX + 20, centerY - 15, 5, 40);
+                    // Guarda
+                    ctx.fillRect(centerX + 15, centerY - 20, 15, 10);
+                    // Punho
+                    ctx.fillStyle = '#8B4513';
+                    ctx.fillRect(centerX + 20, centerY + 25, 5, 15);
+                }
                 
                 // Detalhes da armadura
                 ctx.strokeStyle = '#1c2833';
@@ -1156,6 +1579,8 @@
                 healthText.textContent = `${this.health}/${this.maxHealth}`;
                 manaBar.style.width = `${(this.mana / this.maxMana) * 100}%`;
                 manaText.textContent = `${this.mana}/${this.maxMana}`;
+                staminaBar.style.width = `${(this.stamina / this.maxStamina) * 100}%`;
+                staminaText.textContent = `${this.stamina}/${this.maxStamina}`;
                 expBar.style.width = `${(this.exp / this.expToNextLevel) * 100}%`;
                 expText.textContent = `${this.exp}/${this.expToNextLevel}`;
                 moneyText.textContent = this.money;
@@ -1172,7 +1597,17 @@
                 statDef.textContent = this.baseDef;
                 statMag.textContent = this.baseMag;
                 
-                // Atualizar status das magias
+                // Atualizar status das habilidades
+                if (this.baseStr >= 13) {
+                    chargeStatus.textContent = "Desbloqueada";
+                    chargeBtn.disabled = false;
+                    chargeBtn.textContent = "INVESTIDA";
+                }
+                if (this.baseStr >= 20) {
+                    heavyArmorStatus.textContent = "Desbloqueada";
+                    heavyArmorBtn.disabled = false;
+                    heavyArmorBtn.textContent = "ARMADURA PESADA";
+                }
                 if (this.baseMag >= 12) {
                     fireballStatus.textContent = "Desbloqueada";
                     fireballBtn.disabled = false;
@@ -1190,9 +1625,6 @@
                 }
                 
                 // Atualizar contagem de itens
-                maceCount.textContent = this.items.mace;
-                hamCount.textContent = this.items.ham;
-                strengthPotionCount.textContent = this.items.strengthPotion;
                 inventoryMaceCount.textContent = this.items.mace;
                 inventoryHamCount.textContent = this.items.ham;
                 inventoryStrengthPotionCount.textContent = this.items.strengthPotion;
@@ -1204,12 +1636,20 @@
                 battlePlayerMaxHealth.textContent = this.maxHealth;
                 battlePlayerMana.textContent = this.mana;
                 battlePlayerMaxMana.textContent = this.maxMana;
+                battlePlayerStamina.textContent = this.stamina;
+                battlePlayerMaxStamina.textContent = this.maxStamina;
                 
                 // Atualizar status effects na UI de batalha
                 this.updateBattleStatusEffects();
                 
                 // Atualizar crafting
                 this.updateCraftingUI();
+                
+                // Atualizar equipamentos
+                this.updateEquipmentUI();
+                
+                // Atualizar itens de batalha
+                this.updateBattleItems();
             }
             
             updateBattleStatusEffects() {
@@ -1266,6 +1706,7 @@
                             break;
                         case 'agi':
                             this.baseAgi += 1;
+                            this.maxStamina = 30 + (this.baseAgi - 10) * 2;
                             break;
                         case 'def':
                             this.baseDef += 1;
@@ -1283,22 +1724,34 @@
                 // Recalcular stats com multiplicadores
                 this.maxHealth = Math.floor(this.baseHp * 10);
                 this.maxMana = Math.floor(50 * Math.pow(1.05, this.baseMag - 10));
+                this.maxStamina = 30 + (this.baseAgi - 10) * 2;
                 this.strength = this.baseStr;
-                this.agility = this.baseAgi;
+                this.agility = this.baseAgi - this.armor.agilityPenalty;
                 this.defense = this.baseDef;
                 this.magic = this.baseMag;
                 
                 // Aplicar multiplicador da Dragon Slayer
                 if (this.hasDragonSlayer) {
-                    this.strength = Math.floor(this.strength * this.dragonSlayerMultiplier);
+                    this.strength = Math.floor(this.strength * 11);
                 }
                 
+                // Aplicar multiplicador da espada
+                this.strength = Math.floor(this.strength * this.weapon.damageMultiplier);
+                
+                // Aplicar multiplicador da armadura
+                this.defense = Math.floor(this.defense * this.armor.defenseMultiplier);
+                
                 // Recalcular chance de esquiva baseada na agilidade
-                this.dodgeChance = 0.04 + (this.baseAgi - 10) * 0.03;
+                this.dodgeChance = 0.04 + (this.agility - 10) * 0.03;
                 
                 // Aplicar efeitos de status
                 if (this.hasStatusEffect('slow')) {
                     this.dodgeChance += 0.4; // 40% adicional de esquiva
+                }
+                
+                // Garantir que stamina não exceda o máximo
+                if (this.stamina > this.maxStamina) {
+                    this.stamina = this.maxStamina;
                 }
             }
             
@@ -1313,12 +1766,50 @@
                 return baseDamage;
             }
             
+            chargeAttack() {
+                if (this.stamina < 30) {
+                    return { success: false, message: "Stamina insuficiente para usar Investida!" };
+                }
+                
+                this.stamina -= 30;
+                const baseDamage = 11 + Math.floor(this.strength * 0.3);
+                const isCritical = Math.random() < 0.15; // 15% de chance de crítico (3x mais)
+                
+                if (isCritical) {
+                    return { success: true, damage: Math.floor(baseDamage * 4), isCritical: true }; // 4x de dano crítico
+                }
+                
+                return { success: true, damage: baseDamage, isCritical: false };
+            }
+            
+            activateHeavyArmor() {
+                if (this.stamina < 50) {
+                    return { success: false, message: "Stamina insuficiente para usar Armadura Pesada!" };
+                }
+                
+                this.stamina -= 50;
+                this.addStatusEffect({ type: 'heavy-armor', duration: 5, defenseMultiplier: 1.8 });
+                return { success: true, message: "Armadura Pesada ativada! Defesa aumentada por 5 turnos!" };
+            }
+            
             useMana(amount) {
                 if (this.mana >= amount) {
                     this.mana -= amount;
                     return true;
                 }
                 return false;
+            }
+            
+            useStamina(amount) {
+                if (this.stamina >= amount) {
+                    this.stamina -= amount;
+                    return true;
+                }
+                return false;
+            }
+            
+            recoverStamina(amount) {
+                this.stamina = Math.min(this.maxStamina, this.stamina + amount);
             }
             
             meditate() {
@@ -1332,7 +1823,7 @@
             }
             
             useItem(item) {
-                if (this.items[item] <= 0) return false;
+                if (this.items[item] <= 0) return { success: false, message: "Você não tem este item!" };
                 
                 this.items[item]--;
                 
@@ -1344,8 +1835,8 @@
                         this.health = Math.min(this.maxHealth, this.health + 25);
                         return { success: true, message: "Usou o pernil e recuperou 25 de HP!" };
                     case 'strengthPotion':
-                        this.addStatusEffect({ type: 'strength-potion', duration: 3, multiplier: 1.4 });
-                        return { success: true, message: "Usou a poção de força! Seu ataque aumentou por 3 turnos!" };
+                        this.addStatusEffect({ type: 'strength-potion', duration: 4, damageMultiplier: 1.5 });
+                        return { success: true, message: "Usou a poção de força! Seu ataque aumentou por 4 turnos!" };
                 }
                 
                 this.updateUI();
@@ -1362,8 +1853,8 @@
                 // Verificar se a receita está correta
                 const recipe = [
                     'dragonScales', 'dragonScales', 'dragonScales',
-                    'dragonScales', 'ham', 'dragonScales',
-                    null, 'dragonScales', null
+                    'dragonScales', 'dragonScales', null,
+                    null, 'ham', null
                 ];
                 
                 let recipeCorrect = true;
@@ -1387,8 +1878,8 @@
             craftDragonSlayer() {
                 const recipe = [
                     'dragonScales', 'dragonScales', 'dragonScales',
-                    'dragonScales', 'ham', 'dragonScales',
-                    null, 'dragonScales', null
+                    'dragonScales', 'dragonScales', null,
+                    null, 'ham', null
                 ];
                 
                 // Verificar se a receita está correta
@@ -1406,7 +1897,6 @@
                         this.items.ham -= 1;
                         this.items.dragonScales -= 5;
                         this.hasDragonSlayer = true;
-                        this.dragonSlayerMultiplier = 11; // 11x mais dano
                         this.recalculateStats();
                         
                         // Limpar slots de crafting
@@ -1424,21 +1914,149 @@
             
             addToCraftingSlot(slotIndex, item) {
                 if (this.craftingSlots[slotIndex] === null) {
-                    this.craftingSlots[slotIndex] = item;
-                    this.updateUI();
-                    return true;
+                    // Verificar se o jogador tem o item
+                    if ((item === 'ham' && this.items.ham > 0) || 
+                        (item === 'dragonScales' && this.items.dragonScales > 0)) {
+                        
+                        this.craftingSlots[slotIndex] = item;
+                        
+                        // Consumir o item
+                        if (item === 'ham') {
+                            this.items.ham--;
+                        } else if (item === 'dragonScales') {
+                            this.items.dragonScales--;
+                        }
+                        
+                        this.updateUI();
+                        return true;
+                    }
                 }
                 return false;
             }
             
             clearCraftingSlot(slotIndex) {
+                // Devolver o item ao inventário
+                if (this.craftingSlots[slotIndex] === 'ham') {
+                    this.items.ham++;
+                } else if (this.craftingSlots[slotIndex] === 'dragonScales') {
+                    this.items.dragonScales++;
+                }
+                
                 this.craftingSlots[slotIndex] = null;
                 this.updateUI();
             }
             
             clearAllCraftingSlots() {
-                this.craftingSlots = Array(9).fill(null);
-                this.updateUI();
+                for (let i = 0; i < 9; i++) {
+                    this.clearCraftingSlot(i);
+                }
+            }
+            
+            updateEquipmentUI() {
+                weaponName.textContent = this.weapon.name;
+                weaponStats.textContent = `Dano: ${this.weapon.damageMultiplier}x`;
+                weaponDescription.textContent = this.weapon.description;
+                
+                armorName.textContent = this.armor.name;
+                armorStats.textContent = `Defesa: ${this.armor.defenseMultiplier}x`;
+                if (this.armor.agilityPenalty > 0) {
+                    armorDescription.textContent = `${this.armor.description} (-${this.armor.agilityPenalty} agilidade)`;
+                } else {
+                    armorDescription.textContent = this.armor.description;
+                }
+            }
+            
+            updateBattleItems() {
+                battleItemsGrid.innerHTML = '';
+                
+                // Adicionar apenas itens que o jogador possui
+                if (this.items.mace > 0) {
+                    const itemSlot = document.createElement('div');
+                    itemSlot.className = 'item-slot';
+                    itemSlot.innerHTML = `
+                        <div class="item-icon">🍎</div>
+                        <div>Maçã (x${this.items.mace})</div>
+                        <button class="battle-btn use-item-btn" data-item="mace">Usar</button>
+                    `;
+                    battleItemsGrid.appendChild(itemSlot);
+                }
+                
+                if (this.items.ham > 0) {
+                    const itemSlot = document.createElement('div');
+                    itemSlot.className = 'item-slot';
+                    itemSlot.innerHTML = `
+                        <div class="item-icon">🍗</div>
+                        <div>Pernil (x${this.items.ham})</div>
+                        <button class="battle-btn use-item-btn" data-item="ham">Usar</button>
+                    `;
+                    battleItemsGrid.appendChild(itemSlot);
+                }
+                
+                if (this.items.strengthPotion > 0) {
+                    const itemSlot = document.createElement('div');
+                    itemSlot.className = 'item-slot';
+                    itemSlot.innerHTML = `
+                        <div class="item-icon">🧪</div>
+                        <div>Poção de Força (x${this.items.strengthPotion})</div>
+                        <button class="battle-btn use-item-btn" data-item="strengthPotion">Usar</button>
+                    `;
+                    battleItemsGrid.appendChild(itemSlot);
+                }
+                
+                // Adicionar event listeners para os novos botões
+                document.querySelectorAll('.use-item-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const item = btn.getAttribute('data-item');
+                        itemsOptions.style.display = 'none';
+                        backBtn.style.display = 'none';
+                        playerUseItem(item);
+                    });
+                });
+            }
+            
+            buyItem(item, price) {
+                if (this.money >= price) {
+                    this.money -= price;
+                    
+                    switch(item) {
+                        case 'mace':
+                            this.items.mace++;
+                            break;
+                        case 'ham':
+                            this.items.ham++;
+                            break;
+                        case 'strengthPotion':
+                            this.items.strengthPotion++;
+                            break;
+                        case 'stoneSword':
+                            if (!this.purchasedItems.stoneSword) {
+                                this.weapon = {
+                                    name: "Espada de Pedra",
+                                    damageMultiplier: 1.2,
+                                    description: "Uma espada feita de pedra afiada"
+                                };
+                                this.purchasedItems.stoneSword = true;
+                                this.recalculateStats();
+                            }
+                            break;
+                        case 'chainMail':
+                            if (!this.purchasedItems.chainMail) {
+                                this.armor = {
+                                    name: "Armadura de Malha",
+                                    defenseMultiplier: 1.3,
+                                    agilityPenalty: 2,
+                                    description: "Uma armadura de malha pesada"
+                                };
+                                this.purchasedItems.chainMail = true;
+                                this.recalculateStats();
+                            }
+                            break;
+                    }
+                    
+                    this.updateUI();
+                    return true;
+                }
+                return false;
             }
         }
 
@@ -1449,16 +2067,16 @@
                 
                 if (type === 'weak') {
                     this.name = "Goblin Fraco";
-                    this.maxHealth = 17;
+                    this.maxHealth = 20;
                     this.health = this.maxHealth;
-                    this.attack = 3;
+                    this.attack = 4;
                     this.level = 1;
                     this.agility = 5;
                 } else if (type === 'strong') {
                     this.name = "Orc Forte";
                     this.maxHealth = 35;
                     this.health = this.maxHealth;
-                    this.attack = 10;
+                    this.attack = 11;
                     this.level = 3;
                     this.agility = 8;
                 } else if (type === 'elite') {
@@ -1472,6 +2090,7 @@
                 
                 // Atributos aleatórios
                 this.defense = Math.floor(Math.random() * 5) + 1;
+                this.agility = Math.floor(Math.random() * 5) + 1;
                 this.magic = Math.floor(Math.random() * 5) + 1;
                 
                 // Status effects
@@ -1488,8 +2107,16 @@
                 
                 // Efeito de ataque
                 if (isAttacking) {
-                    ctx.fillStyle = 'rgba(231, 76, 60, 0.3)';
-                    ctx.fillRect(0, 0, 150, 150);
+                    if (this.type === 'elite' && Math.random() < 0.3) {
+                        // Efeito de queimadura do dragão
+                        ctx.fillStyle = 'rgba(255, 69, 0, 0.5)';
+                        ctx.beginPath();
+                        ctx.arc(75, 75, 70, 0, Math.PI * 2);
+                        ctx.fill();
+                    } else {
+                        ctx.fillStyle = 'rgba(231, 76, 60, 0.3)';
+                        ctx.fillRect(0, 0, 150, 150);
+                    }
                 }
                 
                 const centerX = 75;
@@ -1621,7 +2248,7 @@
                         this.recalculateStats();
                     } else if (effect.type === 'burn') {
                         // Aplicar dano de queimadura
-                        this.health -= 3;
+                        this.health -= 4;
                         if (this.health < 0) this.health = 0;
                     }
                 }
@@ -1665,7 +2292,15 @@
             }
             
             attackPlayer(player) {
-                return this.attack;
+                let damage = this.attack;
+                
+                // Dragão de Elite tem chance de causar queimadura
+                if (this.type === 'elite' && Math.random() < 0.3) {
+                    player.addStatusEffect({ type: 'burn', duration: 3 });
+                    damage += 5; // Dano extra do ataque com queimadura
+                }
+                
+                return damage;
             }
             
             dropItems(player) {
@@ -1716,6 +2351,69 @@
                 }
                 
                 return droppedItems;
+            }
+        }
+
+        // Classe do Mercador
+        class Merchant {
+            constructor() {
+                this.x = Math.floor(Math.random() * (WORLD_SIZE - 10)) + 5;
+                this.y = Math.floor(Math.random() * (WORLD_SIZE - 10)) + 5;
+            }
+            
+            draw() {
+                const offsetX = player.x - MAP_WIDTH / 2;
+                const offsetY = player.y - MAP_HEIGHT / 2;
+                
+                const screenX = Math.floor(this.x - offsetX);
+                const screenY = Math.floor(this.y - offsetY);
+                
+                if (screenX >= 0 && screenX < MAP_WIDTH && screenY >= 0 && screenY < MAP_HEIGHT) {
+                    // Desenhar cabana do mercador
+                    const x = screenX * TILE_SIZE;
+                    const y = screenY * TILE_SIZE;
+                    
+                    // Cabana
+                    ctx.fillStyle = COLORS.SHOP;
+                    ctx.fillRect(x + 10, y + 20, TILE_SIZE - 20, TILE_SIZE - 30);
+                    
+                    // Telhado
+                    ctx.fillStyle = COLORS.SHOP_DARK;
+                    ctx.beginPath();
+                    ctx.moveTo(x, y + 20);
+                    ctx.lineTo(x + TILE_SIZE / 2, y);
+                    ctx.lineTo(x + TILE_SIZE, y + 20);
+                    ctx.closePath();
+                    ctx.fill();
+                    
+                    // Porta
+                    ctx.fillStyle = '#8B4513';
+                    ctx.fillRect(x + TILE_SIZE / 2 - 10, y + 30, 20, 30);
+                    
+                    // Janelas
+                    ctx.fillStyle = '#3498db';
+                    ctx.fillRect(x + 15, y + 30, 15, 15);
+                    ctx.fillRect(x + TILE_SIZE - 30, y + 30, 15, 15);
+                    
+                    // Balcão
+                    ctx.fillStyle = '#D2691E';
+                    ctx.fillRect(x, y + TILE_SIZE - 10, TILE_SIZE, 10);
+                    
+                    // Mercador
+                    ctx.fillStyle = '#f8c555';
+                    ctx.fillRect(x + TILE_SIZE / 2 - 5, y + TILE_SIZE - 20, 10, 15);
+                    
+                    // Sinalização "Loja"
+                    ctx.fillStyle = '#f8c555';
+                    ctx.font = 'bold 12px MedievalSharp';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('Loja', x + TILE_SIZE / 2, y - 5);
+                }
+            }
+            
+            isPlayerNearby(player) {
+                const distance = Math.sqrt(Math.pow(player.x - this.x, 2) + Math.pow(player.y - this.y, 2));
+                return distance < 2;
             }
         }
 
@@ -2022,6 +2720,17 @@
                     }
                 }
             }
+            
+            // Desenhar o mercador
+            merchant.draw();
+            
+            // Desenhar indicador de interação com o mercador
+            if (merchant.isPlayerNearby(player)) {
+                ctx.fillStyle = '#f8c555';
+                ctx.font = 'bold 14px MedievalSharp';
+                ctx.textAlign = 'center';
+                ctx.fillText('Pressione E para interagir', canvas.width / 2, canvas.height - 20);
+            }
         }
 
         // Sistema de Batalha
@@ -2084,6 +2793,7 @@
             let damage = 0;
             let isCritical = false;
             let message = "";
+            let attackResult = null;
             
             if (attackType === 'sword') {
                 damage = player.swordAttack();
@@ -2095,7 +2805,31 @@
                 battleAnimation = {
                     type: 'playerAttack',
                     step: 0,
-                    maxSteps: 20
+                    maxSteps: 20,
+                    attackType: 'sword'
+                };
+                
+                animateBattle();
+            } else if (attackType === 'charge') {
+                attackResult = player.chargeAttack();
+                
+                if (!attackResult.success) {
+                    addBattleLog(attackResult.message);
+                    showMainActions();
+                    return;
+                }
+                
+                damage = attackResult.damage;
+                isCritical = attackResult.isCritical;
+                
+                message = "O cavaleiro avança rapidamente e investe contra o inimigo!";
+                
+                // Animação de investida
+                battleAnimation = {
+                    type: 'playerAttack',
+                    step: 0,
+                    maxSteps: 25,
+                    attackType: 'charge'
                 };
                 
                 animateBattle();
@@ -2127,11 +2861,44 @@
                 // Atualizar status effects do monstro
                 currentMonster.updateStatusEffects();
                 currentMonster.updateBattleStatusEffects();
+                player.updateUI();
                 
                 // Passar a vez para o monstro
                 isPlayerTurn = false;
                 setTimeout(monsterTurn, 1000);
-            }, 800);
+            }, attackType === 'charge' ? 1000 : 800);
+        }
+        
+        function playerHeavyArmor() {
+            if (!isPlayerTurn || battleAnimation) return;
+            
+            const result = player.activateHeavyArmor();
+            
+            if (!result.success) {
+                addBattleLog(result.message);
+                showMainActions();
+                return;
+            }
+            
+            addBattleLog(result.message);
+            
+            // Animação de ativação da armadura pesada
+            battleAnimation = {
+                type: 'playerEffect',
+                step: 0,
+                maxSteps: 15
+            };
+            
+            animateBattle();
+            
+            // Esperar animação
+            setTimeout(() => {
+                player.updateUI();
+                
+                // Passar a vez para o monstro
+                isPlayerTurn = false;
+                setTimeout(monsterTurn, 1000);
+            }, 700);
         }
         
         function playerMagic(spellType) {
@@ -2141,6 +2908,7 @@
             let message = "";
             let manaCost = 0;
             let statusEffect = null;
+            let burnChance = 0;
             
             switch(spellType) {
                 case 'fireball':
@@ -2159,7 +2927,7 @@
                     
                     damage = 20 + Math.floor(player.magic * 0.8);
                     message = "O cavaleiro conjura uma Bola de Fogo!";
-                    statusEffect = { type: 'burn', duration: 2 };
+                    burnChance = 0.5; // 50% de chance de causar queimadura
                     break;
                     
                 case 'freeze':
@@ -2197,7 +2965,7 @@
                     
                     damage = 25 + Math.floor(player.magic * 1.2);
                     message = "O cavaleiro lança um feitiço de Posseção!";
-                    statusEffect = { type: 'stun', duration: 2 };
+                    statusEffect = { type: 'stun', duration: 3 };
                     break;
             }
             
@@ -2222,7 +2990,11 @@
                     const actualDamage = currentMonster.takeDamage(damage);
                     addBattleLog(` O feitiço causou ${actualDamage} de dano!`);
                     
-                    if (statusEffect) {
+                    // Aplicar efeitos de status
+                    if (spellType === 'fireball' && Math.random() < burnChance) {
+                        currentMonster.addStatusEffect({ type: 'burn', duration: 3 });
+                        addBattleLog(" O inimigo foi queimado!");
+                    } else if (statusEffect) {
                         currentMonster.addStatusEffect(statusEffect);
                         addBattleLog(` O inimigo foi afetado por ${statusEffect.type.toUpperCase()}!`);
                     }
@@ -2284,6 +3056,10 @@
         function monsterTurn() {
             if (isPlayerTurn) return;
             
+            // Recuperar stamina do jogador a cada round
+            player.recoverStamina(10);
+            player.updateUI();
+            
             // Verificar se o monstro está atordoado
             if (currentMonster.hasStatusEffect('stun')) {
                 addBattleLog(`O ${currentMonster.name} está atordoado e perdeu a vez!`);
@@ -2318,6 +3094,12 @@
                 } else {
                     const actualDamage = player.takeDamage(damage);
                     addBattleLog(` Causou ${actualDamage} de dano ao cavaleiro!`);
+                    
+                    // Verificar se o dragão causou queimadura
+                    if (currentMonster.type === 'elite' && player.hasStatusEffect('burn')) {
+                        addBattleLog(" O cavaleiro está queimando!");
+                    }
+                    
                     player.updateUI();
                     
                     // Verificar se o jogador morreu
@@ -2348,7 +3130,7 @@
             const enemyCtx = enemyCanvas.getContext('2d');
             
             if (battleAnimation.type === 'playerAttack') {
-                player.drawBattle(playerCtx, battleAnimation.step < battleAnimation.maxSteps / 2);
+                player.drawBattle(playerCtx, battleAnimation.step < battleAnimation.maxSteps / 2, battleAnimation.attackType);
                 currentMonster.drawBattle(enemyCtx, false);
             } else if (battleAnimation.type === 'monsterAttack') {
                 player.drawBattle(playerCtx, false);
@@ -2362,6 +3144,15 @@
                 enemyCtx.globalAlpha = 0.5 - (battleAnimation.step / battleAnimation.maxSteps) * 0.5;
                 enemyCtx.fillRect(0, 0, 150, 150);
                 enemyCtx.globalAlpha = 1.0;
+            } else if (battleAnimation.type === 'playerEffect') {
+                player.drawBattle(playerCtx, true);
+                currentMonster.drawBattle(enemyCtx, false);
+                
+                // Efeito visual de ativação de habilidade
+                playerCtx.fillStyle = 'rgba(149, 165, 166, 0.5)';
+                playerCtx.globalAlpha = 0.5 - (battleAnimation.step / battleAnimation.maxSteps) * 0.5;
+                playerCtx.fillRect(0, 0, 150, 150);
+                playerCtx.globalAlpha = 1.0;
             }
             
             battleAnimation.step++;
@@ -2424,6 +3215,7 @@
                     // Resetar saúde do jogador
                     player.health = player.maxHealth;
                     player.mana = player.maxMana;
+                    player.stamina = player.maxStamina;
                     player.statusEffects = [];
                     player.updateUI();
                 }, 3000);
@@ -2463,8 +3255,93 @@
             backBtn.style.display = 'inline-block';
         }
 
+        // Sistema de Loja
+        function openShop() {
+            shopScreen.style.display = 'flex';
+            loadShopItems('food');
+        }
+        
+        function loadShopItems(category) {
+            shopItems.innerHTML = '';
+            
+            if (category === 'food') {
+                // Comidas
+                const maceItem = document.createElement('div');
+                maceItem.className = 'shop-item';
+                maceItem.innerHTML = `
+                    <div class="shop-item-icon">🍎</div>
+                    <div class="shop-item-name">Maçã</div>
+                    <div class="shop-item-price">15 💰</div>
+                    <button class="shop-buy-btn" data-item="mace" data-price="15">Comprar</button>
+                `;
+                shopItems.appendChild(maceItem);
+                
+                const hamItem = document.createElement('div');
+                hamItem.className = 'shop-item';
+                hamItem.innerHTML = `
+                    <div class="shop-item-icon">🍗</div>
+                    <div class="shop-item-name">Pernil</div>
+                    <div class="shop-item-price">35 💰</div>
+                    <button class="shop-buy-btn" data-item="ham" data-price="35">Comprar</button>
+                `;
+                shopItems.appendChild(hamItem);
+            } else if (category === 'weapons') {
+                // Armamentos
+                const stoneSwordItem = document.createElement('div');
+                stoneSwordItem.className = 'shop-item';
+                stoneSwordItem.innerHTML = `
+                    <div class="shop-item-icon">⚔️</div>
+                    <div class="shop-item-name">Espada de Pedra</div>
+                    <div class="shop-item-price">130 💰</div>
+                    <button class="shop-buy-btn" data-item="stoneSword" data-price="130" ${player.purchasedItems.stoneSword ? 'disabled' : ''}>
+                        ${player.purchasedItems.stoneSword ? 'Esgotado' : 'Comprar'}
+                    </button>
+                `;
+                shopItems.appendChild(stoneSwordItem);
+                
+                const chainMailItem = document.createElement('div');
+                chainMailItem.className = 'shop-item';
+                chainMailItem.innerHTML = `
+                    <div class="shop-item-icon">🛡️</div>
+                    <div class="shop-item-name">Armadura de Malha</div>
+                    <div class="shop-item-price">200 💰</div>
+                    <button class="shop-buy-btn" data-item="chainMail" data-price="200" ${player.purchasedItems.chainMail ? 'disabled' : ''}>
+                        ${player.purchasedItems.chainMail ? 'Esgotado' : 'Comprar'}
+                    </button>
+                `;
+                shopItems.appendChild(chainMailItem);
+            } else if (category === 'potions') {
+                // Poções
+                const strengthPotionItem = document.createElement('div');
+                strengthPotionItem.className = 'shop-item';
+                strengthPotionItem.innerHTML = `
+                    <div class="shop-item-icon">🧪</div>
+                    <div class="shop-item-name">Poção de Força</div>
+                    <div class="shop-item-price">55 💰</div>
+                    <button class="shop-buy-btn" data-item="strengthPotion" data-price="55">Comprar</button>
+                `;
+                shopItems.appendChild(strengthPotionItem);
+            }
+            
+            // Adicionar event listeners aos botões de compra
+            document.querySelectorAll('.shop-buy-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const item = btn.getAttribute('data-item');
+                    const price = parseInt(btn.getAttribute('data-price'));
+                    
+                    if (player.buyItem(item, price)) {
+                        alert('Compra realizada com sucesso!');
+                        loadShopItems(category); // Recarregar itens para atualizar o estado
+                    } else {
+                        alert('Dinheiro insuficiente!');
+                    }
+                });
+            });
+        }
+
         // Inicialização do jogo
         const player = new Player();
+        const merchant = new Merchant();
         const worldMap = generateWorldMap();
         let lastTime = 0;
         
@@ -2477,8 +3354,15 @@
         document.addEventListener('keydown', (e) => {
             if (battleScreen.style.display === 'flex') return;
             if (inventoryScreen.style.display === 'flex') return;
+            if (equipmentScreen.style.display === 'flex') return;
+            if (shopScreen.style.display === 'flex') return;
             
             keys[e.key.toLowerCase()] = true;
+            
+            // Interação com o mercador
+            if (e.key.toLowerCase() === 'e' && merchant.isPlayerNearby(player)) {
+                openShop();
+            }
         });
         
         document.addEventListener('keyup', (e) => {
@@ -2492,6 +3376,18 @@
             attackOptions.style.display = 'none';
             backBtn.style.display = 'none';
             playerAttack('sword');
+        });
+        
+        chargeBtn.addEventListener('click', () => {
+            attackOptions.style.display = 'none';
+            backBtn.style.display = 'none';
+            playerAttack('charge');
+        });
+        
+        heavyArmorBtn.addEventListener('click', () => {
+            attackOptions.style.display = 'none';
+            backBtn.style.display = 'none';
+            playerHeavyArmor();
         });
         
         magicBtn.addEventListener('click', showMagicOptions);
@@ -2515,16 +3411,6 @@
         });
         
         itemsBtn.addEventListener('click', showItemsOptions);
-        
-        // Event listeners para uso de itens
-        document.querySelectorAll('.use-item-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const item = btn.getAttribute('data-item');
-                itemsOptions.style.display = 'none';
-                backBtn.style.display = 'none';
-                playerUseItem(item);
-            });
-        });
         
         actBtn.addEventListener('click', showActOptions);
         
@@ -2563,6 +3449,32 @@
         craftingResult.addEventListener('click', () => {
             const result = player.craftDragonSlayer();
             if (result.includes("criou a Dragon Slayer")) {
+                // Mostrar mensagem estilosa
+                const dragonSlayerMessage = document.createElement('div');
+                dragonSlayerMessage.style.position = 'fixed';
+                dragonSlayerMessage.style.top = '50%';
+                dragonSlayerMessage.style.left = '50%';
+                dragonSlayerMessage.style.transform = 'translate(-50%, -50%)';
+                dragonSlayerMessage.style.background = 'rgba(0, 0, 0, 0.9)';
+                dragonSlayerMessage.style.padding = '20px';
+                dragonSlayerMessage.style.border = '4px solid #e74c3c';
+                dragonSlayerMessage.style.borderRadius = '10px';
+                dragonSlayerMessage.style.textAlign = 'center';
+                dragonSlayerMessage.style.zIndex = '100';
+                dragonSlayerMessage.style.color = '#f8c555';
+                dragonSlayerMessage.style.fontSize = '1.5rem';
+                dragonSlayerMessage.innerHTML = `
+                    <h2>DRAGON SLAYER CRIADA!</h2>
+                    <p>Sua espada agora emana poder dragônico!</p>
+                    <p>Dano aumentado em 11x!</p>
+                    <button id="closeDragonSlayerMsg" style="margin-top: 20px; padding: 10px 20px; background: #e74c3c; color: white; border: none; border-radius: 5px; cursor: pointer;">Fechar</button>
+                `;
+                document.body.appendChild(dragonSlayerMessage);
+                
+                document.getElementById('closeDragonSlayerMsg').addEventListener('click', () => {
+                    document.body.removeChild(dragonSlayerMessage);
+                });
+            } else {
                 alert(result);
             }
         });
@@ -2592,6 +3504,31 @@
             slot.addEventListener('contextmenu', (e) => {
                 e.preventDefault();
                 player.clearCraftingSlot(index);
+            });
+        });
+        
+        // Event listeners para equipamentos
+        equipmentBtn.addEventListener('click', () => {
+            equipmentScreen.style.display = 'flex';
+        });
+        
+        closeEquipmentBtn.addEventListener('click', () => {
+            equipmentScreen.style.display = 'none';
+        });
+        
+        // Event listeners para loja
+        closeShopBtn.addEventListener('click', () => {
+            shopScreen.style.display = 'none';
+        });
+        
+        shopCategories.forEach(category => {
+            category.addEventListener('click', () => {
+                // Remover classe active de todas as categorias
+                shopCategories.forEach(c => c.classList.remove('active'));
+                // Adicionar classe active à categoria clicada
+                category.classList.add('active');
+                // Carregar itens da categoria
+                loadShopItems(category.getAttribute('data-category'));
             });
         });
         
