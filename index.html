@@ -2513,7 +2513,7 @@
                             if (!this.purchasedItems.goldArmor) {
                                 this.addToEquipmentCollection({
                                     name: "Armadura de Ouro",
-                                    defenseMultiplier: 1.5,
+                                    defenseMultiplier: 1.6,
                                     agilityPenalty: 3,
                                     description: "Uma armadura de ouro ornamentada",
                                     icon: "🛡️",
@@ -2827,57 +2827,57 @@
                 let droppedItems = [];
                 
                 if (this.type === 'weak') {
-                    if (Math.random() < 0.3) {
-                        player.addItem('mace');
-                        droppedItems.push("maçã");
-                    }
-                    if (Math.random() < 0.05) {
-                        player.addItem('ham');
-                        droppedItems.push("pernil");
-                    }
-                    if (Math.random() < 0.05) {
-                        player.addRecipe('dragonSlayer');
-                        droppedItems.push("receita da Dragon Slayer");
-                    }
-                    if (Math.random() < 0.06) {
-                        player.addRecipe('blackWolfArmor');
-                        droppedItems.push("receita da Armadura do Lobo Negro");
-                    }
-                } else if (this.type === 'strong') {
-                    if (Math.random() < 0.25) {
-                        player.addItem('mace');
-                        droppedItems.push("maçã");
-                    }
-                    if (Math.random() < 0.3) {
-                        player.addItem('ham');
-                        droppedItems.push("pernil");
-                    }
-                    if (Math.random() < 0.1) {
-                        player.addItem('strengthPotion');
-                        droppedItems.push("poção de força");
-                    }
-                    if (Math.random() < 0.05) {
-                        player.addRecipe('dragonSlayer');
-                        droppedItems.push("receita da Dragon Slayer");
-                    }
-                    if (Math.random() < 0.06) {
-                        player.addRecipe('blackWolfArmor');
-                        droppedItems.push("receita da Armadura do Lobo Negro");
-                    }
-                } else if (this.type === 'elite') {
                     if (Math.random() < 0.4) {
                         player.addItem('mace');
                         droppedItems.push("maçã");
                     }
-                    if (Math.random() < 0.2) {
+                    if (Math.random() < 0.25) {
                         player.addItem('ham');
                         droppedItems.push("pernil");
                     }
-                    if (Math.random() < 0.1) {
+                    if (Math.random() < 0.05) {
+                        player.addRecipe('dragonSlayer');
+                        droppedItems.push("receita da Dragon Slayer");
+                    }
+                    if (Math.random() < 0.05) {
+                        player.addRecipe('blackWolfArmor');
+                        droppedItems.push("receita da Armadura do Lobo Negro");
+                    }
+                } else if (this.type === 'strong') {
+                    if (Math.random() < 0.40) {
+                        player.addItem('mace');
+                        droppedItems.push("maçã");
+                    }
+                    if (Math.random() < 0.35) {
+                        player.addItem('ham');
+                        droppedItems.push("pernil");
+                    }
+                    if (Math.random() < 0.15) {
                         player.addItem('strengthPotion');
                         droppedItems.push("poção de força");
                     }
                     if (Math.random() < 0.05) {
+                        player.addRecipe('dragonSlayer');
+                        droppedItems.push("receita da Dragon Slayer");
+                    }
+                    if (Math.random() < 0.05) {
+                        player.addRecipe('blackWolfArmor');
+                        droppedItems.push("receita da Armadura do Lobo Negro");
+                    }
+                } else if (this.type === 'elite') {
+                    if (Math.random() < 0.45) {
+                        player.addItem('mace');
+                        droppedItems.push("maçã");
+                    }
+                    if (Math.random() < 0.30) {
+                        player.addItem('ham');
+                        droppedItems.push("pernil");
+                    }
+                    if (Math.random() < 0.20) {
+                        player.addItem('strengthPotion');
+                        droppedItems.push("poção de força");
+                    }
+                    if (Math.random() < 0.15) {
                         player.addItem('dragonScales');
                         droppedItems.push("escamas de dragão");
                     }
@@ -2885,7 +2885,7 @@
                         player.addRecipe('dragonSlayer');
                         droppedItems.push("receita da Dragon Slayer");
                     }
-                    if (Math.random() < 0.06) {
+                    if (Math.random() < 0.05) {
                         player.addRecipe('blackWolfArmor');
                         droppedItems.push("receita da Armadura do Lobo Negro");
                     }
