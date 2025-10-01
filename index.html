@@ -210,8 +210,8 @@
         }
         
         .character-canvas {
-            width: 150px;
-            height: 150px;
+            width: 200px;
+            height: 200px;
             margin-bottom: 10px;
         }
         
@@ -681,7 +681,7 @@
             border-radius: 12px;
             padding: 20px;
             width: 80%;
-            max-width: 600px;
+            max-width: 800px;
             max-height: 80%;
             overflow-y: auto;
             box-shadow: 0 0 30px rgba(248, 197, 85, 0.3);
@@ -700,6 +700,7 @@
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 15px;
+            margin-bottom: 20px;
         }
         
         .equipment-slot {
@@ -741,6 +742,73 @@
             background: linear-gradient(to bottom, #5dade2, #3498db);
         }
         
+        .inventory-btn-equipment {
+            background: linear-gradient(to bottom, #f8c555, #d4a017);
+            color: #1a1a2e;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 24px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            font-family: 'MedievalSharp', cursive;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            width: 100%;
+            margin-top: 10px;
+        }
+        
+        .inventory-btn-equipment:hover {
+            background: linear-gradient(to bottom, #ffd700, #e6b800);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.4);
+        }
+        
+        .equipment-collection {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            border: 1px solid rgba(248, 197, 85, 0.2);
+        }
+        
+        .collection-title {
+            text-align: center;
+            margin-bottom: 15px;
+            color: #f8c555;
+        }
+        
+        .collection-items {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+        
+        .collection-item {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            border: 1px solid rgba(248, 197, 85, 0.2);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .collection-item:hover {
+            background: rgba(248, 197, 85, 0.1);
+        }
+        
+        .collection-item.equipped {
+            background: rgba(46, 204, 113, 0.3);
+            border-color: #2ecc71;
+        }
+        
+        .collection-item-icon {
+            font-size: 2rem;
+            margin-bottom: 5px;
+        }
+        
         @media (max-width: 768px) {
             .game-board {
                 height: 500px;
@@ -768,14 +836,57 @@
             .shop-items {
                 grid-template-columns: repeat(2, 1fr);
             }
+            
+            .collection-items {
+                grid-template-columns: 1fr;
+            }
         }
+        
+        /* Efeitos visuais de batalha */
+        .battle-effect {
+            position: absolute;
+            pointer-events: none;
+            z-index: 5;
+        }
+        
+        .damage-text {
+            position: absolute;
+            color: #e74c3c;
+            font-weight: bold;
+            font-size: 1.2rem;
+            text-shadow: 1px 1px 2px black;
+            animation: floatUp 1.5s ease-out forwards;
+            pointer-events: none;
+            z-index: 10;
+        }
+        
+        @keyframes floatUp {
+            0% { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(-50px); opacity: 0; }
+        }
+        
+        .status-text {
+            position: absolute;
+            font-weight: bold;
+            font-size: 1rem;
+            text-shadow: 1px 1px 2px black;
+            animation: floatUp 2s ease-out forwards;
+            pointer-events: none;
+            z-index: 10;
+        }
+        
+        .burn-text { color: #ff6b6b; }
+        .slow-text { color: #74b9ff; }
+        .stun-text { color: #a29bfe; }
+        .strength-text { color: #f39c12; }
+        .heavy-armor-text { color: #bdc3c7; }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="game-container">
         <div class="game-header">
-            <h1></h1>
+            <h1>Knight of Valor</h1>
         </div>
         
         <div class="game-board">
@@ -870,11 +981,11 @@
                     
                     <div class="battle-scene">
                         <div class="battle-character">
-                            <canvas id="playerBattleCanvas" class="character-canvas" width="150" height="150"></canvas>
+                            <canvas id="playerBattleCanvas" class="character-canvas" width="200" height="200"></canvas>
                             <div>Cavaleiro</div>
                         </div>
                         <div class="battle-character">
-                            <canvas id="enemyBattleCanvas" class="character-canvas" width="150" height="150"></canvas>
+                            <canvas id="enemyBattleCanvas" class="character-canvas" width="200" height="200"></canvas>
                             <div id="enemyBattleName">Monstro</div>
                         </div>
                     </div>
@@ -1053,6 +1164,15 @@
                             <div class="equipment-stats" id="armorDescription">Sua armadura inicial</div>
                         </div>
                     </div>
+                    
+                    <button class="inventory-btn-equipment" id="inventoryBtnEquipment">Inventário</button>
+                    
+                    <div class="equipment-collection" id="equipmentCollection" style="display: none;">
+                        <h3 class="collection-title">Coleção de Equipamentos</h3>
+                        <div class="collection-items" id="collectionItems">
+                            <!-- Itens da coleção serão carregados dinamicamente -->
+                        </div>
+                    </div>
                 </div>
             </div>
             
@@ -1078,8 +1198,8 @@
         </div>
         
         <div class="instructions">
-            <p></p>
-            <p></p>
+            <p>Use WASD ou as setas para mover o cavaleiro pelo mundo</p>
+            <p>Pressione E perto da loja para interagir com o mercador</p>
         </div>
     </div>
 
@@ -1108,6 +1228,8 @@
         const moneyText = document.getElementById('moneyText');
         
         // Elementos de batalha
+        const playerCanvas = document.getElementById('playerBattleCanvas');
+        const enemyCanvas = document.getElementById('enemyBattleCanvas');
         const battleScreen = document.getElementById('battleScreen');
         const battlePlayerLevel = document.getElementById('battlePlayerLevel');
         const battlePlayerHealth = document.getElementById('battlePlayerHealth');
@@ -1199,6 +1321,9 @@
         const armorName = document.getElementById('armorName');
         const armorStats = document.getElementById('armorStats');
         const armorDescription = document.getElementById('armorDescription');
+        const inventoryBtnEquipment = document.getElementById('inventoryBtnEquipment');
+        const equipmentCollection = document.getElementById('equipmentCollection');
+        const collectionItems = document.getElementById('collectionItems');
         
         // Elementos da loja
         const shopScreen = document.getElementById('shopScreen');
@@ -1236,7 +1361,7 @@
                 this.money = 0;
                 this.exp = 0;
                 this.expToNextLevel = 40;
-                this.upgradePoints = 0;
+                this.upgradePoints = 0
                 
                 // Atributos base
                 this.baseHp = 10;
@@ -1281,20 +1406,47 @@
                 this.weapon = {
                     name: "Espada Básica",
                     damageMultiplier: 1.0,
-                    description: "Sua espada inicial"
+                    description: "Sua espada inicial",
+                    icon: "⚔️",
+                    type: "weapon"
                 };
                 
                 this.armor = {
                     name: "Armadura Básica",
                     defenseMultiplier: 1.0,
                     agilityPenalty: 0,
-                    description: "Sua armadura inicial"
+                    description: "Sua armadura inicial",
+                    icon: "🛡️",
+                    type: "armor"
                 };
+                
+                // Coleção de equipamentos
+                this.equipmentCollection = [
+                    {
+                        name: "Espada Básica",
+                        damageMultiplier: 1.0,
+                        description: "Sua espada inicial",
+                        icon: "⚔️",
+                        type: "weapon",
+                        equipped: true
+                    },
+                    {
+                        name: "Armadura Básica",
+                        defenseMultiplier: 1.0,
+                        agilityPenalty: 0,
+                        description: "Sua armadura inicial",
+                        icon: "🛡️",
+                        type: "armor",
+                        equipped: true
+                    }
+                ];
                 
                 // Itens comprados na loja
                 this.purchasedItems = {
                     stoneSword: false,
-                    chainMail: false
+                    goldSword: false,
+                    chainMail: false,
+                    goldArmor: false
                 };
             }
             
@@ -1302,190 +1454,286 @@
                 const centerX = canvas.width / 2;
                 const centerY = canvas.height / 2;
                 
-                // Desenhar o cavaleiro melhorado
-                // Corpo com armadura detalhada
-                ctx.fillStyle = this.armor.name === "Armadura de Malha" ? '#7f8c8d' : '#34495e';
-                ctx.fillRect(centerX - 20, centerY - 15, 40, 30);
-                
-                // Detalhes da armadura
-                ctx.fillStyle = '#2c3e50';
-                ctx.fillRect(centerX - 18, centerY - 13, 36, 26);
+                // Desenhar o cavaleiro com base nos equipamentos
+                this.drawKnight(centerX, centerY);
+            }
+            
+            drawKnight(x, y) {
+                // Corpo com armadura baseada no equipamento
+                if (this.armor.name === "Armadura de Malha") {
+                    // Armadura de malha
+                    ctx.fillStyle = '#7f8c8d';
+                    ctx.fillRect(x - 20, y - 15, 40, 30);
+                    
+                    // Detalhes da armadura de malha
+                    ctx.fillStyle = '#95a5a6';
+                    for (let i = 0; i < 4; i++) {
+                        for (let j = 0; j < 3; j++) {
+                            ctx.fillRect(x - 18 + i * 12, y - 13 + j * 10, 8, 8);
+                        }
+                    }
+                } else if (this.armor.name === "Armadura de Ouro") {
+                    // Armadura de ouro
+                    ctx.fillStyle = '#f8c555';
+                    ctx.fillRect(x - 20, y - 15, 40, 30);
+                    
+                    // Detalhes dourados
+                    ctx.fillStyle = '#d4a017';
+                    ctx.fillRect(x - 18, y - 13, 36, 26);
+                    
+                    // Padrão de armadura dourada
+                    ctx.fillStyle = '#f8c555';
+                    ctx.fillRect(x - 15, y - 10, 30, 20);
+                    
+                    // Detalhes ornamentais
+                    ctx.fillStyle = '#d4a017';
+                    ctx.fillRect(x - 12, y - 7, 24, 14);
+                } else {
+                    // Armadura básica
+                    ctx.fillStyle = '#34495e';
+                    ctx.fillRect(x - 20, y - 15, 40, 30);
+                    
+                    // Detalhes da armadura
+                    ctx.fillStyle = '#2c3e50';
+                    ctx.fillRect(x - 18, y - 13, 36, 26);
+                }
                 
                 // Cabeça
                 ctx.fillStyle = '#ecf0f1';
-                ctx.fillRect(centerX - 10, centerY - 25, 20, 10);
+                ctx.fillRect(x - 10, y - 25, 20, 10);
                 
                 // Capacete com detalhes
-                ctx.fillStyle = '#95a5a6';
-                ctx.fillRect(centerX - 12, centerY - 27, 24, 5);
-                ctx.fillRect(centerX - 15, centerY - 22, 30, 3);
+                ctx.fillStyle = this.armor.name === "Armadura de Ouro" ? '#f8c555' : '#95a5a6';
+                ctx.fillRect(x - 12, y - 27, 24, 5);
+                ctx.fillRect(x - 15, y - 22, 30, 3);
                 
                 // Visor do capacete
                 ctx.fillStyle = '#3498db';
-                ctx.fillRect(centerX - 8, centerY - 24, 16, 4);
+                ctx.fillRect(x - 8, y - 24, 16, 4);
                 
                 // Escudo
                 ctx.fillStyle = '#2c3e50';
-                ctx.fillRect(centerX - 25, centerY - 10, 8, 20);
+                ctx.fillRect(x - 25, y - 10, 8, 20);
                 
                 // Detalhes do escudo
                 ctx.fillStyle = '#f8c555';
-                ctx.fillRect(centerX - 23, centerY - 5, 4, 10);
+                ctx.fillRect(x - 23, y - 5, 4, 10);
                 
-                // Espada (ou Dragon Slayer)
+                // Espada baseada no equipamento
+                this.drawWeapon(x, y);
+            }
+            
+            drawWeapon(x, y) {
                 if (this.hasDragonSlayer) {
                     // Dragon Slayer - espada épica
                     ctx.fillStyle = '#e74c3c';
-                    ctx.fillRect(centerX + 15, centerY - 15, 5, 30);
+                    ctx.fillRect(x + 15, y - 15, 5, 30);
                     
                     // Lâmina flamejante
                     ctx.fillStyle = '#f39c12';
                     ctx.beginPath();
-                    ctx.moveTo(centerX + 20, centerY - 15);
-                    ctx.lineTo(centerX + 25, centerY - 20);
-                    ctx.lineTo(centerX + 20, centerY - 10);
+                    ctx.moveTo(x + 20, y - 15);
+                    ctx.lineTo(x + 25, y - 20);
+                    ctx.lineTo(x + 20, y - 10);
                     ctx.closePath();
                     ctx.fill();
                     
                     ctx.beginPath();
-                    ctx.moveTo(centerX + 20, centerY);
-                    ctx.lineTo(centerX + 25, centerY - 5);
-                    ctx.lineTo(centerX + 20, centerY + 5);
+                    ctx.moveTo(x + 20, y);
+                    ctx.lineTo(x + 25, y - 5);
+                    ctx.lineTo(x + 20, y + 5);
                     ctx.closePath();
                     ctx.fill();
                     
                     ctx.beginPath();
-                    ctx.moveTo(centerX + 20, centerY + 15);
-                    ctx.lineTo(centerX + 25, centerY + 10);
-                    ctx.lineTo(centerX + 20, centerY + 20);
+                    ctx.moveTo(x + 20, y + 15);
+                    ctx.lineTo(x + 25, y + 10);
+                    ctx.lineTo(x + 20, y + 20);
                     ctx.closePath();
+                    ctx.fill();
+                    
+                    // Efeito de fogo
+                    ctx.fillStyle = 'rgba(255, 69, 0, 0.3)';
+                    ctx.beginPath();
+                    ctx.arc(x + 22, y - 5, 8, 0, Math.PI * 2);
                     ctx.fill();
                 } else if (this.weapon.name === "Espada de Pedra") {
                     // Espada de Pedra
                     ctx.fillStyle = '#95a5a6';
-                    ctx.fillRect(centerX + 15, centerY - 12, 3, 24);
-                    ctx.fillRect(centerX + 10, centerY - 15, 13, 6);
+                    ctx.fillRect(x + 15, y - 12, 3, 24);
+                    ctx.fillRect(x + 10, y - 15, 13, 6);
+                    
+                    // Detalhes da lâmina de pedra
+                    ctx.fillStyle = '#7f8c8d';
+                    ctx.fillRect(x + 16, y - 10, 1, 20);
+                } else if (this.weapon.name === "Espada de Ouro") {
+                    // Espada de Ouro
+                    ctx.fillStyle = '#f8c555';
+                    ctx.fillRect(x + 15, y - 12, 3, 24);
+                    ctx.fillRect(x + 10, y - 15, 13, 6);
+                    
+                    // Detalhes dourados
+                    ctx.fillStyle = '#d4a017';
+                    ctx.fillRect(x + 11, y - 14, 11, 4);
+                    ctx.fillRect(x + 16, y - 10, 1, 20);
                 } else {
                     // Espada básica
                     ctx.fillStyle = '#bdc3c7';
-                    ctx.fillRect(centerX + 15, centerY - 12, 3, 24);
-                    ctx.fillRect(centerX + 10, centerY - 15, 13, 6);
+                    ctx.fillRect(x + 15, y - 12, 3, 24);
+                    ctx.fillRect(x + 10, y - 15, 13, 6);
                 }
                 
                 // Detalhes da armadura
                 ctx.strokeStyle = '#2c3e50';
                 ctx.lineWidth = 2;
-                ctx.strokeRect(centerX - 20, centerY - 15, 40, 30);
+                ctx.strokeRect(x - 20, y - 15, 40, 30);
             }
             
             drawBattle(ctx, isAttacking = false, attackType = null) {
-                ctx.clearRect(0, 0, 150, 150);
+                ctx.clearRect(0, 0, 200, 200);
                 
                 // Fundo do personagem
                 ctx.fillStyle = 'rgba(26, 58, 95, 0.5)';
-                ctx.fillRect(0, 0, 150, 150);
+                ctx.fillRect(0, 0, 200, 200);
                 
                 // Efeito de ataque
                 if (isAttacking) {
                     if (attackType === 'sword') {
                         ctx.fillStyle = 'rgba(255, 215, 0, 0.3)';
-                        ctx.fillRect(0, 0, 150, 150);
+                        ctx.fillRect(0, 0, 200, 200);
                     } else if (attackType === 'charge') {
                         // Efeito de investida - rastro de movimento
                         ctx.fillStyle = 'rgba(255, 165, 0, 0.4)';
                         ctx.beginPath();
-                        ctx.arc(75, 75, 60, 0, Math.PI * 2);
+                        ctx.arc(100, 100, 80, 0, Math.PI * 2);
                         ctx.fill();
                     } else if (attackType === 'fireball') {
                         // Efeito de fogo
                         ctx.fillStyle = 'rgba(255, 69, 0, 0.5)';
                         ctx.beginPath();
-                        ctx.arc(75, 75, 70, 0, Math.PI * 2);
+                        ctx.arc(100, 100, 90, 0, Math.PI * 2);
                         ctx.fill();
                     } else if (attackType === 'freeze') {
                         // Efeito de gelo
                         ctx.fillStyle = 'rgba(173, 216, 230, 0.5)';
                         ctx.beginPath();
-                        ctx.arc(75, 75, 70, 0, Math.PI * 2);
+                        ctx.arc(100, 100, 90, 0, Math.PI * 2);
                         ctx.fill();
                     } else if (attackType === 'possession') {
                         // Efeito de possessão
                         ctx.fillStyle = 'rgba(138, 43, 226, 0.5)';
                         ctx.beginPath();
-                        ctx.arc(75, 75, 70, 0, Math.PI * 2);
+                        ctx.arc(100, 100, 90, 0, Math.PI * 2);
                         ctx.fill();
                     }
                 }
                 
-                const centerX = 75;
-                const centerY = 75;
+                const centerX = 100;
+                const centerY = 100;
                 
                 // Corpo com armadura detalhada
-                ctx.fillStyle = this.armor.name === "Armadura de Malha" ? '#7f8c8d' : '#2c3e50';
-                ctx.fillRect(centerX - 25, centerY - 10, 50, 40);
-                
-                // Detalhes da armadura
-                ctx.fillStyle = '#34495e';
-                ctx.fillRect(centerX - 23, centerY - 8, 46, 36);
+                if (this.armor.name === "Armadura de Malha") {
+                    ctx.fillStyle = '#7f8c8d';
+                    ctx.fillRect(centerX - 35, centerY - 15, 70, 50);
+                    
+                    // Detalhes da armadura de malha
+                    ctx.fillStyle = '#95a5a6';
+                    for (let i = 0; i < 5; i++) {
+                        for (let j = 0; j < 4; j++) {
+                            ctx.fillRect(centerX - 33 + i * 14, centerY - 13 + j * 12, 10, 10);
+                        }
+                    }
+                } else if (this.armor.name === "Armadura de Ouro") {
+                    ctx.fillStyle = '#f8c555';
+                    ctx.fillRect(centerX - 35, centerY - 15, 70, 50);
+                    
+                    // Detalhes dourados
+                    ctx.fillStyle = '#d4a017';
+                    ctx.fillRect(centerX - 33, centerY - 13, 66, 46);
+                    
+                    // Padrão de armadura dourada
+                    ctx.fillStyle = '#f8c555';
+                    ctx.fillRect(cente0rX - 28, centerY - 8, 56, 36);
+                    
+                    // Detalhes ornamentais
+                    ctx.fillStyle = '#d4a017';
+                    ctx.fillRect(centerX - 25, centerY - 5, 50, 30);
+                } else {
+                    ctx.fillStyle = '#2c3e50';
+                    ctx.fillRect(centerX - 35, centerY - 15, 70, 50);
+                    
+                    // Detalhes da armadura
+                    ctx.fillStyle = '#34495e';
+                    ctx.fillRect(centerX - 33, centerY - 13, 66, 46);
+                }
                 
                 // Cabeça
                 ctx.fillStyle = '#ecf0f1';
-                ctx.fillRect(centerX - 15, centerY - 30, 30, 20);
+                ctx.fillRect(centerX - 20, centerY - 40, 40, 25);
                 
                 // Capacete com detalhes
-                ctx.fillStyle = '#7f8c8d';
-                ctx.fillRect(centerX - 18, centerY - 35, 36, 10);
-                ctx.fillRect(centerX - 22, centerY - 25, 44, 5);
+                ctx.fillStyle = this.armor.name === "Armadura de Ouro" ? '#f8c555' : '#7f8c8d';
+                ctx.fillRect(centerX - 25, centerY - 45, 50, 10);
+                ctx.fillRect(centerX - 30, centerY - 35, 60, 5);
                 
                 // Visor do capacete
                 ctx.fillStyle = '#3498db';
-                ctx.fillRect(centerX - 10, centerY - 28, 20, 8);
+                ctx.fillRect(centerX - 15, centerY - 38, 30, 10);
                 
                 // Escudo
                 ctx.fillStyle = '#34495e';
-                ctx.fillRect(centerX - 40, centerY - 5, 15, 30);
+                ctx.fillRect(centerX - 55, centerY - 10, 20, 40);
                 
                 // Detalhes do escudo
                 ctx.fillStyle = '#f8c555';
-                ctx.fillRect(centerX - 38, centerY, 11, 20);
+                ctx.fillRect(centerX - 53, centerY, 16, 30);
                 ctx.fillStyle = '#e74c3c';
                 ctx.beginPath();
-                ctx.arc(centerX - 33, centerY + 10, 5, 0, Math.PI * 2);
+                ctx.arc(centerX - 45, centerY + 15, 8, 0, Math.PI * 2);
                 ctx.fill();
                 
-                // Espada (ou Dragon Slayer)
+                // Espada baseada no equipamento
+                this.drawBattleWeapon(ctx, centerX, centerY, isAttacking);
+                
+                // Detalhes da armadura
+                ctx.strokeStyle = '#1c2833';
+                ctx.lineWidth = 2;
+                ctx.strokeRect(centerX - 35, centerY - 15, 70, 50);
+            }
+            
+            drawBattleWeapon(ctx, x, y, isAttacking) {
                 if (this.hasDragonSlayer) {
                     // Dragon Slayer - espada épica
                     ctx.fillStyle = '#e74c3c';
                     // Lâmina
-                    ctx.fillRect(centerX + 20, centerY - 15, 5, 40);
+                    ctx.fillRect(x + 25, y - 20, 8, 50);
                     // Guarda
-                    ctx.fillRect(centerX + 15, centerY - 20, 15, 10);
+                    ctx.fillRect(x + 20, y - 25, 18, 12);
                     // Punho
                     ctx.fillStyle = '#8B4513';
-                    ctx.fillRect(centerX + 20, centerY + 25, 5, 15);
+                    ctx.fillRect(x + 25, y + 30, 8, 20);
                     
                     // Efeito flamejante
                     if (isAttacking) {
                         ctx.fillStyle = '#f39c12';
                         ctx.beginPath();
-                        ctx.moveTo(centerX + 25, centerY - 15);
-                        ctx.lineTo(centerX + 35, centerY - 25);
-                        ctx.lineTo(centerX + 25, centerY - 5);
+                        ctx.moveTo(x + 33, y - 20);
+                        ctx.lineTo(x + 45, y - 35);
+                        ctx.lineTo(x + 33, y - 5);
                         ctx.closePath();
                         ctx.fill();
                         
                         ctx.beginPath();
-                        ctx.moveTo(centerX + 25, centerY + 5);
-                        ctx.lineTo(centerX + 35, centerY - 5);
-                        ctx.lineTo(centerX + 25, centerY + 15);
+                        ctx.moveTo(x + 33, y + 5);
+                        ctx.lineTo(x + 45, y - 10);
+                        ctx.lineTo(x + 33, y + 20);
                         ctx.closePath();
                         ctx.fill();
                         
                         ctx.beginPath();
-                        ctx.moveTo(centerX + 25, centerY + 25);
-                        ctx.lineTo(centerX + 35, centerY + 15);
-                        ctx.lineTo(centerX + 25, centerY + 35);
+                        ctx.moveTo(x + 33, y + 30);
+                        ctx.lineTo(x + 45, y + 15);
+                        ctx.lineTo(x + 33, y + 45);
                         ctx.closePath();
                         ctx.fill();
                     }
@@ -1493,28 +1741,42 @@
                     // Espada de Pedra
                     ctx.fillStyle = '#95a5a6';
                     // Lâmina
-                    ctx.fillRect(centerX + 20, centerY - 15, 5, 40);
+                    ctx.fillRect(x + 25, y - 20, 6, 50);
                     // Guarda
-                    ctx.fillRect(centerX + 15, centerY - 20, 15, 10);
+                    ctx.fillRect(x + 20, y - 25, 16, 12);
                     // Punho
                     ctx.fillStyle = '#8B4513';
-                    ctx.fillRect(centerX + 20, centerY + 25, 5, 15);
+                    ctx.fillRect(x + 25, y + 30, 6, 20);
+                    
+                    // Detalhes da lâmina de pedra
+                    ctx.fillStyle = '#7f8c8d';
+                    ctx.fillRect(x + 26, y - 15, 4, 40);
+                } else if (this.weapon.name === "Espada de Ouro") {
+                    // Espada de Ouro
+                    ctx.fillStyle = '#f8c555';
+                    // Lâmina
+                    ctx.fillRect(x + 25, y - 20, 6, 50);
+                    // Guarda
+                    ctx.fillRect(x + 20, y - 25, 16, 12);
+                    // Punho
+                    ctx.fillStyle = '#8B4513';
+                    ctx.fillRect(x + 25, y + 30, 6, 20);
+                    
+                    // Detalhes dourados
+                    ctx.fillStyle = '#d4a017';
+                    ctx.fillRect(x + 21, y - 24, 14, 10);
+                    ctx.fillRect(x + 26, y - 15, 4, 40);
                 } else {
                     // Espada básica
                     ctx.fillStyle = '#bdc3c7';
                     // Lâmina
-                    ctx.fillRect(centerX + 20, centerY - 15, 5, 40);
+                    ctx.fillRect(x + 25, y - 20, 6, 50);
                     // Guarda
-                    ctx.fillRect(centerX + 15, centerY - 20, 15, 10);
+                    ctx.fillRect(x + 20, y - 25, 16, 12);
                     // Punho
                     ctx.fillStyle = '#8B4513';
-                    ctx.fillRect(centerX + 20, centerY + 25, 5, 15);
+                    ctx.fillRect(x + 25, y + 30, 6, 20);
                 }
-                
-                // Detalhes da armadura
-                ctx.strokeStyle = '#1c2833';
-                ctx.lineWidth = 2;
-                ctx.strokeRect(centerX - 25, centerY - 10, 50, 40);
             }
             
             move(dx, dy, worldMap) {
@@ -1650,6 +1912,9 @@
                 
                 // Atualizar itens de batalha
                 this.updateBattleItems();
+                
+                // Atualizar coleção de equipamentos
+                this.updateEquipmentCollection();
             }
             
             updateBattleStatusEffects() {
@@ -1897,6 +2162,17 @@
                         this.items.ham -= 1;
                         this.items.dragonScales -= 5;
                         this.hasDragonSlayer = true;
+                        
+                        // Adicionar Dragon Slayer à coleção
+                        this.addToEquipmentCollection({
+                            name: "Dragon Slayer",
+                            damageMultiplier: 11.0,
+                            description: "A lendária espada forjada com escamas de dragão",
+                            icon: "🐉⚔️",
+                            type: "weapon",
+                            equipped: false
+                        });
+                        
                         this.recalculateStats();
                         
                         // Limpar slots de crafting
@@ -1966,6 +2242,68 @@
                 }
             }
             
+            updateEquipmentCollection() {
+                collectionItems.innerHTML = '';
+                
+                this.equipmentCollection.forEach((item, index) => {
+                    const itemElement = document.createElement('div');
+                    itemElement.className = `collection-item ${item.equipped ? 'equipped' : ''}`;
+                    itemElement.innerHTML = `
+                        <div class="collection-item-icon">${item.icon}</div>
+                        <div class="equipment-name">${item.name}</div>
+                        <div class="equipment-stats">
+                            ${item.type === 'weapon' ? `Dano: ${item.damageMultiplier}x` : `Defesa: ${item.defenseMultiplier}x`}
+                        </div>
+                        <div class="equipment-stats">${item.description}</div>
+                    `;
+                    
+                    itemElement.addEventListener('click', () => {
+                        this.equipItem(index);
+                    });
+                    
+                    collectionItems.appendChild(itemElement);
+                });
+            }
+            
+            addToEquipmentCollection(item) {
+                // Verificar se o item já existe na coleção
+                const existingItemIndex = this.equipmentCollection.findIndex(i => i.name === item.name);
+                
+                if (existingItemIndex === -1) {
+                    this.equipmentCollection.push(item);
+                } else {
+                    // Atualizar o item existente
+                    this.equipmentCollection[existingItemIndex] = item;
+                }
+                
+                this.updateEquipmentCollection();
+            }
+            
+            equipItem(index) {
+                const item = this.equipmentCollection[index];
+                
+                // Remover o status de equipado de todos os itens do mesmo tipo
+                this.equipmentCollection.forEach(i => {
+                    if (i.type === item.type) {
+                        i.equipped = false;
+                    }
+                });
+                
+                // Equipar o novo item
+                item.equipped = true;
+                
+                // Atualizar o equipamento atual
+                if (item.type === 'weapon') {
+                    this.weapon = item;
+                } else if (item.type === 'armor') {
+                    this.armor = item;
+                }
+                
+                this.recalculateStats();
+                this.updateUI();
+                this.updateEquipmentCollection();
+            }
+            
             updateBattleItems() {
                 battleItemsGrid.innerHTML = '';
                 
@@ -2030,25 +2368,56 @@
                             break;
                         case 'stoneSword':
                             if (!this.purchasedItems.stoneSword) {
-                                this.weapon = {
+                                this.addToEquipmentCollection({
                                     name: "Espada de Pedra",
                                     damageMultiplier: 1.2,
-                                    description: "Uma espada feita de pedra afiada"
-                                };
+                                    description: "Uma espada feita de pedra afiada",
+                                    icon: "⚔️",
+                                    type: "weapon",
+                                    equipped: false
+                                });
                                 this.purchasedItems.stoneSword = true;
-                                this.recalculateStats();
+                            }
+                            break;
+                        case 'goldSword':
+                            if (!this.purchasedItems.goldSword) {
+                                this.addToEquipmentCollection({
+                                    name: "Espada de Ouro",
+                                    damageMultiplier: 1.42,
+                                    description: "Uma espada forjada em ouro puro",
+                                    icon: "⚔️",
+                                    type: "weapon",
+                                    equipped: false
+                                });
+                                this.purchasedItems.goldSword = true;
                             }
                             break;
                         case 'chainMail':
                             if (!this.purchasedItems.chainMail) {
-                                this.armor = {
+                                this.addToEquipmentCollection({
                                     name: "Armadura de Malha",
                                     defenseMultiplier: 1.3,
                                     agilityPenalty: 2,
-                                    description: "Uma armadura de malha pesada"
-                                };
+                                    description: "Uma armadura de malha pesada",
+                                    icon: "🛡️",
+                                    type: "armor",
+                                    equipped: false
+                                });
                                 this.purchasedItems.chainMail = true;
-                                this.recalculateStats();
+                            }
+                            break;
+                        case 'goldArmor':
+                            if (!this.purchasedItems.goldArmor) {
+                                this.addToEquipmentCollection({
+                                    name: "Armadura de Ouro",
+                                    defenseMultiplier: 1.5,
+                                    agilityPenalty: 3,
+                                    description: "Uma armadura de ouro ornamentada",
+                                    icon: "🛡️",
+                                    type: "armor",
+                                    equipped: false
+                                });
+                                this.purchasedItems.goldArmor = true;
                             }
                             break;
                     }
@@ -2099,11 +2468,11 @@
             }
             
             drawBattle(ctx, isAttacking = false) {
-                ctx.clearRect(0, 0, 150, 150);
+                ctx.clearRect(0, 0, 200, 200);
                 
                 // Fundo do monstro
                 ctx.fillStyle = 'rgba(26, 58, 95, 0.5)';
-                ctx.fillRect(0, 0, 150, 150);
+                ctx.fillRect(0, 0, 200, 200);
                 
                 // Efeito de ataque
                 if (isAttacking) {
@@ -2111,128 +2480,177 @@
                         // Efeito de queimadura do dragão
                         ctx.fillStyle = 'rgba(255, 69, 0, 0.5)';
                         ctx.beginPath();
-                        ctx.arc(75, 75, 70, 0, Math.PI * 2);
+                        ctx.arc(100, 100, 90, 0, Math.PI * 2);
                         ctx.fill();
                     } else {
                         ctx.fillStyle = 'rgba(231, 76, 60, 0.3)';
-                        ctx.fillRect(0, 0, 150, 150);
+                        ctx.fillRect(0, 0, 200, 200);
                     }
                 }
                 
-                const centerX = 75;
-                const centerY = 75;
+                const centerX = 100;
+                const centerY = 100;
                 
                 if (this.type === 'weak') {
-                    // Desenhar Goblin
+                    // Desenhar Goblin melhorado
                     ctx.fillStyle = '#27ae60'; // Corpo verde
                     ctx.beginPath();
-                    ctx.ellipse(centerX, centerY, 25, 30, 0, 0, Math.PI * 2);
+                    ctx.ellipse(centerX, centerY, 35, 45, 0, 0, Math.PI * 2);
                     ctx.fill();
                     
                     // Cabeça
                     ctx.fillStyle = '#2ecc71';
                     ctx.beginPath();
-                    ctx.arc(centerX, centerY - 20, 20, 0, Math.PI * 2);
+                    ctx.arc(centerX, centerY - 30, 25, 0, Math.PI * 2);
                     ctx.fill();
                     
                     // Olhos
                     ctx.fillStyle = '#e74c3c';
                     ctx.beginPath();
-                    ctx.arc(centerX - 8, centerY - 22, 5, 0, Math.PI * 2);
-                    ctx.arc(centerX + 8, centerY - 22, 5, 0, Math.PI * 2);
+                    ctx.arc(centerX - 10, centerY - 32, 6, 0, Math.PI * 2);
+                    ctx.arc(centerX + 10, centerY - 32, 6, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    // Boca
+                    ctx.fillStyle = '#c0392b';
+                    ctx.beginPath();
+                    ctx.arc(centerX, centerY - 20, 8, 0, Math.PI, false);
                     ctx.fill();
                     
                     // Chifres
                     ctx.fillStyle = '#d35400';
                     ctx.beginPath();
-                    ctx.moveTo(centerX - 15, centerY - 35);
-                    ctx.lineTo(centerX - 25, centerY - 45);
-                    ctx.lineTo(centerX - 10, centerY - 38);
+                    ctx.moveTo(centerX - 20, centerY - 50);
+                    ctx.lineTo(centerX - 35, centerY - 65);
+                    ctx.lineTo(centerX - 15, centerY - 55);
                     ctx.closePath();
                     ctx.fill();
                     
                     ctx.beginPath();
-                    ctx.moveTo(centerX + 15, centerY - 35);
-                    ctx.lineTo(centerX + 25, centerY - 45);
-                    ctx.lineTo(centerX + 10, centerY - 38);
+                    ctx.moveTo(centerX + 20, centerY - 50);
+                    ctx.lineTo(centerX + 35, centerY - 65);
+                    ctx.lineTo(centerX + 15, centerY - 55);
                     ctx.closePath();
                     ctx.fill();
+                    
+                    // Arma primitiva
+                    ctx.fillStyle = '#8B4513';
+                    ctx.fillRect(centerX + 25, centerY - 20, 5, 40);
+                    ctx.fillRect(centerX + 20, centerY - 25, 15, 10);
                     
                 } else if (this.type === 'strong') {
-                    // Desenhar Orc
+                    // Desenhar Orc melhorado
                     ctx.fillStyle = '#34495e'; // Corpo cinza
                     ctx.beginPath();
-                    ctx.ellipse(centerX, centerY, 30, 35, 0, 0, Math.PI * 2);
+                    ctx.ellipse(centerX, centerY, 40, 50, 0, 0, Math.PI * 2);
                     ctx.fill();
                     
                     // Cabeça
                     ctx.fillStyle = '#2c3e50';
                     ctx.beginPath();
-                    ctx.arc(centerX, centerY - 25, 25, 0, Math.PI * 2);
+                    ctx.arc(centerX, centerY - 35, 30, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    // Olhos
+                    ctx.fillStyle = '#e74c3c';
+                    ctx.beginPath();
+                    ctx.arc(centerX - 12, centerY - 38, 8, 0, Math.PI * 2);
+                    ctx.arc(centerX + 12, centerY - 38, 8, 0, Math.PI * 2);
                     ctx.fill();
                     
                     // Presas
                     ctx.fillStyle = '#ecf0f1';
                     ctx.beginPath();
-                    ctx.moveTo(centerX - 10, centerY - 15);
-                    ctx.lineTo(centerX - 15, centerY - 5);
-                    ctx.lineTo(centerX - 5, centerY - 10);
+                    ctx.moveTo(centerX - 15, centerY - 20);
+                    ctx.lineTo(centerX - 20, centerY - 5);
+                    ctx.lineTo(centerX - 10, centerY - 15);
                     ctx.closePath();
                     ctx.fill();
                     
                     ctx.beginPath();
-                    ctx.moveTo(centerX + 10, centerY - 15);
-                    ctx.lineTo(centerX + 15, centerY - 5);
-                    ctx.lineTo(centerX + 5, centerY - 10);
+                    ctx.moveTo(centerX + 15, centerY - 20);
+                    ctx.lineTo(centerX + 20, centerY - 5);
+                    ctx.lineTo(centerX + 10, centerY - 15);
                     ctx.closePath();
                     ctx.fill();
                     
                     // Machado
                     ctx.fillStyle = '#bdc3c7';
-                    ctx.fillRect(centerX + 20, centerY - 30, 5, 40);
-                    ctx.fillRect(centerX + 15, centerY - 25, 15, 10);
+                    ctx.fillRect(centerX + 25, centerY - 35, 8, 50);
+                    ctx.fillRect(centerX + 20, centerY - 30, 18, 12);
+                    
+                    // Detalhes do machado
+                    ctx.fillStyle = '#95a5a6';
+                    ctx.fillRect(centerX + 23, centerY - 25, 2, 30);
                     
                 } else if (this.type === 'elite') {
-                    // Desenhar Dragão
+                    // Desenhar Dragão melhorado
                     ctx.fillStyle = '#e74c3c'; // Corpo vermelho
                     ctx.beginPath();
-                    ctx.ellipse(centerX, centerY, 35, 25, 0, 0, Math.PI * 2);
+                    ctx.ellipse(centerX, centerY, 45, 35, 0, 0, Math.PI * 2);
                     ctx.fill();
                     
                     // Cabeça
                     ctx.fillStyle = '#c0392b';
                     ctx.beginPath();
-                    ctx.arc(centerX, centerY - 30, 20, 0, Math.PI * 2);
+                    ctx.arc(centerX, centerY - 40, 25, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    // Olhos
+                    ctx.fillStyle = '#f39c12';
+                    ctx.beginPath();
+                    ctx.arc(centerX - 10, centerY - 42, 8, 0, Math.PI * 2);
+                    ctx.arc(centerX + 10, centerY - 42, 8, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    // Pupilas
+                    ctx.fillStyle = '#2c3e50';
+                    ctx.beginPath();
+                    ctx.arc(centerX - 10, centerY - 42, 4, 0, Math.PI * 2);
+                    ctx.arc(centerX + 10, centerY - 42, 4, 0, Math.PI * 2);
                     ctx.fill();
                     
                     // Chifres
                     ctx.fillStyle = '#d35400';
                     ctx.beginPath();
-                    ctx.moveTo(centerX - 10, centerY - 40);
-                    ctx.lineTo(centerX - 20, centerY - 50);
-                    ctx.lineTo(centerX - 5, centerY - 42);
+                    ctx.moveTo(centerX - 15, centerY - 55);
+                    ctx.lineTo(centerX - 25, centerY - 70);
+                    ctx.lineTo(centerX - 10, centerY - 58);
                     ctx.closePath();
                     ctx.fill();
                     
                     ctx.beginPath();
-                    ctx.moveTo(centerX + 10, centerY - 40);
-                    ctx.lineTo(centerX + 20, centerY - 50);
-                    ctx.lineTo(centerX + 5, centerY - 42);
+                    ctx.moveTo(centerX + 15, centerY - 55);
+                    ctx.lineTo(centerX + 25, centerY - 70);
+                    ctx.lineTo(centerX + 10, centerY - 58);
                     ctx.closePath();
                     ctx.fill();
                     
                     // Asas
                     ctx.fillStyle = 'rgba(231, 76, 60, 0.7)';
                     ctx.beginPath();
-                    ctx.ellipse(centerX - 30, centerY - 10, 20, 15, Math.PI/4, 0, Math.PI * 2);
-                    ctx.ellipse(centerX + 30, centerY - 10, 20, 15, -Math.PI/4, 0, Math.PI * 2);
+                    ctx.ellipse(centerX - 40, centerY - 15, 25, 20, Math.PI/4, 0, Math.PI * 2);
+                    ctx.ellipse(centerX + 40, centerY - 15, 25, 20, -Math.PI/4, 0, Math.PI * 2);
                     ctx.fill();
                     
                     // Fogo na boca
                     if (isAttacking) {
                         ctx.fillStyle = '#f39c12';
                         ctx.beginPath();
-                        ctx.arc(centerX, centerY - 25, 10, 0, Math.PI * 2);
+                        ctx.arc(centerX, centerY - 35, 12, 0, Math.PI * 2);
+                        ctx.fill();
+                        
+                        ctx.fillStyle = '#ff6b6b';
+                        ctx.beginPath();
+                        ctx.arc(centerX, centerY - 35, 8, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+                    
+                    // Escamas
+                    ctx.fillStyle = '#c0392b';
+                    for (let i = 0; i < 8; i++) {
+                        ctx.beginPath();
+                        ctx.arc(centerX - 20 + i * 5, centerY, 5, 0, Math.PI * 2);
                         ctx.fill();
                     }
                 }
@@ -2308,7 +2726,7 @@
                 
                 if (this.type === 'weak') {
                     // Goblin Fraco
-                    if (Math.random() < 0.2) { // 20% de chance
+                    if (Math.random() < 0.3) { // 20% de chance
                         player.addItem('mace');
                         droppedItems.push("maçã");
                     }
@@ -2318,21 +2736,21 @@
                     }
                 } else if (this.type === 'strong') {
                     // Orc Forte
-                    if (Math.random() < 0.1) { // 10% de chance
+                    if (Math.random() < 0.25) { // 10% de chance
                         player.addItem('mace');
                         droppedItems.push("maçã");
                     }
-                    if (Math.random() < 0.25) { // 25% de chance
+                    if (Math.random() < 0.3) { // 25% de chance
                         player.addItem('ham');
                         droppedItems.push("pernil");
                     }
-                    if (Math.random() < 0.05) { // 5% de chance
+                    if (Math.random() < 0.1) { // 5% de chance
                         player.addItem('strengthPotion');
                         droppedItems.push("poção de força");
                     }
                 } else if (this.type === 'elite') {
                     // Dragão de Elite
-                    if (Math.random() < 0.05) { // 5% de chance
+                    if (Math.random() < 0.4) { // 5% de chance
                         player.addItem('mace');
                         droppedItems.push("maçã");
                     }
@@ -2344,7 +2762,7 @@
                         player.addItem('strengthPotion');
                         droppedItems.push("poção de força");
                     }
-                    if (Math.random() < 0.01) { // 1% de chance
+                    if (Math.random() < 0.05) { // 1% de chance
                         player.addItem('dragonScales');
                         droppedItems.push("escamas de dragão");
                     }
@@ -2738,6 +3156,7 @@
         let isPlayerTurn = true;
         let battleAnimation = null;
         let currentRound = 1;
+        let battleEffects = [];
         
         function startBattle() {
             // Determinar tipo de monstro baseado nas probabilidades
@@ -2756,6 +3175,7 @@
             isPlayerTurn = true;
             battleAnimation = null;
             currentRound = 1;
+            battleEffects = [];
             
             // Atualizar UI da batalha
             battleEnemyLevel.textContent = currentMonster.level;
@@ -2835,16 +3255,23 @@
                 animateBattle();
             }
             
+            addBattleLog(message);
+            
             // Esperar animação para aplicar dano
             setTimeout(() => {
                 // Verificar se o monstro desviou
                 if (Math.random() < currentMonster.dodgeChance) {
                     addBattleLog("Mas o inimigo desviou do ataque!");
+                    createBattleEffect('miss', enemyCanvas, 100, 50);
                 } else {
                     const actualDamage = currentMonster.takeDamage(damage);
                     
+                    // Criar efeito visual de dano
+                    createBattleEffect('damage', enemyCanvas, 100, 50, actualDamage);
+                    
                     if (isCritical) {
                         addBattleLog(` CRÍTICO! Causou ${actualDamage} de dano ao inimigo!`);
+                        createBattleEffect('critical', enemyCanvas, 100, 30);
                     } else {
                         addBattleLog(` Causou ${actualDamage} de dano ao inimigo!`);
                     }
@@ -2881,6 +3308,9 @@
             }
             
             addBattleLog(result.message);
+            
+            // Criar efeito visual
+            createBattleEffect('heavy-armor', playerCanvas, 100, 50);
             
             // Animação de ativação da armadura pesada
             battleAnimation = {
@@ -2986,17 +3416,26 @@
                 // Verificar se o monstro desviou
                 if (Math.random() < currentMonster.dodgeChance) {
                     addBattleLog("Mas o inimigo desviou do feitiço!");
+                    createBattleEffect('miss', enemyCanvas, 100, 50);
                 } else {
                     const actualDamage = currentMonster.takeDamage(damage);
+                    
+                    // Criar efeito visual de dano
+                    createBattleEffect('damage', enemyCanvas, 100, 50, actualDamage);
+                    
                     addBattleLog(` O feitiço causou ${actualDamage} de dano!`);
                     
                     // Aplicar efeitos de status
                     if (spellType === 'fireball' && Math.random() < burnChance) {
                         currentMonster.addStatusEffect({ type: 'burn', duration: 3 });
                         addBattleLog(" O inimigo foi queimado!");
+                        createBattleEffect('burn', enemyCanvas, 100, 30);
                     } else if (statusEffect) {
                         currentMonster.addStatusEffect(statusEffect);
                         addBattleLog(` O inimigo foi afetado por ${statusEffect.type.toUpperCase()}!`);
+                        
+                        // Criar efeito visual de status
+                        createBattleEffect(statusEffect.type, enemyCanvas, 100, 30);
                     }
                     
                     battleEnemyHealth.textContent = currentMonster.health;
@@ -3026,6 +3465,14 @@
             
             if (result.success) {
                 addBattleLog(result.message);
+                
+                // Criar efeito visual baseado no item
+                if (itemType === 'mace' || itemType === 'ham') {
+                    createBattleEffect('heal', playerCanvas, 100, 50);
+                } else if (itemType === 'strengthPotion') {
+                    createBattleEffect('strength-potion', playerCanvas, 100, 50);
+                }
+                
                 player.updateUI();
                 
                 // Passar a vez para o monstro
@@ -3045,6 +3492,10 @@
             if (actionType === 'meditate') {
                 message = player.meditate();
                 addBattleLog(message);
+                
+                // Criar efeito visual de meditação
+                createBattleEffect('meditate', playerCanvas, 100, 50);
+                
                 player.updateUI();
                 
                 // Passar a vez para o monstro
@@ -3091,13 +3542,19 @@
                 // Verificar se o jogador desviou
                 if (Math.random() < player.dodgeChance) {
                     addBattleLog("Mas o cavaleiro desviou do ataque!");
+                    createBattleEffect('miss', playerCanvas, 100, 50);
                 } else {
                     const actualDamage = player.takeDamage(damage);
+                    
+                    // Criar efeito visual de dano
+                    createBattleEffect('damage', playerCanvas, 100, 50, actualDamage);
+                    
                     addBattleLog(` Causou ${actualDamage} de dano ao cavaleiro!`);
                     
                     // Verificar se o dragão causou queimadura
                     if (currentMonster.type === 'elite' && player.hasStatusEffect('burn')) {
                         addBattleLog(" O cavaleiro está queimando!");
+                        createBattleEffect('burn', playerCanvas, 100, 30);
                     }
                     
                     player.updateUI();
@@ -3142,7 +3599,7 @@
                 // Efeito visual da magia
                 enemyCtx.fillStyle = getSpellColor(battleAnimation.spell);
                 enemyCtx.globalAlpha = 0.5 - (battleAnimation.step / battleAnimation.maxSteps) * 0.5;
-                enemyCtx.fillRect(0, 0, 150, 150);
+                enemyCtx.fillRect(0, 0, 200, 200);
                 enemyCtx.globalAlpha = 1.0;
             } else if (battleAnimation.type === 'playerEffect') {
                 player.drawBattle(playerCtx, true);
@@ -3151,9 +3608,12 @@
                 // Efeito visual de ativação de habilidade
                 playerCtx.fillStyle = 'rgba(149, 165, 166, 0.5)';
                 playerCtx.globalAlpha = 0.5 - (battleAnimation.step / battleAnimation.maxSteps) * 0.5;
-                playerCtx.fillRect(0, 0, 150, 150);
+                playerCtx.fillRect(0, 0, 200, 200);
                 playerCtx.globalAlpha = 1.0;
             }
+            
+            // Atualizar efeitos de batalha
+            updateBattleEffects();
             
             battleAnimation.step++;
             
@@ -3174,6 +3634,91 @@
                 case 'freeze': return '#74b9ff';
                 case 'possession': return '#a29bfe';
                 default: return '#ffffff';
+            }
+        }
+        
+        function createBattleEffect(type, canvas, x, y, value = null) {
+            const effect = {
+                type: type,
+                x: x,
+                y: y,
+                value: value,
+                step: 0,
+                maxSteps: 60,
+                canvas: canvas
+            };
+            
+            battleEffects.push(effect);
+        }
+        
+        function updateBattleEffects() {
+            const playerCtx = playerCanvas.getContext('2d');
+            const enemyCtx = enemyCanvas.getContext('2d');
+            
+            for (let i = battleEffects.length - 1; i >= 0; i--) {
+                const effect = battleEffects[i];
+                const ctx = effect.canvas === playerCanvas ? playerCtx : enemyCtx;
+                
+                effect.step++;
+                
+                if (effect.step >= effect.maxSteps) {
+                    battleEffects.splice(i, 1);
+                    continue;
+                }
+                
+                const progress = effect.step / effect.maxSteps;
+                const alpha = 1 - progress;
+                const offsetY = progress * 30;
+                
+                ctx.save();
+                ctx.globalAlpha = alpha;
+                ctx.font = 'bold 16px MedievalSharp';
+                ctx.textAlign = 'center';
+                
+                switch(effect.type) {
+                    case 'damage':
+                        ctx.fillStyle = '#e74c3c';
+                        ctx.fillText(`-${effect.value}`, effect.x, effect.y - offsetY);
+                        break;
+                    case 'critical':
+                        ctx.fillStyle = '#f39c12';
+                        ctx.fillText('CRÍTICO!', effect.x, effect.y - offsetY);
+                        break;
+                    case 'miss':
+                        ctx.fillStyle = '#95a5a6';
+                        ctx.fillText('ESQUIVOU!', effect.x, effect.y - offsetY);
+                        break;
+                    case 'heal':
+                        ctx.fillStyle = '#2ecc71';
+                        ctx.fillText('+CURA', effect.x, effect.y - offsetY);
+                        break;
+                    case 'burn':
+                        ctx.fillStyle = '#ff6b6b';
+                        ctx.fillText('QUEIMANDO!', effect.x, effect.y - offsetY);
+                        break;
+                    case 'slow':
+                        ctx.fillStyle = '#74b9ff';
+                        ctx.fillText('LENTIDÃO!', effect.x, effect.y - offsetY);
+                        break;
+                    case 'stun':
+                        ctx.fillStyle = '#a29bfe';
+                        ctx.fillText('ATORDOADO!', effect.x, effect.y - offsetY);
+                        break;
+                    case 'strength-potion':
+                        ctx.fillStyle = '#f39c12';
+                        ctx.fillText('FORÇA+', effect.x, effect.y - offsetY);
+                        break;
+                    case 'heavy-armor':
+                        ctx.fillStyle = '#bdc3c7';
+                        ctx.fillText('DEFESA+', effect.x, effect.y - offsetY);
+                        break;
+                    case 'meditate':
+                        ctx.fillStyle = '#3498db';
+                        ctx.fillText('MEDITANDO', effect.x, effect.y - offsetY);
+                        break;
+                }
+                
+                ctx.restore();
             }
         }
         
@@ -3287,29 +3832,61 @@
                 shopItems.appendChild(hamItem);
             } else if (category === 'weapons') {
                 // Armamentos
-                const stoneSwordItem = document.createElement('div');
-                stoneSwordItem.className = 'shop-item';
-                stoneSwordItem.innerHTML = `
-                    <div class="shop-item-icon">⚔️</div>
-                    <div class="shop-item-name">Espada de Pedra</div>
-                    <div class="shop-item-price">130 💰</div>
-                    <button class="shop-buy-btn" data-item="stoneSword" data-price="130" ${player.purchasedItems.stoneSword ? 'disabled' : ''}>
-                        ${player.purchasedItems.stoneSword ? 'Esgotado' : 'Comprar'}
-                    </button>
-                `;
-                shopItems.appendChild(stoneSwordItem);
+                let stoneSwordItem, goldSwordItem;
                 
-                const chainMailItem = document.createElement('div');
-                chainMailItem.className = 'shop-item';
-                chainMailItem.innerHTML = `
-                    <div class="shop-item-icon">🛡️</div>
-                    <div class="shop-item-name">Armadura de Malha</div>
-                    <div class="shop-item-price">200 💰</div>
-                    <button class="shop-buy-btn" data-item="chainMail" data-price="200" ${player.purchasedItems.chainMail ? 'disabled' : ''}>
-                        ${player.purchasedItems.chainMail ? 'Esgotado' : 'Comprar'}
-                    </button>
-                `;
-                shopItems.appendChild(chainMailItem);
+                if (!player.purchasedItems.stoneSword) {
+                    stoneSwordItem = document.createElement('div');
+                    stoneSwordItem.className = 'shop-item';
+                    stoneSwordItem.innerHTML = `
+                        <div class="shop-item-icon">⚔️</div>
+                        <div class="shop-item-name">Espada de Pedra</div>
+                        <div class="shop-item-price">130 💰</div>
+                        <button class="shop-buy-btn" data-item="stoneSword" data-price="130">
+                            Comprar
+                        </button>
+                    `;
+                    shopItems.appendChild(stoneSwordItem);
+                } else {
+                    goldSwordItem = document.createElement('div');
+                    goldSwordItem.className = 'shop-item';
+                    goldSwordItem.innerHTML = `
+                        <div class="shop-item-icon">⚔️</div>
+                        <div class="shop-item-name">Espada de Ouro</div>
+                        <div class="shop-item-price">250 💰</div>
+                        <button class="shop-buy-btn" data-item="goldSword" data-price="250" ${player.purchasedItems.goldSword ? 'disabled' : ''}>
+                            ${player.purchasedItems.goldSword ? 'Esgotado' : 'Comprar'}
+                        </button>
+                    `;
+                    shopItems.appendChild(goldSwordItem);
+                }
+                
+                let chainMailItem, goldArmorItem;
+                
+                if (!player.purchasedItems.chainMail) {
+                    chainMailItem = document.createElement('div');
+                    chainMailItem.className = 'shop-item';
+                    chainMailItem.innerHTML = `
+                        <div class="shop-item-icon">🛡️</div>
+                        <div class="shop-item-name">Armadura de Malha</div>
+                        <div class="shop-item-price">200 💰</div>
+                        <button class="shop-buy-btn" data-item="chainMail" data-price="200">
+                            Comprar
+                        </button>
+                    `;
+                    shopItems.appendChild(chainMailItem);
+                } else {
+                    goldArmorItem = document.createElement('div');
+                    goldArmorItem.className = 'shop-item';
+                    goldArmorItem.innerHTML = `
+                        <div class="shop-item-icon">🛡️</div>
+                        <div class="shop-item-name">Armadura de Ouro</div>
+                        <div class="shop-item-price">350 💰</div>
+                        <button class="shop-buy-btn" data-item="goldArmor" data-price="350" ${player.purchasedItems.goldArmor ? 'disabled' : ''}>
+                            ${player.purchasedItems.goldArmor ? 'Esgotado' : 'Comprar'}
+                        </button>
+                    `;
+                    shopItems.appendChild(goldArmorItem);
+                }
             } else if (category === 'potions') {
                 // Poções
                 const strengthPotionItem = document.createElement('div');
@@ -3514,6 +4091,10 @@
         
         closeEquipmentBtn.addEventListener('click', () => {
             equipmentScreen.style.display = 'none';
+        });
+        
+        inventoryBtnEquipment.addEventListener('click', () => {
+            equipmentCollection.style.display = equipmentCollection.style.display === 'none' ? 'block' : 'none';
         });
         
         // Event listeners para loja
