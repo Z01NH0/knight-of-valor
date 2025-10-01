@@ -151,7 +151,6 @@
             transform: scale(1.1);
         }
         
-        /* Tela de Combate */
         .battle-screen {
             position: absolute;
             top: 0;
@@ -553,7 +552,6 @@
         .strength-potion { background: rgba(230, 126, 34, 0.7); }
         .heavy-armor { background: rgba(149, 165, 166, 0.7); }
         
-        /* Loja */
         .shop-screen {
             position: absolute;
             top: 0;
@@ -659,7 +657,6 @@
             cursor: not-allowed;
         }
         
-        /* Menu de Equipamentos */
         .equipment-screen {
             position: absolute;
             top: 0;
@@ -842,7 +839,6 @@
             }
         }
         
-        /* Efeitos visuais de batalha */
         .battle-effect {
             position: absolute;
             pointer-events: none;
@@ -880,6 +876,61 @@
         .stun-text { color: #a29bfe; }
         .strength-text { color: #f39c12; }
         .heavy-armor-text { color: #bdc3c7; }
+        
+        .death-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            color: #e74c3c;
+            font-size: 3rem;
+            text-shadow: 0 0 10px rgba(231, 76, 60, 0.5);
+        }
+        
+        .recipe-item {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            border: 1px solid rgba(248, 197, 85, 0.2);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .recipe-item:hover {
+            background: rgba(248, 197, 85, 0.1);
+        }
+        
+        .recipe-icon {
+            font-size: 2rem;
+            margin-bottom: 5px;
+        }
+        
+        .recipe-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .recipe-description {
+            font-size: 0.8rem;
+            color: #ccc;
+        }
+        
+        .crafting-glow {
+            animation: craftingGlow 1.5s infinite alternate;
+        }
+        
+        @keyframes craftingGlow {
+            0% { box-shadow: 0 0 5px rgba(248, 197, 85, 0.5); }
+            100% { box-shadow: 0 0 20px rgba(248, 197, 85, 1), 0 0 30px rgba(231, 76, 60, 0.7); }
+        }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap" rel="stylesheet">
 </head>
@@ -935,7 +986,6 @@
                 🎒
             </div>
             
-            <!-- Tela de Combate -->
             <div class="battle-screen" id="battleScreen">
                 <div class="battle-container">
                     <div class="round-indicator" id="roundIndicator">Round 1</div>
@@ -1019,7 +1069,6 @@
                     <div class="items-options" id="itemsOptions">
                         <button class="back-btn" id="backFromItemsBtn">← Voltar</button>
                         <div class="items-grid" id="battleItemsGrid">
-                            <!-- Itens serão adicionados dinamicamente -->
                         </div>
                     </div>
                     
@@ -1030,7 +1079,6 @@
                 </div>
             </div>
             
-            <!-- Tela de Inventário -->
             <div class="inventory-screen" id="inventoryScreen">
                 <div class="inventory-container">
                     <div class="inventory-header">
@@ -1114,8 +1162,14 @@
                         </div>
                     </div>
                     
+                    <div class="upgrade-points">
+                        <h3>Receitas de Crafting</h3>
+                        <div class="items-grid" id="recipesGrid">
+                        </div>
+                    </div>
+                    
                     <div class="crafting-section">
-                        <h3 class="crafting-title">Crafting - Dragon Slayer</h3>
+                        <h3 class="crafting-title">Crafting</h3>
                         <div class="crafting-grid">
                             <div class="crafting-slot" id="craftSlot1"></div>
                             <div class="crafting-slot" id="craftSlot2"></div>
@@ -1130,9 +1184,6 @@
                         <div class="crafting-result" id="craftingResult">
                             <span>⚔️</span>
                         </div>
-                        <p style="text-align: center; margin-top: 10px; font-size: 0.9rem;">
-                            Receita: Pernil no centro inferior, Escamas de Dragão nas outras posições
-                        </p>
                     </div>
                     
                     <div style="text-align: center; margin-top: 20px;">
@@ -1141,7 +1192,6 @@
                 </div>
             </div>
             
-            <!-- Tela de Equipamentos -->
             <div class="equipment-screen" id="equipmentScreen">
                 <div class="equipment-container">
                     <div class="equipment-header">
@@ -1170,13 +1220,11 @@
                     <div class="equipment-collection" id="equipmentCollection" style="display: none;">
                         <h3 class="collection-title">Coleção de Equipamentos</h3>
                         <div class="collection-items" id="collectionItems">
-                            <!-- Itens da coleção serão carregados dinamicamente -->
                         </div>
                     </div>
                 </div>
             </div>
             
-            <!-- Tela da Loja -->
             <div class="shop-screen" id="shopScreen">
                 <div class="shop-container">
                     <div class="shop-header">
@@ -1191,9 +1239,13 @@
                     </div>
                     
                     <div class="shop-items" id="shopItems">
-                        <!-- Itens da loja serão carregados dinamicamente -->
                     </div>
                 </div>
+            </div>
+            
+            <div class="death-screen" id="deathScreen">
+                <h2>Você Morreu</h2>
+                <p>Seus itens e Sua Experiência Talvez Foram Junto Com Você...</p>
             </div>
         </div>
         
@@ -1204,19 +1256,16 @@
     </div>
 
     <script>
-        // Configurações do jogo
         const TILE_SIZE = 64;
-        const MAP_WIDTH = 16;  // Largura do mapa visível
-        const MAP_HEIGHT = 10; // Altura do mapa visível
-        const WORLD_SIZE = 200; // Tamanho do mundo (200x200 tiles)
-        const MOVE_COOLDOWN = 200; // 0.6 segundos entre movimentos
-        const MONSTER_SPAWN_CHANCE = 0.1; // 30% de chance de spawnar monstro a cada 3 tiles
+        const MAP_WIDTH = 16;
+        const MAP_HEIGHT = 10;
+        const WORLD_SIZE = 120;
+        const MOVE_COOLDOWN = 200;
+        const MONSTER_SPAWN_CHANCE = 0.1;
 
-        // Elementos do DOM
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
         
-        // Elementos de UI
         const healthBar = document.getElementById('healthBar');
         const healthText = document.getElementById('healthText');
         const manaBar = document.getElementById('manaBar');
@@ -1227,7 +1276,6 @@
         const expText = document.getElementById('expText');
         const moneyText = document.getElementById('moneyText');
         
-        // Elementos de batalha
         const playerCanvas = document.getElementById('playerBattleCanvas');
         const enemyCanvas = document.getElementById('enemyBattleCanvas');
         const battleScreen = document.getElementById('battleScreen');
@@ -1270,7 +1318,6 @@
         const backFromActBtn = document.getElementById('backFromActBtn');
         const battleItemsGrid = document.getElementById('battleItemsGrid');
         
-        // Elementos de inventário
         const inventoryScreen = document.getElementById('inventoryScreen');
         const inventoryBtn = document.getElementById('inventoryBtn');
         const closeInventoryBtn = document.getElementById('closeInventoryBtn');
@@ -1279,7 +1326,6 @@
         const inventoryMoney = document.getElementById('inventoryMoney');
         const upgradePoints = document.getElementById('upgradePoints');
         
-        // Elementos de status
         const statHp = document.getElementById('statHp');
         const statStr = document.getElementById('statStr');
         const statAgi = document.getElementById('statAgi');
@@ -1291,13 +1337,11 @@
         const freezeStatus = document.getElementById('freezeStatus');
         const possessionStatus = document.getElementById('possessionStatus');
         
-        // Elementos de itens
         const inventoryMaceCount = document.getElementById('inventoryMaceCount');
         const inventoryHamCount = document.getElementById('inventoryHamCount');
         const inventoryStrengthPotionCount = document.getElementById('inventoryStrengthPotionCount');
         const inventoryDragonScalesCount = document.getElementById('inventoryDragonScalesCount');
         
-        // Elementos de crafting
         const craftingSlots = [
             document.getElementById('craftSlot1'),
             document.getElementById('craftSlot2'),
@@ -1310,8 +1354,8 @@
             document.getElementById('craftSlot9')
         ];
         const craftingResult = document.getElementById('craftingResult');
+        const recipesGrid = document.getElementById('recipesGrid');
         
-        // Elementos de equipamentos
         const equipmentScreen = document.getElementById('equipmentScreen');
         const equipmentBtn = document.getElementById('equipmentBtn');
         const closeEquipmentBtn = document.getElementById('closeEquipmentBtn');
@@ -1325,13 +1369,13 @@
         const equipmentCollection = document.getElementById('equipmentCollection');
         const collectionItems = document.getElementById('collectionItems');
         
-        // Elementos da loja
         const shopScreen = document.getElementById('shopScreen');
         const closeShopBtn = document.getElementById('closeShopBtn');
         const shopCategories = document.querySelectorAll('.shop-category');
         const shopItems = document.getElementById('shopItems');
         
-        // Cores
+        const deathScreen = document.getElementById('deathScreen');
+
         const COLORS = {
             GRASS: '#2ecc71',
             GRASS_DARK: '#27ae60',
@@ -1349,10 +1393,13 @@
             SAND: '#f1c40f',
             SAND_DARK: '#d4ac0d',
             SHOP: '#8B4513',
-            SHOP_DARK: '#654321'
+            SHOP_DARK: '#654321',
+            VOLCANIC: '#8B0000',
+            VOLCANIC_DARK: '#660000',
+            LAVA: '#FF4500',
+            LAVA_DARK: '#CC3700'
         };
 
-        // Classe do Jogador
         class Player {
             constructor() {
                 this.level = 1;
@@ -1363,33 +1410,29 @@
                 this.expToNextLevel = 40;
                 this.upgradePoints = 0
                 
-                // Atributos base
                 this.baseHp = 10;
                 this.baseStr = 10;
                 this.baseAgi = 10;
                 this.baseDef = 10;
                 this.baseMag = 10;
                 
-                // Atributos atuais (com multiplicadores)
                 this.maxHealth = Math.floor(this.baseHp * 10);
                 this.health = this.maxHealth;
                 this.maxMana = Math.floor(50 * Math.pow(1.05, this.baseMag - 10));
                 this.mana = this.maxMana;
-                this.maxStamina = 30 + (this.baseAgi - 10) * 2; // Stamina base + 2 por ponto de agilidade
+                this.maxStamina = 30 + (this.baseAgi - 10) * 2;
                 this.stamina = this.maxStamina;
                 this.strength = this.baseStr;
                 this.agility = this.baseAgi;
                 this.defense = this.baseDef;
                 this.magic = this.baseMag;
                 
-                this.dodgeChance = 0.04 + (this.baseAgi - 10) * 0.03; // 4% base + 0.3% por ponto de agilidade
+                this.dodgeChance = 0.04 + (this.baseAgi - 10) * 0.03;
                 this.moveCooldown = 0;
                 this.stepsTaken = 0;
                 
-                // Status effects
                 this.statusEffects = [];
                 
-                // Itens
                 this.items = {
                     mace: 2,
                     ham: 0,
@@ -1397,12 +1440,17 @@
                     dragonScales: 0
                 };
                 
-                // Crafting
+                this.recipes = {
+                    dragonSlayer: false,
+                    blackWolfArmor: false
+                };
+                
                 this.craftingSlots = Array(9).fill(null);
                 this.hasDragonSlayer = false;
-                this.dragonSlayerMultiplier = 1; // Multiplicador de dano da Dragon Slayer
+                this.dragonSlayerMultiplier = 1;
+                this.hasBlackWolfArmor = false;
+                this.blackWolfArmorMultiplier = 1;
                 
-                // Equipamentos
                 this.weapon = {
                     name: "Espada Básica",
                     damageMultiplier: 1.0,
@@ -1420,7 +1468,6 @@
                     type: "armor"
                 };
                 
-                // Coleção de equipamentos
                 this.equipmentCollection = [
                     {
                         name: "Espada Básica",
@@ -1441,7 +1488,6 @@
                     }
                 ];
                 
-                // Itens comprados na loja
                 this.purchasedItems = {
                     stoneSword: false,
                     goldSword: false,
@@ -1454,18 +1500,16 @@
                 const centerX = canvas.width / 2;
                 const centerY = canvas.height / 2;
                 
-                // Desenhar o cavaleiro com base nos equipamentos
                 this.drawKnight(centerX, centerY);
             }
             
             drawKnight(x, y) {
-                // Corpo com armadura baseada no equipamento
+                ctx.save();
+                
                 if (this.armor.name === "Armadura de Malha") {
-                    // Armadura de malha
                     ctx.fillStyle = '#7f8c8d';
                     ctx.fillRect(x - 20, y - 15, 40, 30);
                     
-                    // Detalhes da armadura de malha
                     ctx.fillStyle = '#95a5a6';
                     for (let i = 0; i < 4; i++) {
                         for (let j = 0; j < 3; j++) {
@@ -1473,63 +1517,64 @@
                         }
                     }
                 } else if (this.armor.name === "Armadura de Ouro") {
-                    // Armadura de ouro
                     ctx.fillStyle = '#f8c555';
                     ctx.fillRect(x - 20, y - 15, 40, 30);
                     
-                    // Detalhes dourados
                     ctx.fillStyle = '#d4a017';
                     ctx.fillRect(x - 18, y - 13, 36, 26);
                     
-                    // Padrão de armadura dourada
                     ctx.fillStyle = '#f8c555';
                     ctx.fillRect(x - 15, y - 10, 30, 20);
                     
-                    // Detalhes ornamentais
                     ctx.fillStyle = '#d4a017';
                     ctx.fillRect(x - 12, y - 7, 24, 14);
+                } else if (this.hasBlackWolfArmor) {
+                    ctx.fillStyle = '#2c3e50';
+                    ctx.fillRect(x - 20, y - 15, 40, 30);
+                    
+                    ctx.fillStyle = '#34495e';
+                    ctx.fillRect(x - 18, y - 13, 36, 26);
+                    
+                    ctx.fillStyle = '#e74c3c';
+                    for (let i = 0; i < 3; i++) {
+                        ctx.beginPath();
+                        ctx.arc(x - 10 + i * 10, y - 5, 3, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
                 } else {
-                    // Armadura básica
                     ctx.fillStyle = '#34495e';
                     ctx.fillRect(x - 20, y - 15, 40, 30);
                     
-                    // Detalhes da armadura
                     ctx.fillStyle = '#2c3e50';
                     ctx.fillRect(x - 18, y - 13, 36, 26);
                 }
                 
-                // Cabeça
                 ctx.fillStyle = '#ecf0f1';
                 ctx.fillRect(x - 10, y - 25, 20, 10);
                 
-                // Capacete com detalhes
                 ctx.fillStyle = this.armor.name === "Armadura de Ouro" ? '#f8c555' : '#95a5a6';
                 ctx.fillRect(x - 12, y - 27, 24, 5);
                 ctx.fillRect(x - 15, y - 22, 30, 3);
                 
-                // Visor do capacete
                 ctx.fillStyle = '#3498db';
                 ctx.fillRect(x - 8, y - 24, 16, 4);
                 
-                // Escudo
                 ctx.fillStyle = '#2c3e50';
                 ctx.fillRect(x - 25, y - 10, 8, 20);
                 
-                // Detalhes do escudo
                 ctx.fillStyle = '#f8c555';
                 ctx.fillRect(x - 23, y - 5, 4, 10);
                 
-                // Espada baseada no equipamento
                 this.drawWeapon(x, y);
+                
+                ctx.restore();
             }
             
             drawWeapon(x, y) {
                 if (this.hasDragonSlayer) {
-                    // Dragon Slayer - espada épica
                     ctx.fillStyle = '#e74c3c';
                     ctx.fillRect(x + 15, y - 15, 5, 30);
                     
-                    // Lâmina flamejante
                     ctx.fillStyle = '#f39c12';
                     ctx.beginPath();
                     ctx.moveTo(x + 20, y - 15);
@@ -1552,38 +1597,31 @@
                     ctx.closePath();
                     ctx.fill();
                     
-                    // Efeito de fogo
                     ctx.fillStyle = 'rgba(255, 69, 0, 0.3)';
                     ctx.beginPath();
                     ctx.arc(x + 22, y - 5, 8, 0, Math.PI * 2);
                     ctx.fill();
                 } else if (this.weapon.name === "Espada de Pedra") {
-                    // Espada de Pedra
                     ctx.fillStyle = '#95a5a6';
                     ctx.fillRect(x + 15, y - 12, 3, 24);
                     ctx.fillRect(x + 10, y - 15, 13, 6);
                     
-                    // Detalhes da lâmina de pedra
                     ctx.fillStyle = '#7f8c8d';
                     ctx.fillRect(x + 16, y - 10, 1, 20);
                 } else if (this.weapon.name === "Espada de Ouro") {
-                    // Espada de Ouro
                     ctx.fillStyle = '#f8c555';
                     ctx.fillRect(x + 15, y - 12, 3, 24);
                     ctx.fillRect(x + 10, y - 15, 13, 6);
                     
-                    // Detalhes dourados
                     ctx.fillStyle = '#d4a017';
                     ctx.fillRect(x + 11, y - 14, 11, 4);
                     ctx.fillRect(x + 16, y - 10, 1, 20);
                 } else {
-                    // Espada básica
                     ctx.fillStyle = '#bdc3c7';
                     ctx.fillRect(x + 15, y - 12, 3, 24);
                     ctx.fillRect(x + 10, y - 15, 13, 6);
                 }
                 
-                // Detalhes da armadura
                 ctx.strokeStyle = '#2c3e50';
                 ctx.lineWidth = 2;
                 ctx.strokeRect(x - 20, y - 15, 40, 30);
@@ -1592,35 +1630,29 @@
             drawBattle(ctx, isAttacking = false, attackType = null) {
                 ctx.clearRect(0, 0, 200, 200);
                 
-                // Fundo do personagem
                 ctx.fillStyle = 'rgba(26, 58, 95, 0.5)';
                 ctx.fillRect(0, 0, 200, 200);
                 
-                // Efeito de ataque
                 if (isAttacking) {
                     if (attackType === 'sword') {
                         ctx.fillStyle = 'rgba(255, 215, 0, 0.3)';
                         ctx.fillRect(0, 0, 200, 200);
                     } else if (attackType === 'charge') {
-                        // Efeito de investida - rastro de movimento
                         ctx.fillStyle = 'rgba(255, 165, 0, 0.4)';
                         ctx.beginPath();
                         ctx.arc(100, 100, 80, 0, Math.PI * 2);
                         ctx.fill();
                     } else if (attackType === 'fireball') {
-                        // Efeito de fogo
                         ctx.fillStyle = 'rgba(255, 69, 0, 0.5)';
                         ctx.beginPath();
                         ctx.arc(100, 100, 90, 0, Math.PI * 2);
                         ctx.fill();
                     } else if (attackType === 'freeze') {
-                        // Efeito de gelo
                         ctx.fillStyle = 'rgba(173, 216, 230, 0.5)';
                         ctx.beginPath();
                         ctx.arc(100, 100, 90, 0, Math.PI * 2);
                         ctx.fill();
                     } else if (attackType === 'possession') {
-                        // Efeito de possessão
                         ctx.fillStyle = 'rgba(138, 43, 226, 0.5)';
                         ctx.beginPath();
                         ctx.arc(100, 100, 90, 0, Math.PI * 2);
@@ -1631,12 +1663,10 @@
                 const centerX = 100;
                 const centerY = 100;
                 
-                // Corpo com armadura detalhada
                 if (this.armor.name === "Armadura de Malha") {
                     ctx.fillStyle = '#7f8c8d';
                     ctx.fillRect(centerX - 35, centerY - 15, 70, 50);
                     
-                    // Detalhes da armadura de malha
                     ctx.fillStyle = '#95a5a6';
                     for (let i = 0; i < 5; i++) {
                         for (let j = 0; j < 4; j++) {
@@ -1647,44 +1677,50 @@
                     ctx.fillStyle = '#f8c555';
                     ctx.fillRect(centerX - 35, centerY - 15, 70, 50);
                     
-                    // Detalhes dourados
                     ctx.fillStyle = '#d4a017';
                     ctx.fillRect(centerX - 33, centerY - 13, 66, 46);
                     
-                    // Padrão de armadura dourada
                     ctx.fillStyle = '#f8c555';
-                    ctx.fillRect(cente0rX - 28, centerY - 8, 56, 36);
+                    ctx.fillRect(centerX - 28, centerY - 8, 56, 36);
                     
-                    // Detalhes ornamentais
                     ctx.fillStyle = '#d4a017';
                     ctx.fillRect(centerX - 25, centerY - 5, 50, 30);
+                } else if (this.hasBlackWolfArmor) {
+                    ctx.fillStyle = '#2c3e50';
+                    ctx.fillRect(centerX - 35, centerY - 15, 70, 50);
+                    
+                    ctx.fillStyle = '#34495e';
+                    ctx.fillRect(centerX - 33, centerY - 13, 66, 46);
+                    
+                    ctx.fillStyle = '#e74c3c';
+                    for (let i = 0; i < 5; i++) {
+                        for (let j = 0; j < 3; j++) {
+                            ctx.beginPath();
+                            ctx.arc(centerX - 25 + i * 12, centerY - 10 + j * 10, 3, 0, Math.PI * 2);
+                            ctx.fill();
+                        }
+                    }
                 } else {
                     ctx.fillStyle = '#2c3e50';
                     ctx.fillRect(centerX - 35, centerY - 15, 70, 50);
                     
-                    // Detalhes da armadura
                     ctx.fillStyle = '#34495e';
                     ctx.fillRect(centerX - 33, centerY - 13, 66, 46);
                 }
                 
-                // Cabeça
                 ctx.fillStyle = '#ecf0f1';
                 ctx.fillRect(centerX - 20, centerY - 40, 40, 25);
                 
-                // Capacete com detalhes
                 ctx.fillStyle = this.armor.name === "Armadura de Ouro" ? '#f8c555' : '#7f8c8d';
                 ctx.fillRect(centerX - 25, centerY - 45, 50, 10);
                 ctx.fillRect(centerX - 30, centerY - 35, 60, 5);
                 
-                // Visor do capacete
                 ctx.fillStyle = '#3498db';
                 ctx.fillRect(centerX - 15, centerY - 38, 30, 10);
                 
-                // Escudo
                 ctx.fillStyle = '#34495e';
                 ctx.fillRect(centerX - 55, centerY - 10, 20, 40);
                 
-                // Detalhes do escudo
                 ctx.fillStyle = '#f8c555';
                 ctx.fillRect(centerX - 53, centerY, 16, 30);
                 ctx.fillStyle = '#e74c3c';
@@ -1692,10 +1728,8 @@
                 ctx.arc(centerX - 45, centerY + 15, 8, 0, Math.PI * 2);
                 ctx.fill();
                 
-                // Espada baseada no equipamento
                 this.drawBattleWeapon(ctx, centerX, centerY, isAttacking);
                 
-                // Detalhes da armadura
                 ctx.strokeStyle = '#1c2833';
                 ctx.lineWidth = 2;
                 ctx.strokeRect(centerX - 35, centerY - 15, 70, 50);
@@ -1703,17 +1737,12 @@
             
             drawBattleWeapon(ctx, x, y, isAttacking) {
                 if (this.hasDragonSlayer) {
-                    // Dragon Slayer - espada épica
                     ctx.fillStyle = '#e74c3c';
-                    // Lâmina
                     ctx.fillRect(x + 25, y - 20, 8, 50);
-                    // Guarda
                     ctx.fillRect(x + 20, y - 25, 18, 12);
-                    // Punho
                     ctx.fillStyle = '#8B4513';
                     ctx.fillRect(x + 25, y + 30, 8, 20);
                     
-                    // Efeito flamejante
                     if (isAttacking) {
                         ctx.fillStyle = '#f39c12';
                         ctx.beginPath();
@@ -1738,42 +1767,28 @@
                         ctx.fill();
                     }
                 } else if (this.weapon.name === "Espada de Pedra") {
-                    // Espada de Pedra
                     ctx.fillStyle = '#95a5a6';
-                    // Lâmina
                     ctx.fillRect(x + 25, y - 20, 6, 50);
-                    // Guarda
                     ctx.fillRect(x + 20, y - 25, 16, 12);
-                    // Punho
                     ctx.fillStyle = '#8B4513';
                     ctx.fillRect(x + 25, y + 30, 6, 20);
                     
-                    // Detalhes da lâmina de pedra
                     ctx.fillStyle = '#7f8c8d';
                     ctx.fillRect(x + 26, y - 15, 4, 40);
                 } else if (this.weapon.name === "Espada de Ouro") {
-                    // Espada de Ouro
                     ctx.fillStyle = '#f8c555';
-                    // Lâmina
                     ctx.fillRect(x + 25, y - 20, 6, 50);
-                    // Guarda
                     ctx.fillRect(x + 20, y - 25, 16, 12);
-                    // Punho
                     ctx.fillStyle = '#8B4513';
                     ctx.fillRect(x + 25, y + 30, 6, 20);
                     
-                    // Detalhes dourados
                     ctx.fillStyle = '#d4a017';
                     ctx.fillRect(x + 21, y - 24, 14, 10);
                     ctx.fillRect(x + 26, y - 15, 4, 40);
                 } else {
-                    // Espada básica
                     ctx.fillStyle = '#bdc3c7';
-                    // Lâmina
                     ctx.fillRect(x + 25, y - 20, 6, 50);
-                    // Guarda
                     ctx.fillRect(x + 20, y - 25, 16, 12);
-                    // Punho
                     ctx.fillStyle = '#8B4513';
                     ctx.fillRect(x + 25, y + 30, 6, 20);
                 }
@@ -1785,18 +1800,28 @@
                 const newX = this.x + dx;
                 const newY = this.y + dy;
                 
-                // Verificar se a nova posição está dentro dos limites do mundo
                 if (newX >= 0 && newX < WORLD_SIZE && newY >= 0 && newY < WORLD_SIZE) {
-                    // Verificar se a nova posição não é água (intransponível)
                     if (worldMap[Math.floor(newY)][Math.floor(newX)] !== 1) {
                         this.x = newX;
                         this.y = newY;
                         this.moveCooldown = MOVE_COOLDOWN;
                         this.stepsTaken++;
                         
-                        // Verificar se deve spawnar um monstro (a cada 3 passos)
-                        if (this.stepsTaken % 3 === 0 && Math.random() < MONSTER_SPAWN_CHANCE) {
-                            return 'monster';
+                        if (this.stepsTaken % 3 === 0) {
+                            let spawnChance = MONSTER_SPAWN_CHANCE;
+                            const currentTile = worldMap[Math.floor(this.y)][Math.floor(this.x)];
+                            
+                            if (currentTile === 2) {
+                                spawnChance *= 1.3;
+                            } else if (currentTile === 3) {
+                                spawnChance *= 1.3;
+                            } else if (currentTile === 7) {
+                                spawnChance *= 1.3;
+                            }
+                            
+                            if (Math.random() < spawnChance) {
+                                return 'monster';
+                            }
                         }
                         
                         return true;
@@ -1811,7 +1836,6 @@
                     if (this.moveCooldown < 0) this.moveCooldown = 0;
                 }
                 
-                // Atualizar status effects
                 this.updateStatusEffects();
             }
             
@@ -1822,18 +1846,23 @@
                     
                     if (effect.duration <= 0) {
                         this.statusEffects.splice(i, 1);
-                        this.recalculateStats(); // Recalcular stats após remover efeito
+                        this.recalculateStats();
                     }
                 }
             }
             
             addStatusEffect(effect) {
                 this.statusEffects.push(effect);
-                this.recalculateStats(); // Recalcular stats após adicionar efeito
+                this.recalculateStats();
             }
             
             hasStatusEffect(type) {
                 return this.statusEffects.some(effect => effect.type === type);
+            }
+            
+            clearStatusEffects() {
+                this.statusEffects = [];
+                this.recalculateStats();
             }
             
             updateUI() {
@@ -1847,7 +1876,6 @@
                 expText.textContent = `${this.exp}/${this.expToNextLevel}`;
                 moneyText.textContent = this.money;
                 
-                // Atualizar inventário
                 inventoryLevel.textContent = this.level;
                 inventoryExp.textContent = `${this.exp}/${this.expToNextLevel}`;
                 inventoryMoney.textContent = this.money;
@@ -1859,7 +1887,6 @@
                 statDef.textContent = this.baseDef;
                 statMag.textContent = this.baseMag;
                 
-                // Atualizar status das habilidades
                 if (this.baseStr >= 13) {
                     chargeStatus.textContent = "Desbloqueada";
                     chargeBtn.disabled = false;
@@ -1886,13 +1913,11 @@
                     possessionBtn.textContent = "POSSEÇÃO";
                 }
                 
-                // Atualizar contagem de itens
                 inventoryMaceCount.textContent = this.items.mace;
                 inventoryHamCount.textContent = this.items.ham;
                 inventoryStrengthPotionCount.textContent = this.items.strengthPotion;
                 inventoryDragonScalesCount.textContent = this.items.dragonScales;
                 
-                // Atualizar tela de batalha
                 battlePlayerLevel.textContent = this.level;
                 battlePlayerHealth.textContent = this.health;
                 battlePlayerMaxHealth.textContent = this.maxHealth;
@@ -1901,20 +1926,17 @@
                 battlePlayerStamina.textContent = this.stamina;
                 battlePlayerMaxStamina.textContent = this.maxStamina;
                 
-                // Atualizar status effects na UI de batalha
                 this.updateBattleStatusEffects();
                 
-                // Atualizar crafting
                 this.updateCraftingUI();
                 
-                // Atualizar equipamentos
                 this.updateEquipmentUI();
                 
-                // Atualizar itens de batalha
                 this.updateBattleItems();
                 
-                // Atualizar coleção de equipamentos
                 this.updateEquipmentCollection();
+                
+                this.updateRecipesUI();
             }
             
             updateBattleStatusEffects() {
@@ -1928,7 +1950,6 @@
             }
             
             takeDamage(damage) {
-                // Calcular dano com defesa
                 const actualDamage = Math.max(1, Math.floor(damage - (this.defense * 0.1)));
                 this.health -= actualDamage;
                 if (this.health < 0) this.health = 0;
@@ -1948,7 +1969,6 @@
                 this.expToNextLevel = Math.floor(this.expToNextLevel * 1.5);
                 this.upgradePoints += 1;
                 
-                // Aumentar stats base ao subir de nível
                 this.baseHp += 1;
                 this.baseStr += 1;
                 this.baseAgi += 1;
@@ -1986,7 +2006,6 @@
             }
             
             recalculateStats() {
-                // Recalcular stats com multiplicadores
                 this.maxHealth = Math.floor(this.baseHp * 10);
                 this.maxMana = Math.floor(50 * Math.pow(1.05, this.baseMag - 10));
                 this.maxStamina = 30 + (this.baseAgi - 10) * 2;
@@ -1995,34 +2014,36 @@
                 this.defense = this.baseDef;
                 this.magic = this.baseMag;
                 
-                // Aplicar multiplicador da Dragon Slayer
                 if (this.hasDragonSlayer) {
                     this.strength = Math.floor(this.strength * 11);
                 }
                 
-                // Aplicar multiplicador da espada
                 this.strength = Math.floor(this.strength * this.weapon.damageMultiplier);
                 
-                // Aplicar multiplicador da armadura
                 this.defense = Math.floor(this.defense * this.armor.defenseMultiplier);
                 
-                // Recalcular chance de esquiva baseada na agilidade
-                this.dodgeChance = 0.04 + (this.agility - 10) * 0.03;
-                
-                // Aplicar efeitos de status
-                if (this.hasStatusEffect('slow')) {
-                    this.dodgeChance += 0.4; // 40% adicional de esquiva
+                if (this.hasBlackWolfArmor) {
+                    this.defense = Math.floor(this.defense * 2.5);
                 }
                 
-                // Garantir que stamina não exceda o máximo
+                this.dodgeChance = 0.04 + (this.agility - 10) * 0.03;
+                
+                if (this.hasStatusEffect('slow')) {
+                    this.dodgeChance += 0.7;
+                }
+                
                 if (this.stamina > this.maxStamina) {
                     this.stamina = this.maxStamina;
                 }
             }
             
             swordAttack() {
-                const baseDamage = 5 + Math.floor(this.strength * 0.5);
-                const isCritical = Math.random() < 0.05; // 5% de chance de crítico
+                let baseDamage = 5 + Math.floor(this.strength * 0.5);
+                const isCritical = Math.random() < 0.05;
+                
+                if (this.hasStatusEffect('strength-potion')) {
+                    baseDamage = Math.floor(baseDamage * 1.4);
+                }
                 
                 if (isCritical) {
                     return Math.floor(baseDamage * 2);
@@ -2037,11 +2058,15 @@
                 }
                 
                 this.stamina -= 30;
-                const baseDamage = 11 + Math.floor(this.strength * 0.3);
-                const isCritical = Math.random() < 0.15; // 15% de chance de crítico (3x mais)
+                let baseDamage = 11 + Math.floor(this.strength * 0.3);
+                const isCritical = Math.random() < 0.15;
+                
+                if (this.hasStatusEffect('strength-potion')) {
+                    baseDamage = Math.floor(baseDamage * 1.4);
+                }
                 
                 if (isCritical) {
-                    return { success: true, damage: Math.floor(baseDamage * 4), isCritical: true }; // 4x de dano crítico
+                    return { success: true, damage: Math.floor(baseDamage * 4), isCritical: true };
                 }
                 
                 return { success: true, damage: baseDamage, isCritical: false };
@@ -2100,70 +2125,131 @@
                         this.health = Math.min(this.maxHealth, this.health + 25);
                         return { success: true, message: "Usou o pernil e recuperou 25 de HP!" };
                     case 'strengthPotion':
-                        this.addStatusEffect({ type: 'strength-potion', duration: 4, damageMultiplier: 1.5 });
-                        return { success: true, message: "Usou a poção de força! Seu ataque aumentou por 4 turnos!" };
+                        this.addStatusEffect({ type: 'strength-potion', duration: 5, damageMultiplier: 1.4 });
+                        return { success: true, message: "Usou a poção de força! Seu ataque aumentou 40% por 5 turnos!" };
                 }
                 
                 this.updateUI();
                 return { success: false, message: "Item não pode ser usado agora." };
             }
             
-            updateCraftingUI() {
-                // Atualizar slots de crafting
-                for (let i = 0; i < 9; i++) {
-                    craftingSlots[i].textContent = this.craftingSlots[i] ? 
-                        (this.craftingSlots[i] === 'ham' ? '🍗' : '🐉') : '';
+            addRecipe(recipe) {
+                this.recipes[recipe] = true;
+                this.updateRecipesUI();
+            }
+            
+            updateRecipesUI() {
+                recipesGrid.innerHTML = '';
+                
+                if (this.recipes.dragonSlayer) {
+                    const recipeElement = document.createElement('div');
+                    recipeElement.className = 'recipe-item';
+                    recipeElement.innerHTML = `
+                        <div class="recipe-icon">🐉⚔️</div>
+                        <div class="recipe-name">Dragon Slayer</div>
+                        <div class="recipe-description">Espada lendária forjada com escamas de dragão</div>
+                    `;
+                    recipeElement.addEventListener('click', () => {
+                        this.showRecipe('dragonSlayer');
+                    });
+                    recipesGrid.appendChild(recipeElement);
                 }
                 
-                // Verificar se a receita está correta
-                const recipe = [
-                    'dragonScales', 'dragonScales', 'dragonScales',
-                    'dragonScales', 'dragonScales', null,
-                    null, 'ham', null
-                ];
-                
-                let recipeCorrect = true;
-                for (let i = 0; i < 9; i++) {
-                    if (this.craftingSlots[i] !== recipe[i]) {
-                        recipeCorrect = false;
-                        break;
-                    }
-                }
-                
-                // Atualizar resultado do crafting
-                if (recipeCorrect && !this.hasDragonSlayer) {
-                    craftingResult.classList.add('crafting-pulse');
-                    craftingResult.title = "Clique para criar a Dragon Slayer!";
-                } else {
-                    craftingResult.classList.remove('crafting-pulse');
-                    craftingResult.title = this.hasDragonSlayer ? "Você já possui a Dragon Slayer!" : "Receita incompleta";
+                if (this.recipes.blackWolfArmor) {
+                    const recipeElement = document.createElement('div');
+                    recipeElement.className = 'recipe-item';
+                    recipeElement.innerHTML = `
+                        <div class="recipe-icon">🐺🛡️</div>
+                        <div class="recipe-name">Armadura do Lobo Negro</div>
+                        <div class="recipe-description">Armadura lendária do lobo negro</div>
+                    `;
+                    recipeElement.addEventListener('click', () => {
+                        this.showRecipe('blackWolfArmor');
+                    });
+                    recipesGrid.appendChild(recipeElement);
                 }
             }
             
-            craftDragonSlayer() {
-                const recipe = [
+            showRecipe(recipeType) {
+                if (recipeType === 'dragonSlayer') {
+                    alert("Receita da Dragon Slayer:\n\n🐉 🐉 🐉\n🐉 🐉 🍗\n🐉 🐉 🐉\n\nColoque 5 escamas de dragão e 1 pernil no centro inferior");
+                } else if (recipeType === 'blackWolfArmor') {
+                    alert("Receita da Armadura do Lobo Negro:\n\n🐉 🐉 🐉\n🐉 🧪 🐉\n🐉 🐉 🐉\n\nColoque 8 escamas de dragão e 1 poção de força no centro");
+                }
+            }
+            
+            updateCraftingUI() {
+                for (let i = 0; i < 9; i++) {
+                    craftingSlots[i].textContent = this.craftingSlots[i] ? 
+                        (this.craftingSlots[i] === 'ham' ? '🍗' : 
+                         this.craftingSlots[i] === 'strengthPotion' ? '🧪' : '🐉') : '';
+                }
+                
+                const dragonSlayerRecipe = [
                     'dragonScales', 'dragonScales', 'dragonScales',
                     'dragonScales', 'dragonScales', null,
                     null, 'ham', null
                 ];
                 
-                // Verificar se a receita está correta
-                let recipeCorrect = true;
+                const blackWolfArmorRecipe = [
+                    'dragonScales', 'dragonScales', 'dragonScales',
+                    'dragonScales', 'strengthPotion', 'dragonScales',
+                    'dragonScales', 'dragonScales', 'dragonScales'
+                ];
+                
+                let dragonSlayerCorrect = true;
+                let blackWolfArmorCorrect = true;
+                
                 for (let i = 0; i < 9; i++) {
-                    if (this.craftingSlots[i] !== recipe[i]) {
-                        recipeCorrect = false;
-                        break;
+                    if (this.craftingSlots[i] !== dragonSlayerRecipe[i]) {
+                        dragonSlayerCorrect = false;
+                    }
+                    if (this.craftingSlots[i] !== blackWolfArmorRecipe[i]) {
+                        blackWolfArmorCorrect = false;
                     }
                 }
                 
-                if (recipeCorrect && !this.hasDragonSlayer) {
-                    // Verificar se o jogador tem os itens necessários
+                if ((dragonSlayerCorrect && !this.hasDragonSlayer) || (blackWolfArmorCorrect && !this.hasBlackWolfArmor)) {
+                    craftingResult.classList.add('crafting-glow');
+                    craftingResult.title = "Clique para criar o item!";
+                } else {
+                    craftingResult.classList.remove('crafting-glow');
+                    craftingResult.title = this.hasDragonSlayer && this.hasBlackWolfArmor ? 
+                        "Você já possui todos os itens lendários!" : "Receita incompleta";
+                }
+            }
+            
+            craftItem() {
+                const dragonSlayerRecipe = [
+                    'dragonScales', 'dragonScales', 'dragonScales',
+                    'dragonScales', 'dragonScales', null,
+                    null, 'ham', null
+                ];
+                
+                const blackWolfArmorRecipe = [
+                    'dragonScales', 'dragonScales', 'dragonScales',
+                    'dragonScales', 'strengthPotion', 'dragonScales',
+                    'dragonScales', 'dragonScales', 'dragonScales'
+                ];
+                
+                let dragonSlayerCorrect = true;
+                let blackWolfArmorCorrect = true;
+                
+                for (let i = 0; i < 9; i++) {
+                    if (this.craftingSlots[i] !== dragonSlayerRecipe[i]) {
+                        dragonSlayerCorrect = false;
+                    }
+                    if (this.craftingSlots[i] !== blackWolfArmorRecipe[i]) {
+                        blackWolfArmorCorrect = false;
+                    }
+                }
+                
+                if (dragonSlayerCorrect && !this.hasDragonSlayer) {
                     if (this.items.ham >= 1 && this.items.dragonScales >= 5) {
                         this.items.ham -= 1;
                         this.items.dragonScales -= 5;
                         this.hasDragonSlayer = true;
                         
-                        // Adicionar Dragon Slayer à coleção
                         this.addToEquipmentCollection({
                             name: "Dragon Slayer",
                             damageMultiplier: 11.0,
@@ -2174,10 +2260,7 @@
                         });
                         
                         this.recalculateStats();
-                        
-                        // Limpar slots de crafting
                         this.craftingSlots = Array(9).fill(null);
-                        
                         this.updateUI();
                         return "Você criou a Dragon Slayer! Seu dano aumentou 11x!";
                     } else {
@@ -2185,22 +2268,48 @@
                     }
                 }
                 
-                return "Receita incorreta ou você já possui a Dragon Slayer!";
+                if (blackWolfArmorCorrect && !this.hasBlackWolfArmor) {
+                    if (this.items.strengthPotion >= 1 && this.items.dragonScales >= 8) {
+                        this.items.strengthPotion -= 1;
+                        this.items.dragonScales -= 8;
+                        this.hasBlackWolfArmor = true;
+                        
+                        this.addToEquipmentCollection({
+                            name: "Armadura do Lobo Negro",
+                            defenseMultiplier: 2.5,
+                            agilityPenalty: 0,
+                            description: "A lendária armadura do lobo negro",
+                            icon: "🐺🛡️",
+                            type: "armor",
+                            equipped: false
+                        });
+                        
+                        this.recalculateStats();
+                        this.craftingSlots = Array(9).fill(null);
+                        this.updateUI();
+                        return "Você criou a Armadura do Lobo Negro! Sua defesa aumentou 2.5x!";
+                    } else {
+                        return "Você não tem itens suficientes para criar a Armadura do Lobo Negro!";
+                    }
+                }
+                
+                return "Receita incorreta ou você já possui o item!";
             }
             
             addToCraftingSlot(slotIndex, item) {
                 if (this.craftingSlots[slotIndex] === null) {
-                    // Verificar se o jogador tem o item
                     if ((item === 'ham' && this.items.ham > 0) || 
-                        (item === 'dragonScales' && this.items.dragonScales > 0)) {
+                        (item === 'dragonScales' && this.items.dragonScales > 0) ||
+                        (item === 'strengthPotion' && this.items.strengthPotion > 0)) {
                         
                         this.craftingSlots[slotIndex] = item;
                         
-                        // Consumir o item
                         if (item === 'ham') {
                             this.items.ham--;
                         } else if (item === 'dragonScales') {
                             this.items.dragonScales--;
+                        } else if (item === 'strengthPotion') {
+                            this.items.strengthPotion--;
                         }
                         
                         this.updateUI();
@@ -2211,11 +2320,12 @@
             }
             
             clearCraftingSlot(slotIndex) {
-                // Devolver o item ao inventário
                 if (this.craftingSlots[slotIndex] === 'ham') {
                     this.items.ham++;
                 } else if (this.craftingSlots[slotIndex] === 'dragonScales') {
                     this.items.dragonScales++;
+                } else if (this.craftingSlots[slotIndex] === 'strengthPotion') {
+                    this.items.strengthPotion++;
                 }
                 
                 this.craftingSlots[slotIndex] = null;
@@ -2266,13 +2376,11 @@
             }
             
             addToEquipmentCollection(item) {
-                // Verificar se o item já existe na coleção
                 const existingItemIndex = this.equipmentCollection.findIndex(i => i.name === item.name);
                 
                 if (existingItemIndex === -1) {
                     this.equipmentCollection.push(item);
                 } else {
-                    // Atualizar o item existente
                     this.equipmentCollection[existingItemIndex] = item;
                 }
                 
@@ -2282,17 +2390,14 @@
             equipItem(index) {
                 const item = this.equipmentCollection[index];
                 
-                // Remover o status de equipado de todos os itens do mesmo tipo
                 this.equipmentCollection.forEach(i => {
                     if (i.type === item.type) {
                         i.equipped = false;
                     }
                 });
                 
-                // Equipar o novo item
                 item.equipped = true;
                 
-                // Atualizar o equipamento atual
                 if (item.type === 'weapon') {
                     this.weapon = item;
                 } else if (item.type === 'armor') {
@@ -2307,7 +2412,6 @@
             updateBattleItems() {
                 battleItemsGrid.innerHTML = '';
                 
-                // Adicionar apenas itens que o jogador possui
                 if (this.items.mace > 0) {
                     const itemSlot = document.createElement('div');
                     itemSlot.className = 'item-slot';
@@ -2341,7 +2445,6 @@
                     battleItemsGrid.appendChild(itemSlot);
                 }
                 
-                // Adicionar event listeners para os novos botões
                 document.querySelectorAll('.use-item-btn').forEach(btn => {
                     btn.addEventListener('click', () => {
                         const item = btn.getAttribute('data-item');
@@ -2427,11 +2530,28 @@
                 }
                 return false;
             }
+            
+            loseRandomItems() {
+                const items = Object.keys(this.items).filter(key => this.items[key] > 0);
+                let itemsLost = 0;
+                
+                for (let i = 0; i < 2 && items.length > 0; i++) {
+                    const randomIndex = Math.floor(Math.random() * items.length);
+                    const itemToLose = items[randomIndex];
+                    
+                    if (this.items[itemToLose] > 0) {
+                        this.items[itemToLose]--;
+                        itemsLost++;
+                        items.splice(randomIndex, 1);
+                    }
+                }
+                
+                return itemsLost;
+            }
         }
 
-        // Classe do Monstro
         class Monster {
-            constructor(type) {
+            constructor(type, worldMap, playerX, playerY) {
                 this.type = type;
                 
                 if (type === 'weak') {
@@ -2457,27 +2577,33 @@
                     this.agility = 12;
                 }
                 
-                // Atributos aleatórios
                 this.defense = Math.floor(Math.random() * 5) + 1;
                 this.agility = Math.floor(Math.random() * 5) + 1;
                 this.magic = Math.floor(Math.random() * 5) + 1;
                 
-                // Status effects
                 this.statusEffects = [];
-                this.dodgeChance = 0.02 + (this.agility - 5) * 0.02; // 2% base + 0.2% por ponto de agilidade
+                this.dodgeChance = 0.02 + (this.agility - 5) * 0.02;
+                
+                const currentTile = worldMap[Math.floor(playerY)][Math.floor(playerX)];
+                if (currentTile === 7 && type !== 'elite' && Math.random() < 0.3) {
+                    this.type = 'elite';
+                    this.name = "Dragão de Elite";
+                    this.maxHealth = 100;
+                    this.health = this.maxHealth;
+                    this.attack = 25;
+                    this.level = 5;
+                    this.agility = 12;
+                }
             }
             
             drawBattle(ctx, isAttacking = false) {
                 ctx.clearRect(0, 0, 200, 200);
                 
-                // Fundo do monstro
                 ctx.fillStyle = 'rgba(26, 58, 95, 0.5)';
                 ctx.fillRect(0, 0, 200, 200);
                 
-                // Efeito de ataque
                 if (isAttacking) {
                     if (this.type === 'elite' && Math.random() < 0.3) {
-                        // Efeito de queimadura do dragão
                         ctx.fillStyle = 'rgba(255, 69, 0, 0.5)';
                         ctx.beginPath();
                         ctx.arc(100, 100, 90, 0, Math.PI * 2);
@@ -2492,32 +2618,27 @@
                 const centerY = 100;
                 
                 if (this.type === 'weak') {
-                    // Desenhar Goblin melhorado
-                    ctx.fillStyle = '#27ae60'; // Corpo verde
+                    ctx.fillStyle = '#27ae60';
                     ctx.beginPath();
                     ctx.ellipse(centerX, centerY, 35, 45, 0, 0, Math.PI * 2);
                     ctx.fill();
                     
-                    // Cabeça
                     ctx.fillStyle = '#2ecc71';
                     ctx.beginPath();
                     ctx.arc(centerX, centerY - 30, 25, 0, Math.PI * 2);
                     ctx.fill();
                     
-                    // Olhos
                     ctx.fillStyle = '#e74c3c';
                     ctx.beginPath();
                     ctx.arc(centerX - 10, centerY - 32, 6, 0, Math.PI * 2);
                     ctx.arc(centerX + 10, centerY - 32, 6, 0, Math.PI * 2);
                     ctx.fill();
                     
-                    // Boca
                     ctx.fillStyle = '#c0392b';
                     ctx.beginPath();
                     ctx.arc(centerX, centerY - 20, 8, 0, Math.PI, false);
                     ctx.fill();
                     
-                    // Chifres
                     ctx.fillStyle = '#d35400';
                     ctx.beginPath();
                     ctx.moveTo(centerX - 20, centerY - 50);
@@ -2533,32 +2654,27 @@
                     ctx.closePath();
                     ctx.fill();
                     
-                    // Arma primitiva
                     ctx.fillStyle = '#8B4513';
                     ctx.fillRect(centerX + 25, centerY - 20, 5, 40);
                     ctx.fillRect(centerX + 20, centerY - 25, 15, 10);
                     
                 } else if (this.type === 'strong') {
-                    // Desenhar Orc melhorado
-                    ctx.fillStyle = '#34495e'; // Corpo cinza
+                    ctx.fillStyle = '#34495e';
                     ctx.beginPath();
                     ctx.ellipse(centerX, centerY, 40, 50, 0, 0, Math.PI * 2);
                     ctx.fill();
                     
-                    // Cabeça
                     ctx.fillStyle = '#2c3e50';
                     ctx.beginPath();
                     ctx.arc(centerX, centerY - 35, 30, 0, Math.PI * 2);
                     ctx.fill();
                     
-                    // Olhos
                     ctx.fillStyle = '#e74c3c';
                     ctx.beginPath();
                     ctx.arc(centerX - 12, centerY - 38, 8, 0, Math.PI * 2);
                     ctx.arc(centerX + 12, centerY - 38, 8, 0, Math.PI * 2);
                     ctx.fill();
                     
-                    // Presas
                     ctx.fillStyle = '#ecf0f1';
                     ctx.beginPath();
                     ctx.moveTo(centerX - 15, centerY - 20);
@@ -2574,43 +2690,36 @@
                     ctx.closePath();
                     ctx.fill();
                     
-                    // Machado
                     ctx.fillStyle = '#bdc3c7';
                     ctx.fillRect(centerX + 25, centerY - 35, 8, 50);
                     ctx.fillRect(centerX + 20, centerY - 30, 18, 12);
                     
-                    // Detalhes do machado
                     ctx.fillStyle = '#95a5a6';
                     ctx.fillRect(centerX + 23, centerY - 25, 2, 30);
                     
                 } else if (this.type === 'elite') {
-                    // Desenhar Dragão melhorado
-                    ctx.fillStyle = '#e74c3c'; // Corpo vermelho
+                    ctx.fillStyle = '#e74c3c';
                     ctx.beginPath();
                     ctx.ellipse(centerX, centerY, 45, 35, 0, 0, Math.PI * 2);
                     ctx.fill();
                     
-                    // Cabeça
                     ctx.fillStyle = '#c0392b';
                     ctx.beginPath();
                     ctx.arc(centerX, centerY - 40, 25, 0, Math.PI * 2);
                     ctx.fill();
                     
-                    // Olhos
                     ctx.fillStyle = '#f39c12';
                     ctx.beginPath();
                     ctx.arc(centerX - 10, centerY - 42, 8, 0, Math.PI * 2);
                     ctx.arc(centerX + 10, centerY - 42, 8, 0, Math.PI * 2);
                     ctx.fill();
                     
-                    // Pupilas
                     ctx.fillStyle = '#2c3e50';
                     ctx.beginPath();
                     ctx.arc(centerX - 10, centerY - 42, 4, 0, Math.PI * 2);
                     ctx.arc(centerX + 10, centerY - 42, 4, 0, Math.PI * 2);
                     ctx.fill();
                     
-                    // Chifres
                     ctx.fillStyle = '#d35400';
                     ctx.beginPath();
                     ctx.moveTo(centerX - 15, centerY - 55);
@@ -2626,14 +2735,12 @@
                     ctx.closePath();
                     ctx.fill();
                     
-                    // Asas
                     ctx.fillStyle = 'rgba(231, 76, 60, 0.7)';
                     ctx.beginPath();
                     ctx.ellipse(centerX - 40, centerY - 15, 25, 20, Math.PI/4, 0, Math.PI * 2);
                     ctx.ellipse(centerX + 40, centerY - 15, 25, 20, -Math.PI/4, 0, Math.PI * 2);
                     ctx.fill();
                     
-                    // Fogo na boca
                     if (isAttacking) {
                         ctx.fillStyle = '#f39c12';
                         ctx.beginPath();
@@ -2646,7 +2753,6 @@
                         ctx.fill();
                     }
                     
-                    // Escamas
                     ctx.fillStyle = '#c0392b';
                     for (let i = 0; i < 8; i++) {
                         ctx.beginPath();
@@ -2665,7 +2771,6 @@
                         this.statusEffects.splice(i, 1);
                         this.recalculateStats();
                     } else if (effect.type === 'burn') {
-                        // Aplicar dano de queimadura
                         this.health -= 4;
                         if (this.health < 0) this.health = 0;
                     }
@@ -2682,12 +2787,10 @@
             }
             
             recalculateStats() {
-                // Recalcular chance de esquiva baseada na agilidade
                 this.dodgeChance = 0.02 + (this.agility - 5) * 0.02;
                 
-                // Aplicar efeitos de status
                 if (this.hasStatusEffect('slow')) {
-                    this.dodgeChance -= 0.4; // 40% menos chance de esquiva
+                    this.dodgeChance -= 0.4;
                     if (this.dodgeChance < 0) this.dodgeChance = 0;
                 }
             }
@@ -2712,10 +2815,9 @@
             attackPlayer(player) {
                 let damage = this.attack;
                 
-                // Dragão de Elite tem chance de causar queimadura
                 if (this.type === 'elite' && Math.random() < 0.3) {
                     player.addStatusEffect({ type: 'burn', duration: 3 });
-                    damage += 5; // Dano extra do ataque com queimadura
+                    damage += 5;
                 }
                 
                 return damage;
@@ -2725,46 +2827,67 @@
                 let droppedItems = [];
                 
                 if (this.type === 'weak') {
-                    // Goblin Fraco
-                    if (Math.random() < 0.3) { // 20% de chance
+                    if (Math.random() < 0.3) {
                         player.addItem('mace');
                         droppedItems.push("maçã");
                     }
-                    if (Math.random() < 0.05) { // 5% de chance
+                    if (Math.random() < 0.05) {
                         player.addItem('ham');
                         droppedItems.push("pernil");
+                    }
+                    if (Math.random() < 0.05) {
+                        player.addRecipe('dragonSlayer');
+                        droppedItems.push("receita da Dragon Slayer");
+                    }
+                    if (Math.random() < 0.06) {
+                        player.addRecipe('blackWolfArmor');
+                        droppedItems.push("receita da Armadura do Lobo Negro");
                     }
                 } else if (this.type === 'strong') {
-                    // Orc Forte
-                    if (Math.random() < 0.25) { // 10% de chance
+                    if (Math.random() < 0.25) {
                         player.addItem('mace');
                         droppedItems.push("maçã");
                     }
-                    if (Math.random() < 0.3) { // 25% de chance
+                    if (Math.random() < 0.3) {
                         player.addItem('ham');
                         droppedItems.push("pernil");
                     }
-                    if (Math.random() < 0.1) { // 5% de chance
+                    if (Math.random() < 0.1) {
                         player.addItem('strengthPotion');
                         droppedItems.push("poção de força");
+                    }
+                    if (Math.random() < 0.05) {
+                        player.addRecipe('dragonSlayer');
+                        droppedItems.push("receita da Dragon Slayer");
+                    }
+                    if (Math.random() < 0.06) {
+                        player.addRecipe('blackWolfArmor');
+                        droppedItems.push("receita da Armadura do Lobo Negro");
                     }
                 } else if (this.type === 'elite') {
-                    // Dragão de Elite
-                    if (Math.random() < 0.4) { // 5% de chance
+                    if (Math.random() < 0.4) {
                         player.addItem('mace');
                         droppedItems.push("maçã");
                     }
-                    if (Math.random() < 0.2) { // 20% de chance
+                    if (Math.random() < 0.2) {
                         player.addItem('ham');
                         droppedItems.push("pernil");
                     }
-                    if (Math.random() < 0.1) { // 10% de chance
+                    if (Math.random() < 0.1) {
                         player.addItem('strengthPotion');
                         droppedItems.push("poção de força");
                     }
-                    if (Math.random() < 0.05) { // 1% de chance
+                    if (Math.random() < 0.05) {
                         player.addItem('dragonScales');
                         droppedItems.push("escamas de dragão");
+                    }
+                    if (Math.random() < 0.05) {
+                        player.addRecipe('dragonSlayer');
+                        droppedItems.push("receita da Dragon Slayer");
+                    }
+                    if (Math.random() < 0.06) {
+                        player.addRecipe('blackWolfArmor');
+                        droppedItems.push("receita da Armadura do Lobo Negro");
                     }
                 }
                 
@@ -2772,11 +2895,26 @@
             }
         }
 
-        // Classe do Mercador
         class Merchant {
-            constructor() {
-                this.x = Math.floor(Math.random() * (WORLD_SIZE - 10)) + 5;
-                this.y = Math.floor(Math.random() * (WORLD_SIZE - 10)) + 5;
+            constructor(worldMap) {
+                let validPosition = false;
+                let attempts = 0;
+                
+                while (!validPosition && attempts < 100) {
+                    this.x = Math.floor(Math.random() * (WORLD_SIZE - 10)) + 5;
+                    this.y = Math.floor(Math.random() * (WORLD_SIZE - 10)) + 5;
+                    
+                    if (worldMap[this.y][this.x] === 2) {
+                        validPosition = true;
+                    }
+                    
+                    attempts++;
+                }
+                
+                if (!validPosition) {
+                    this.x = Math.floor(WORLD_SIZE / 2);
+                    this.y = Math.floor(WORLD_SIZE / 2);
+                }
             }
             
             draw() {
@@ -2787,15 +2925,12 @@
                 const screenY = Math.floor(this.y - offsetY);
                 
                 if (screenX >= 0 && screenX < MAP_WIDTH && screenY >= 0 && screenY < MAP_HEIGHT) {
-                    // Desenhar cabana do mercador
                     const x = screenX * TILE_SIZE;
                     const y = screenY * TILE_SIZE;
                     
-                    // Cabana
                     ctx.fillStyle = COLORS.SHOP;
                     ctx.fillRect(x + 10, y + 20, TILE_SIZE - 20, TILE_SIZE - 30);
                     
-                    // Telhado
                     ctx.fillStyle = COLORS.SHOP_DARK;
                     ctx.beginPath();
                     ctx.moveTo(x, y + 20);
@@ -2804,24 +2939,19 @@
                     ctx.closePath();
                     ctx.fill();
                     
-                    // Porta
                     ctx.fillStyle = '#8B4513';
                     ctx.fillRect(x + TILE_SIZE / 2 - 10, y + 30, 20, 30);
                     
-                    // Janelas
                     ctx.fillStyle = '#3498db';
                     ctx.fillRect(x + 15, y + 30, 15, 15);
                     ctx.fillRect(x + TILE_SIZE - 30, y + 30, 15, 15);
                     
-                    // Balcão
                     ctx.fillStyle = '#D2691E';
                     ctx.fillRect(x, y + TILE_SIZE - 10, TILE_SIZE, 10);
                     
-                    // Mercador
                     ctx.fillStyle = '#f8c555';
                     ctx.fillRect(x + TILE_SIZE / 2 - 5, y + TILE_SIZE - 20, 10, 15);
                     
-                    // Sinalização "Loja"
                     ctx.fillStyle = '#f8c555';
                     ctx.font = 'bold 12px MedievalSharp';
                     ctx.textAlign = 'center';
@@ -2835,46 +2965,41 @@
             }
         }
 
-        // Gerar mapa procedural melhorado
         function generateWorldMap() {
             const map = Array(WORLD_SIZE).fill().map(() => Array(WORLD_SIZE).fill(0));
             
-            // Adicionar corpos de água melhorados
             for (let i = 0; i < 10; i++) {
                 const x = Math.floor(Math.random() * WORLD_SIZE);
                 const y = Math.floor(Math.random() * WORLD_SIZE);
                 addWaterBody(map, x, y);
             }
             
-            // Adicionar florestas com mais árvores
             for (let i = 0; i < 20; i++) {
                 const x = Math.floor(Math.random() * WORLD_SIZE);
                 const y = Math.floor(Math.random() * WORLD_SIZE);
                 addForest(map, x, y);
             }
             
-            // Adicionar montanhas melhoradas
             for (let i = 0; i < 15; i++) {
                 const x = Math.floor(Math.random() * WORLD_SIZE);
                 const y = Math.floor(Math.random() * WORLD_SIZE);
                 addMountain(map, x, y);
             }
             
-            // Adicionar caminhos
             for (let i = 0; i < 8; i++) {
                 const x = Math.floor(Math.random() * WORLD_SIZE);
                 const y = Math.floor(Math.random() * WORLD_SIZE);
                 addPath(map, x, y);
             }
             
-            // Adicionar áreas de areia
             for (let i = 0; i < 5; i++) {
                 const x = Math.floor(Math.random() * WORLD_SIZE);
                 const y = Math.floor(Math.random() * WORLD_SIZE);
                 addSandArea(map, x, y);
             }
             
-            // Adicionar flores na grama
+            addVolcanicArea(map);
+            
             addFlowers(map);
             
             return map;
@@ -2888,9 +3013,8 @@
                     const newY = y + j;
                     if (newX >= 0 && newX < WORLD_SIZE && newY >= 0 && newY < WORLD_SIZE) {
                         const dist = Math.sqrt(i*i + j*j);
-                        // Criar formas mais orgânicas para a água
                         if (dist < size * (0.7 + Math.random() * 0.3)) {
-                            map[newY][newX] = 1; // Água
+                            map[newY][newX] = 1;
                         }
                     }
                 }
@@ -2906,7 +3030,7 @@
                     if (newX >= 0 && newX < WORLD_SIZE && newY >= 0 && newY < WORLD_SIZE) {
                         const dist = Math.sqrt(i*i + j*j);
                         if (dist < size && Math.random() < 0.8 && map[newY][newX] === 0) {
-                            map[newY][newX] = 2; // Floresta
+                            map[newY][newX] = 2;
                         }
                     }
                 }
@@ -2921,9 +3045,8 @@
                     const newY = y + j;
                     if (newX >= 0 && newX < WORLD_SIZE && newY >= 0 && newY < WORLD_SIZE) {
                         const dist = Math.sqrt(i*i + j*j);
-                        // Criar montanhas mais realistas
                         if (dist < size * (0.8 + Math.random() * 0.2) && Math.random() < 0.8 && map[newY][newX] === 0) {
-                            map[newY][newX] = 3; // Montanha
+                            map[newY][newX] = 3;
                         }
                     }
                 }
@@ -2941,10 +3064,9 @@
             for (let i = 0; i < length; i++) {
                 if (x >= 0 && x < WORLD_SIZE && y >= 0 && y < WORLD_SIZE) {
                     if (map[y][x] === 0) {
-                        map[y][x] = 4; // Caminho
+                        map[y][x] = 4;
                     }
                     
-                    // Mudar direção ocasionalmente de forma mais suave
                     if (Math.random() < 0.15) {
                         if (dirX !== 0) {
                             dirY = Math.random() < 0.5 ? 1 : -1;
@@ -2970,7 +3092,30 @@
                     if (newX >= 0 && newX < WORLD_SIZE && newY >= 0 && newY < WORLD_SIZE) {
                         const dist = Math.sqrt(i*i + j*j);
                         if (dist < size && Math.random() < 0.7 && map[newY][newX] === 0) {
-                            map[newY][newX] = 6; // Areia
+                            map[newY][newX] = 6;
+                        }
+                    }
+                }
+            }
+        }
+        
+        function addVolcanicArea(map) {
+            const centerX = Math.floor(Math.random() * (WORLD_SIZE - 20)) + 10;
+            const centerY = Math.floor(Math.random() * (WORLD_SIZE - 20)) + 10;
+            const size = 8 + Math.floor(Math.random() * 5);
+            
+            for (let i = -size; i < size; i++) {
+                for (let j = -size; j < size; j++) {
+                    const newX = centerX + i;
+                    const newY = centerY + j;
+                    if (newX >= 0 && newX < WORLD_SIZE && newY >= 0 && newY < WORLD_SIZE) {
+                        const dist = Math.sqrt(i*i + j*j);
+                        if (dist < size) {
+                            if (dist < size * 0.3) {
+                                map[newY][newX] = 8;
+                            } else {
+                                map[newY][newX] = 7;
+                            }
                         }
                     }
                 }
@@ -2978,17 +3123,15 @@
         }
         
         function addFlowers(map) {
-            // Adicionar flores aleatórias na grama
             for (let y = 0; y < WORLD_SIZE; y++) {
                 for (let x = 0; x < WORLD_SIZE; x++) {
-                    if (map[y][x] === 0 && Math.random() < 0.03) { // 3% de chance em tiles de grama
-                        map[y][x] = 5; // Flor
+                    if (map[y][x] === 0 && Math.random() < 0.03) {
+                        map[y][x] = 5;
                     }
                 }
             }
         }
 
-        // Desenhar o mapa melhorado
         function drawMap(worldMap, player) {
             const offsetX = player.x - MAP_WIDTH / 2;
             const offsetY = player.y - MAP_HEIGHT / 2;
@@ -2998,53 +3141,54 @@
                     const mapX = Math.floor(offsetX + x);
                     const mapY = Math.floor(offsetY + y);
                     
-                    let tileType = 0; // Grama por padrão
+                    let tileType = 0;
                     let color = COLORS.GRASS;
                     
                     if (mapX >= 0 && mapX < WORLD_SIZE && mapY >= 0 && mapY < WORLD_SIZE) {
                         tileType = worldMap[mapY][mapX];
                     }
                     
-                    // Determinar a cor baseada no tipo de tile
                     switch (tileType) {
-                        case 0: // Grama
+                        case 0:
                             color = COLORS.GRASS;
                             break;
-                        case 1: // Água
+                        case 1:
                             color = COLORS.WATER;
                             break;
-                        case 2: // Floresta
+                        case 2:
                             color = COLORS.FOREST;
                             break;
-                        case 3: // Montanha
+                        case 3:
                             color = COLORS.MOUNTAIN;
                             break;
-                        case 4: // Caminho
+                        case 4:
                             color = COLORS.PATH;
                             break;
-                        case 5: // Flor
-                            color = COLORS.GRASS; // Base é grama
+                        case 5:
+                            color = COLORS.GRASS;
                             break;
-                        case 6: // Areia
+                        case 6:
                             color = COLORS.SAND;
+                            break;
+                        case 7:
+                            color = COLORS.VOLCANIC;
+                            break;
+                        case 8:
+                            color = COLORS.LAVA;
                             break;
                     }
                     
-                    // Desenhar o tile
                     ctx.fillStyle = color;
                     ctx.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
                     
-                    // Adicionar detalhes aos tiles
-                    if (tileType === 0) { // Grama
-                        // Mais detalhes na grama
+                    if (tileType === 0) {
                         ctx.fillStyle = COLORS.GRASS_DARK;
                         for (let i = 0; i < 8; i++) {
                             const detailX = x * TILE_SIZE + 3 + Math.random() * (TILE_SIZE - 6);
                             const detailY = y * TILE_SIZE + 3 + Math.random() * (TILE_SIZE - 6);
                             ctx.fillRect(detailX, detailY, 2, 2);
                         }
-                    } else if (tileType === 1) { // Água
-                        // Ondas mais realistas
+                    } else if (tileType === 1) {
                         ctx.fillStyle = COLORS.WATER_DARK;
                         for (let i = 0; i < 6; i++) {
                             const waveX = x * TILE_SIZE + 10 + Math.random() * (TILE_SIZE - 20);
@@ -3053,16 +3197,13 @@
                             ctx.ellipse(waveX, waveY, 12, 6, Math.random() * Math.PI, 0, Math.PI * 2);
                             ctx.fill();
                         }
-                    } else if (tileType === 2) { // Floresta
-                        // Árvores mais detalhadas
+                    } else if (tileType === 2) {
                         const treeX = x * TILE_SIZE + TILE_SIZE / 2;
                         const treeY = y * TILE_SIZE + TILE_SIZE / 2;
                         
-                        // Tronco
                         ctx.fillStyle = '#8B4513';
                         ctx.fillRect(treeX - 4, treeY, 8, TILE_SIZE / 2);
                         
-                        // Copa da árvore com múltiplas camadas
                         ctx.fillStyle = COLORS.FOREST_DARK;
                         ctx.beginPath();
                         ctx.arc(treeX, treeY - 8, TILE_SIZE / 3, 0, Math.PI * 2);
@@ -3073,8 +3214,7 @@
                         ctx.arc(treeX - 5, treeY - 10, TILE_SIZE / 4, 0, Math.PI * 2);
                         ctx.arc(treeX + 5, treeY - 10, TILE_SIZE / 4, 0, Math.PI * 2);
                         ctx.fill();
-                    } else if (tileType === 3) { // Montanha
-                        // Montanhas mais realistas
+                    } else if (tileType === 3) {
                         ctx.fillStyle = COLORS.MOUNTAIN_DARK;
                         for (let i = 0; i < 8; i++) {
                             const rockX = x * TILE_SIZE + 5 + Math.random() * (TILE_SIZE - 10);
@@ -3084,7 +3224,6 @@
                             ctx.fill();
                         }
                         
-                        // Neve no topo (para montanhas altas)
                         if (Math.random() < 0.4) {
                             ctx.fillStyle = '#ecf0f1';
                             ctx.beginPath();
@@ -3094,8 +3233,7 @@
                             ctx.closePath();
                             ctx.fill();
                         }
-                    } else if (tileType === 4) { // Caminho
-                        // Detalhes do caminho
+                    } else if (tileType === 4) {
                         ctx.fillStyle = COLORS.PATH_DARK;
                         for (let i = 0; i < 6; i++) {
                             const stoneX = x * TILE_SIZE + 5 + Math.random() * (TILE_SIZE - 10);
@@ -3104,29 +3242,24 @@
                             ctx.ellipse(stoneX, stoneY, 8, 5, 0, 0, Math.PI * 2);
                             ctx.fill();
                         }
-                    } else if (tileType === 5) { // Flor
-                        // Desenhar flor
+                    } else if (tileType === 5) {
                         const flowerX = x * TILE_SIZE + TILE_SIZE / 2;
                         const flowerY = y * TILE_SIZE + TILE_SIZE / 2;
                         
-                        // Caule
                         ctx.fillStyle = '#27ae60';
                         ctx.fillRect(flowerX - 1, flowerY, 2, TILE_SIZE / 3);
                         
-                        // Pétalas
                         const flowerColor = [COLORS.FLOWER1, COLORS.FLOWER2, COLORS.FLOWER3][Math.floor(Math.random() * 3)];
                         ctx.fillStyle = flowerColor;
                         ctx.beginPath();
                         ctx.arc(flowerX, flowerY - 5, 6, 0, Math.PI * 2);
                         ctx.fill();
                         
-                        // Centro da flor
                         ctx.fillStyle = '#f1c40f';
                         ctx.beginPath();
                         ctx.arc(flowerX, flowerY - 5, 3, 0, Math.PI * 2);
                         ctx.fill();
-                    } else if (tileType === 6) { // Areia
-                        // Detalhes de areia
+                    } else if (tileType === 6) {
                         ctx.fillStyle = COLORS.SAND_DARK;
                         for (let i = 0; i < 10; i++) {
                             const sandX = x * TILE_SIZE + 3 + Math.random() * (TILE_SIZE - 6);
@@ -3135,14 +3268,48 @@
                             ctx.arc(sandX, sandY, 2, 0, Math.PI * 2);
                             ctx.fill();
                         }
+                    } else if (tileType === 7) {
+                        ctx.fillStyle = COLORS.VOLCANIC_DARK;
+                        for (let i = 0; i < 12; i++) {
+                            const rockX = x * TILE_SIZE + 5 + Math.random() * (TILE_SIZE - 10);
+                            const rockY = y * TILE_SIZE + 5 + Math.random() * (TILE_SIZE - 10);
+                            ctx.beginPath();
+                            ctx.ellipse(rockX, rockY, 8, 5, Math.random() * Math.PI, 0, Math.PI * 2);
+                            ctx.fill();
+                        }
+                        
+                        if (Math.random() < 0.3) {
+                            ctx.fillStyle = COLORS.LAVA;
+                            ctx.beginPath();
+                            ctx.arc(x * TILE_SIZE + 10 + Math.random() * (TILE_SIZE - 20), 
+                                   y * TILE_SIZE + 10 + Math.random() * (TILE_SIZE - 20), 
+                                   5, 0, Math.PI * 2);
+                            ctx.fill();
+                        }
+                    } else if (tileType === 8) {
+                        ctx.fillStyle = COLORS.LAVA_DARK;
+                        for (let i = 0; i < 15; i++) {
+                            const lavaX = x * TILE_SIZE + 5 + Math.random() * (TILE_SIZE - 10);
+                            const lavaY = y * TILE_SIZE + 5 + Math.random() * (TILE_SIZE - 10);
+                            ctx.beginPath();
+                            ctx.ellipse(lavaX, lavaY, 6, 4, Math.random() * Math.PI, 0, Math.PI * 2);
+                            ctx.fill();
+                        }
+                        
+                        ctx.fillStyle = COLORS.LAVA;
+                        for (let i = 0; i < 8; i++) {
+                            const bubbleX = x * TILE_SIZE + 10 + Math.random() * (TILE_SIZE - 20);
+                            const bubbleY = y * TILE_SIZE + 10 + Math.random() * (TILE_SIZE - 20);
+                            ctx.beginPath();
+                            ctx.arc(bubbleX, bubbleY, 3, 0, Math.PI * 2);
+                            ctx.fill();
+                        }
                     }
                 }
             }
             
-            // Desenhar o mercador
             merchant.draw();
             
-            // Desenhar indicador de interação com o mercador
             if (merchant.isPlayerNearby(player)) {
                 ctx.fillStyle = '#f8c555';
                 ctx.font = 'bold 14px MedievalSharp';
@@ -3151,7 +3318,6 @@
             }
         }
 
-        // Sistema de Batalha
         let currentMonster = null;
         let isPlayerTurn = true;
         let battleAnimation = null;
@@ -3159,25 +3325,26 @@
         let battleEffects = [];
         
         function startBattle() {
-            // Determinar tipo de monstro baseado nas probabilidades
             const rand = Math.random();
             let monsterType = 'weak';
             
             if (rand < 0.6) {
-                monsterType = 'weak'; // 60% de chance
+                monsterType = 'weak';
             } else if (rand < 0.9) {
-                monsterType = 'strong'; // 30% de chance
+                monsterType = 'strong';
             } else {
-                monsterType = 'elite'; // 10% de chance
+                monsterType = 'elite';
             }
             
-            currentMonster = new Monster(monsterType);
+            currentMonster = new Monster(monsterType, worldMap, player.x, player.y);
             isPlayerTurn = true;
             battleAnimation = null;
             currentRound = 1;
             battleEffects = [];
             
-            // Atualizar UI da batalha
+            player.clearStatusEffects();
+            if (currentMonster) currentMonster.statusEffects = [];
+            
             battleEnemyLevel.textContent = currentMonster.level;
             battleEnemyHealth.textContent = currentMonster.health;
             battleEnemyMaxHealth.textContent = currentMonster.maxHealth;
@@ -3194,10 +3361,8 @@
             actOptions.style.display = 'none';
             backBtn.style.display = 'none';
             
-            // Mostrar tela de batalha
             battleScreen.style.display = 'flex';
             
-            // Desenhar sprites iniciais
             const playerCanvas = document.getElementById('playerBattleCanvas');
             const playerCtx = playerCanvas.getContext('2d');
             player.drawBattle(playerCtx);
@@ -3221,7 +3386,6 @@
                 
                 message = "O cavaleiro usa sua espada para atacar seu oponente!";
                 
-                // Animação de ataque
                 battleAnimation = {
                     type: 'playerAttack',
                     step: 0,
@@ -3244,7 +3408,6 @@
                 
                 message = "O cavaleiro avança rapidamente e investe contra o inimigo!";
                 
-                // Animação de investida
                 battleAnimation = {
                     type: 'playerAttack',
                     step: 0,
@@ -3257,16 +3420,13 @@
             
             addBattleLog(message);
             
-            // Esperar animação para aplicar dano
             setTimeout(() => {
-                // Verificar se o monstro desviou
                 if (Math.random() < currentMonster.dodgeChance) {
                     addBattleLog("Mas o inimigo desviou do ataque!");
                     createBattleEffect('miss', enemyCanvas, 100, 50);
                 } else {
                     const actualDamage = currentMonster.takeDamage(damage);
                     
-                    // Criar efeito visual de dano
                     createBattleEffect('damage', enemyCanvas, 100, 50, actualDamage);
                     
                     if (isCritical) {
@@ -3278,19 +3438,16 @@
                     
                     battleEnemyHealth.textContent = currentMonster.health;
                     
-                    // Verificar se o monstro morreu
                     if (currentMonster.health <= 0) {
                         endBattle(true);
                         return;
                     }
                 }
                 
-                // Atualizar status effects do monstro
                 currentMonster.updateStatusEffects();
                 currentMonster.updateBattleStatusEffects();
                 player.updateUI();
                 
-                // Passar a vez para o monstro
                 isPlayerTurn = false;
                 setTimeout(monsterTurn, 1000);
             }, attackType === 'charge' ? 1000 : 800);
@@ -3309,10 +3466,8 @@
             
             addBattleLog(result.message);
             
-            // Criar efeito visual
             createBattleEffect('heavy-armor', playerCanvas, 100, 50);
             
-            // Animação de ativação da armadura pesada
             battleAnimation = {
                 type: 'playerEffect',
                 step: 0,
@@ -3321,11 +3476,9 @@
             
             animateBattle();
             
-            // Esperar animação
             setTimeout(() => {
                 player.updateUI();
                 
-                // Passar a vez para o monstro
                 isPlayerTurn = false;
                 setTimeout(monsterTurn, 1000);
             }, 700);
@@ -3357,7 +3510,7 @@
                     
                     damage = 20 + Math.floor(player.magic * 0.8);
                     message = "O cavaleiro conjura uma Bola de Fogo!";
-                    burnChance = 0.5; // 50% de chance de causar queimadura
+                    burnChance = 0.5;
                     break;
                     
                 case 'freeze':
@@ -3376,7 +3529,7 @@
                     
                     damage = 10 + Math.floor(player.magic * 0.5);
                     message = "O cavaleiro invoca uma Brisa Congelante!";
-                    statusEffect = { type: 'slow', duration: 2 };
+                    statusEffect = { type: 'slow', duration: 3 };
                     break;
                     
                 case 'possession':
@@ -3401,7 +3554,6 @@
             
             addBattleLog(message);
             
-            // Animação de magia
             battleAnimation = {
                 type: 'playerMagic',
                 step: 0,
@@ -3411,21 +3563,17 @@
             
             animateBattle();
             
-            // Esperar animação para aplicar efeitos
             setTimeout(() => {
-                // Verificar se o monstro desviou
                 if (Math.random() < currentMonster.dodgeChance) {
                     addBattleLog("Mas o inimigo desviou do feitiço!");
                     createBattleEffect('miss', enemyCanvas, 100, 50);
                 } else {
                     const actualDamage = currentMonster.takeDamage(damage);
                     
-                    // Criar efeito visual de dano
                     createBattleEffect('damage', enemyCanvas, 100, 50, actualDamage);
                     
                     addBattleLog(` O feitiço causou ${actualDamage} de dano!`);
                     
-                    // Aplicar efeitos de status
                     if (spellType === 'fireball' && Math.random() < burnChance) {
                         currentMonster.addStatusEffect({ type: 'burn', duration: 3 });
                         addBattleLog(" O inimigo foi queimado!");
@@ -3434,25 +3582,21 @@
                         currentMonster.addStatusEffect(statusEffect);
                         addBattleLog(` O inimigo foi afetado por ${statusEffect.type.toUpperCase()}!`);
                         
-                        // Criar efeito visual de status
                         createBattleEffect(statusEffect.type, enemyCanvas, 100, 30);
                     }
                     
                     battleEnemyHealth.textContent = currentMonster.health;
                     
-                    // Verificar se o monstro morreu
                     if (currentMonster.health <= 0) {
                         endBattle(true);
                         return;
                     }
                 }
                 
-                // Atualizar status effects do monstro
                 currentMonster.updateStatusEffects();
                 currentMonster.updateBattleStatusEffects();
                 player.updateUI();
                 
-                // Passar a vez para o monstro
                 isPlayerTurn = false;
                 setTimeout(monsterTurn, 1000);
             }, 1000);
@@ -3466,7 +3610,6 @@
             if (result.success) {
                 addBattleLog(result.message);
                 
-                // Criar efeito visual baseado no item
                 if (itemType === 'mace' || itemType === 'ham') {
                     createBattleEffect('heal', playerCanvas, 100, 50);
                 } else if (itemType === 'strengthPotion') {
@@ -3475,7 +3618,6 @@
                 
                 player.updateUI();
                 
-                // Passar a vez para o monstro
                 isPlayerTurn = false;
                 setTimeout(monsterTurn, 1000);
             } else {
@@ -3493,12 +3635,10 @@
                 message = player.meditate();
                 addBattleLog(message);
                 
-                // Criar efeito visual de meditação
                 createBattleEffect('meditate', playerCanvas, 100, 50);
                 
                 player.updateUI();
                 
-                // Passar a vez para o monstro
                 isPlayerTurn = false;
                 setTimeout(monsterTurn, 1000);
             }
@@ -3507,17 +3647,14 @@
         function monsterTurn() {
             if (isPlayerTurn) return;
             
-            // Recuperar stamina do jogador a cada round
             player.recoverStamina(10);
             player.updateUI();
             
-            // Verificar se o monstro está atordoado
             if (currentMonster.hasStatusEffect('stun')) {
                 addBattleLog(`O ${currentMonster.name} está atordoado e perdeu a vez!`);
                 currentMonster.updateStatusEffects();
                 currentMonster.updateBattleStatusEffects();
                 
-                // Passar a vez para o jogador
                 isPlayerTurn = true;
                 currentRound++;
                 roundIndicator.textContent = `Round ${currentRound}`;
@@ -3528,7 +3665,6 @@
             const damage = currentMonster.attackPlayer(player);
             addBattleLog(`O ${currentMonster.name} ataca o cavaleiro!`);
             
-            // Animação de ataque do monstro
             battleAnimation = {
                 type: 'monsterAttack',
                 step: 0,
@@ -3537,21 +3673,17 @@
             
             animateBattle();
             
-            // Esperar animação para aplicar dano
             setTimeout(() => {
-                // Verificar se o jogador desviou
                 if (Math.random() < player.dodgeChance) {
                     addBattleLog("Mas o cavaleiro desviou do ataque!");
                     createBattleEffect('miss', playerCanvas, 100, 50);
                 } else {
                     const actualDamage = player.takeDamage(damage);
                     
-                    // Criar efeito visual de dano
                     createBattleEffect('damage', playerCanvas, 100, 50, actualDamage);
                     
                     addBattleLog(` Causou ${actualDamage} de dano ao cavaleiro!`);
                     
-                    // Verificar se o dragão causou queimadura
                     if (currentMonster.type === 'elite' && player.hasStatusEffect('burn')) {
                         addBattleLog(" O cavaleiro está queimando!");
                         createBattleEffect('burn', playerCanvas, 100, 30);
@@ -3559,18 +3691,15 @@
                     
                     player.updateUI();
                     
-                    // Verificar se o jogador morreu
                     if (player.health <= 0) {
                         endBattle(false);
                         return;
                     }
                 }
                 
-                // Atualizar status effects do jogador
                 player.updateStatusEffects();
                 player.updateBattleStatusEffects();
                 
-                // Passar a vez para o jogador
                 isPlayerTurn = true;
                 currentRound++;
                 roundIndicator.textContent = `Round ${currentRound}`;
@@ -3596,7 +3725,6 @@
                 player.drawBattle(playerCtx, true);
                 currentMonster.drawBattle(enemyCtx, false);
                 
-                // Efeito visual da magia
                 enemyCtx.fillStyle = getSpellColor(battleAnimation.spell);
                 enemyCtx.globalAlpha = 0.5 - (battleAnimation.step / battleAnimation.maxSteps) * 0.5;
                 enemyCtx.fillRect(0, 0, 200, 200);
@@ -3605,14 +3733,12 @@
                 player.drawBattle(playerCtx, true);
                 currentMonster.drawBattle(enemyCtx, false);
                 
-                // Efeito visual de ativação de habilidade
                 playerCtx.fillStyle = 'rgba(149, 165, 166, 0.5)';
                 playerCtx.globalAlpha = 0.5 - (battleAnimation.step / battleAnimation.maxSteps) * 0.5;
                 playerCtx.fillRect(0, 0, 200, 200);
                 playerCtx.globalAlpha = 1.0;
             }
             
-            // Atualizar efeitos de batalha
             updateBattleEffects();
             
             battleAnimation.step++;
@@ -3622,7 +3748,6 @@
             } else {
                 battleAnimation = null;
                 
-                // Redesenhar personagens sem efeitos de ataque
                 player.drawBattle(playerCtx, false);
                 currentMonster.drawBattle(enemyCtx, false);
             }
@@ -3738,7 +3863,6 @@
                 player.addExp(expGained);
                 player.money += moneyGained;
                 
-                // Dropar itens
                 const droppedItems = currentMonster.dropItems(player);
                 
                 let dropMessage = "";
@@ -3757,13 +3881,20 @@
                 
                 setTimeout(() => {
                     battleScreen.style.display = 'none';
-                    // Resetar saúde do jogador
-                    player.health = player.maxHealth;
-                    player.mana = player.maxMana;
-                    player.stamina = player.maxStamina;
-                    player.statusEffects = [];
-                    player.updateUI();
-                }, 3000);
+                    deathScreen.style.display = 'flex';
+                    
+                    player.exp = Math.floor(player.exp * 0.5);
+                    const itemsLost = player.loseRandomItems();
+                    
+                    setTimeout(() => {
+                        deathScreen.style.display = 'none';
+                        player.health = player.maxHealth;
+                        player.mana = player.maxMana;
+                        player.stamina = player.maxStamina;
+                        player.statusEffects = [];
+                        player.updateUI();
+                    }, 3000);
+                }, 2000);
             }
         }
         
@@ -3800,7 +3931,6 @@
             backBtn.style.display = 'inline-block';
         }
 
-        // Sistema de Loja
         function openShop() {
             shopScreen.style.display = 'flex';
             loadShopItems('food');
@@ -3810,7 +3940,6 @@
             shopItems.innerHTML = '';
             
             if (category === 'food') {
-                // Comidas
                 const maceItem = document.createElement('div');
                 maceItem.className = 'shop-item';
                 maceItem.innerHTML = `
@@ -3831,7 +3960,6 @@
                 `;
                 shopItems.appendChild(hamItem);
             } else if (category === 'weapons') {
-                // Armamentos
                 let stoneSwordItem, goldSwordItem;
                 
                 if (!player.purchasedItems.stoneSword) {
@@ -3888,7 +4016,6 @@
                     shopItems.appendChild(goldArmorItem);
                 }
             } else if (category === 'potions') {
-                // Poções
                 const strengthPotionItem = document.createElement('div');
                 strengthPotionItem.className = 'shop-item';
                 strengthPotionItem.innerHTML = `
@@ -3900,7 +4027,6 @@
                 shopItems.appendChild(strengthPotionItem);
             }
             
-            // Adicionar event listeners aos botões de compra
             document.querySelectorAll('.shop-buy-btn').forEach(btn => {
                 btn.addEventListener('click', () => {
                     const item = btn.getAttribute('data-item');
@@ -3908,7 +4034,7 @@
                     
                     if (player.buyItem(item, price)) {
                         alert('Compra realizada com sucesso!');
-                        loadShopItems(category); // Recarregar itens para atualizar o estado
+                        loadShopItems(category);
                     } else {
                         alert('Dinheiro insuficiente!');
                     }
@@ -3916,16 +4042,13 @@
             });
         }
 
-        // Inicialização do jogo
         const player = new Player();
-        const merchant = new Merchant();
         const worldMap = generateWorldMap();
+        const merchant = new Merchant(worldMap);
         let lastTime = 0;
         
-        // Atualizar UI inicial
         player.updateUI();
         
-        // Controles
         const keys = {};
         
         document.addEventListener('keydown', (e) => {
@@ -3933,10 +4056,10 @@
             if (inventoryScreen.style.display === 'flex') return;
             if (equipmentScreen.style.display === 'flex') return;
             if (shopScreen.style.display === 'flex') return;
+            if (deathScreen.style.display === 'flex') return;
             
             keys[e.key.toLowerCase()] = true;
             
-            // Interação com o mercador
             if (e.key.toLowerCase() === 'e' && merchant.isPlayerNearby(player)) {
                 openShop();
             }
@@ -3946,7 +4069,6 @@
             keys[e.key.toLowerCase()] = false;
         });
         
-        // Event listeners para batalha
         attackBtn.addEventListener('click', showAttackOptions);
         
         swordAttackBtn.addEventListener('click', () => {
@@ -3997,14 +4119,12 @@
             playerAct('meditate');
         });
         
-        // Event listeners para botões de voltar
         backBtn.addEventListener('click', showMainActions);
         backFromAttackBtn.addEventListener('click', showMainActions);
         backFromMagicBtn.addEventListener('click', showMainActions);
         backFromItemsBtn.addEventListener('click', showMainActions);
         backFromActBtn.addEventListener('click', showMainActions);
         
-        // Event listeners para inventário
         inventoryBtn.addEventListener('click', () => {
             inventoryScreen.style.display = 'flex';
         });
@@ -4013,7 +4133,6 @@
             inventoryScreen.style.display = 'none';
         });
         
-        // Event listeners para upgrades de status
         document.querySelectorAll('.upgrade-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 const stat = btn.getAttribute('data-stat');
@@ -4022,34 +4141,42 @@
             });
         });
         
-        // Event listeners para crafting
         craftingResult.addEventListener('click', () => {
-            const result = player.craftDragonSlayer();
-            if (result.includes("criou a Dragon Slayer")) {
-                // Mostrar mensagem estilosa
-                const dragonSlayerMessage = document.createElement('div');
-                dragonSlayerMessage.style.position = 'fixed';
-                dragonSlayerMessage.style.top = '50%';
-                dragonSlayerMessage.style.left = '50%';
-                dragonSlayerMessage.style.transform = 'translate(-50%, -50%)';
-                dragonSlayerMessage.style.background = 'rgba(0, 0, 0, 0.9)';
-                dragonSlayerMessage.style.padding = '20px';
-                dragonSlayerMessage.style.border = '4px solid #e74c3c';
-                dragonSlayerMessage.style.borderRadius = '10px';
-                dragonSlayerMessage.style.textAlign = 'center';
-                dragonSlayerMessage.style.zIndex = '100';
-                dragonSlayerMessage.style.color = '#f8c555';
-                dragonSlayerMessage.style.fontSize = '1.5rem';
-                dragonSlayerMessage.innerHTML = `
-                    <h2>DRAGON SLAYER CRIADA!</h2>
-                    <p>Sua espada agora emana poder dragônico!</p>
-                    <p>Dano aumentado em 11x!</p>
-                    <button id="closeDragonSlayerMsg" style="margin-top: 20px; padding: 10px 20px; background: #e74c3c; color: white; border: none; border-radius: 5px; cursor: pointer;">Fechar</button>
-                `;
-                document.body.appendChild(dragonSlayerMessage);
+            const result = player.craftItem();
+            if (result.includes("criou a Dragon Slayer") || result.includes("criou a Armadura do Lobo Negro")) {
+                const successMessage = document.createElement('div');
+                successMessage.style.position = 'fixed';
+                successMessage.style.top = '50%';
+                successMessage.style.left = '50%';
+                successMessage.style.transform = 'translate(-50%, -50%)';
+                successMessage.style.background = 'rgba(0, 0, 0, 0.9)';
+                successMessage.style.padding = '20px';
+                successMessage.style.border = '4px solid #e74c3c';
+                successMessage.style.borderRadius = '10px';
+                successMessage.style.textAlign = 'center';
+                successMessage.style.zIndex = '100';
+                successMessage.style.color = '#f8c555';
+                successMessage.style.fontSize = '1.5rem';
                 
-                document.getElementById('closeDragonSlayerMsg').addEventListener('click', () => {
-                    document.body.removeChild(dragonSlayerMessage);
+                if (result.includes("Dragon Slayer")) {
+                    successMessage.innerHTML = `
+                        <h2>DRAGON SLAYER CRIADA!</h2>
+                        <p>Sua espada agora emana poder dragônico!</p>
+                        <p>Dano aumentado em 11x!</p>
+                    `;
+                } else {
+                    successMessage.innerHTML = `
+                        <h2>ARMADURA DO LOBO NEGRO CRIADA!</h2>
+                        <p>Sua armadura agora possui a força do lobo negro!</p>
+                        <p>Defesa aumentada em 2.5x!</p>
+                    `;
+                }
+                
+                successMessage.innerHTML += `<button id="closeSuccessMsg" style="margin-top: 20px; padding: 10px 20px; background: #e74c3c; color: white; border: none; border-radius: 5px; cursor: pointer;">Fechar</button>`;
+                document.body.appendChild(successMessage);
+                
+                document.getElementById('closeSuccessMsg').addEventListener('click', () => {
+                    document.body.removeChild(successMessage);
                 });
             } else {
                 alert(result);
@@ -4058,14 +4185,15 @@
         
         craftingSlots.forEach((slot, index) => {
             slot.addEventListener('click', () => {
-                // Se o slot estiver vazio, perguntar qual item adicionar
                 if (player.craftingSlots[index] === null) {
-                    if (player.items.ham > 0 || player.items.dragonScales > 0) {
-                        const itemChoice = prompt("Qual item deseja adicionar? (Digite 'ham' para Pernil ou 'dragonScales' para Escamas de Dragão):");
+                    if (player.items.ham > 0 || player.items.dragonScales > 0 || player.items.strengthPotion > 0) {
+                        const itemChoice = prompt("Qual item deseja adicionar? (Digite 'ham' para Pernil, 'dragonScales' para Escamas de Dragão ou 'strengthPotion' para Poção de Força):");
                         if (itemChoice === 'ham' && player.items.ham > 0) {
                             player.addToCraftingSlot(index, 'ham');
                         } else if (itemChoice === 'dragonScales' && player.items.dragonScales > 0) {
                             player.addToCraftingSlot(index, 'dragonScales');
+                        } else if (itemChoice === 'strengthPotion' && player.items.strengthPotion > 0) {
+                            player.addToCraftingSlot(index, 'strengthPotion');
                         } else {
                             alert("Item inválido ou quantidade insuficiente!");
                         }
@@ -4073,7 +4201,6 @@
                         alert("Você não tem itens para adicionar ao crafting!");
                     }
                 } else {
-                    // Se o slot estiver ocupado, limpar
                     player.clearCraftingSlot(index);
                 }
             });
@@ -4084,7 +4211,6 @@
             });
         });
         
-        // Event listeners para equipamentos
         equipmentBtn.addEventListener('click', () => {
             equipmentScreen.style.display = 'flex';
         });
@@ -4097,31 +4223,24 @@
             equipmentCollection.style.display = equipmentCollection.style.display === 'none' ? 'block' : 'none';
         });
         
-        // Event listeners para loja
         closeShopBtn.addEventListener('click', () => {
             shopScreen.style.display = 'none';
         });
         
         shopCategories.forEach(category => {
             category.addEventListener('click', () => {
-                // Remover classe active de todas as categorias
                 shopCategories.forEach(c => c.classList.remove('active'));
-                // Adicionar classe active à categoria clicada
                 category.classList.add('active');
-                // Carregar itens da categoria
                 loadShopItems(category.getAttribute('data-category'));
             });
         });
         
-        // Loop do jogo
         function gameLoop(timestamp) {
             const deltaTime = timestamp - lastTime;
             lastTime = timestamp;
             
-            // Atualizar jogador
             player.update(deltaTime);
             
-            // Processar movimentos
             if (player.moveCooldown === 0) {
                 let moveResult = false;
                 
@@ -4140,20 +4259,15 @@
                 }
             }
             
-            // Limpar o canvas
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             
-            // Desenhar o mapa
             drawMap(worldMap, player);
             
-            // Desenhar o jogador
             player.draw();
             
-            // Chamar o próximo frame
             requestAnimationFrame(gameLoop);
         }
         
-        // Iniciar o jogo
         requestAnimationFrame(gameLoop);
     </script>
 </body>
