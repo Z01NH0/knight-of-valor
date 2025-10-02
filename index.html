@@ -925,14 +925,6 @@
             color: #ccc;
         }
         
-        
-        
-       
-        
-        
-        
-        
-        
         .level-indicator {
             position: absolute;
             top: 10px;
@@ -944,6 +936,10 @@
             font-weight: bold;
             backdrop-filter: blur(5px);
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+        
+        .glowing-border {
+            box-shadow: 0 0 5px #f8c555, 0 0 10px #f8c555, 0 0 15px #f8c555;
         }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap" rel="stylesheet">
@@ -1276,8 +1272,7 @@
         </div>
         
         <div class="instructions">
-            <p></p>
-            <p></p>
+            >
         </div>
     </div>
 
@@ -1426,7 +1421,9 @@
             VOLCANIC: '#8B0000',
             VOLCANIC_DARK: '#660000',
             LAVA: '#FF4500',
-            LAVA_DARK: '#CC3700'
+            LAVA_DARK: '#CC3700',
+            DARK_FOREST: '#1b5e20',
+            DARK_FOREST_DARK: '#0d3b0d'
         };
 
         class Player {
@@ -1942,12 +1939,15 @@
                             let spawnChance = MONSTER_SPAWN_CHANCE;
                             const currentTile = worldMap[Math.floor(this.y)][Math.floor(this.x)];
                             
-                            if (currentTile === 2) {
+                            // Aumento de chance de spawn baseado no bioma
+                            if (currentTile === 2) { // Floresta
                                 spawnChance *= 1.3;
-                            } else if (currentTile === 3) {
+                            } else if (currentTile === 3) { // Montanha
                                 spawnChance *= 1.3;
-                            } else if (currentTile === 7) {
-                                spawnChance *= 1.3;
+                            } else if (currentTile === 7) { // Vulcão
+                                spawnChance *= 1.5;
+                            } else if (currentTile === 9) { // Floresta Negra
+                                spawnChance *= 1.4;
                             }
                             
                             if (Math.random() < spawnChance) {
@@ -2795,6 +2795,13 @@
                     healthPerLevel = 10;
                     attackPerLevel = 5;
                     this.agility = 12;
+                } else if (type === 'darkMage') {
+                    this.name = "Mago Negro";
+                    baseHealth = 150;
+                    baseAttack = 34;
+                    healthPerLevel = 15;
+                    attackPerLevel = 10;
+                    this.agility = 6;
                 }
                 
                 this.maxHealth = baseHealth + (this.level - 1) * healthPerLevel;
@@ -2809,7 +2816,9 @@
                 this.dodgeChance = 0.02 + (this.agility - 5) * 0.02;
                 
                 const currentTile = worldMap[Math.floor(playerY)][Math.floor(playerX)];
-                if (currentTile === 7 && type !== 'elite' && Math.random() < 0.3) {
+                
+                // Aumento de chance de spawn baseado no bioma
+                if (currentTile === 7 && type !== 'elite' && Math.random() < 0.5) {
                     this.type = 'elite';
                     this.name = "Dragão de Elite";
                     this.maxHealth = 100 + (this.level - 1) * 10;
@@ -2817,6 +2826,27 @@
                     this.attack = 25 + (this.level - 1) * 5;
                     this.level = playerLevel >= 8 ? this.level : 1;
                     this.agility = 12;
+                } else if (currentTile === 3 && type !== 'strong' && Math.random() < 0.3) {
+                    this.type = 'strong';
+                    this.name = "Orc Forte";
+                    this.maxHealth = 35 + (this.level - 1) * 7;
+                    this.health = this.maxHealth;
+                    this.attack = 11 + (this.level - 1) * 3;
+                    this.agility = 8;
+                } else if (currentTile === 2 && type !== 'weak' && Math.random() < 0.3) {
+                    this.type = 'weak';
+                    this.name = "Goblin Fraco";
+                    this.maxHealth = 20 + (this.level - 1) * 5;
+                    this.health = this.maxHealth;
+                    this.attack = 4 + (this.level - 1) * 2;
+                    this.agility = 5;
+                } else if (currentTile === 9 && type !== 'darkMage' && Math.random() < 0.4) {
+                    this.type = 'darkMage';
+                    this.name = "Mago Negro";
+                    this.maxHealth = 150 + (this.level - 1) * 15;
+                    this.health = this.maxHealth;
+                    this.attack = 34 + (this.level - 1) * 10;
+                    this.agility = 6;
                 }
             }
             
@@ -2829,6 +2859,11 @@
                 if (isAttacking) {
                     if (this.type === 'elite' && Math.random() < 0.3) {
                         ctx.fillStyle = 'rgba(255, 69, 0, 0.5)';
+                        ctx.beginPath();
+                        ctx.arc(100, 100, 90, 0, Math.PI * 2);
+                        ctx.fill();
+                    } else if (this.type === 'darkMage') {
+                        ctx.fillStyle = 'rgba(75, 0, 130, 0.5)';
                         ctx.beginPath();
                         ctx.arc(100, 100, 90, 0, Math.PI * 2);
                         ctx.fill();
@@ -2983,6 +3018,63 @@
                         ctx.arc(centerX - 20 + i * 5, centerY, 5, 0, Math.PI * 2);
                         ctx.fill();
                     }
+                } else if (this.type === 'darkMage') {
+                    ctx.fillStyle = '#4b0082';
+                    ctx.beginPath();
+                    ctx.ellipse(centerX, centerY, 40, 50, 0, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    ctx.fillStyle = '#6a0dad';
+                    ctx.beginPath();
+                    ctx.arc(centerX, centerY - 35, 30, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    ctx.fillStyle = '#9370db';
+                    ctx.beginPath();
+                    ctx.arc(centerX - 12, centerY - 38, 8, 0, Math.PI * 2);
+                    ctx.arc(centerX + 12, centerY - 38, 8, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    ctx.fillStyle = '#d8bfd8';
+                    ctx.beginPath();
+                    ctx.arc(centerX, centerY - 25, 12, 0, Math.PI, false);
+                    ctx.fill();
+                    
+                    ctx.fillStyle = '#4b0082';
+                    ctx.beginPath();
+                    ctx.arc(centerX, centerY - 35, 15, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    ctx.fillStyle = '#9370db';
+                    ctx.beginPath();
+                    ctx.moveTo(centerX - 20, centerY - 50);
+                    ctx.lineTo(centerX - 35, centerY - 65);
+                    ctx.lineTo(centerX - 15, centerY - 55);
+                    ctx.closePath();
+                    ctx.fill();
+                    
+                    ctx.beginPath();
+                    ctx.moveTo(centerX + 20, centerY - 50);
+                    ctx.lineTo(centerX + 35, centerY - 65);
+                    ctx.lineTo(centerX + 15, centerY - 55);
+                    ctx.closePath();
+                    ctx.fill();
+                    
+                    ctx.fillStyle = '#6a0dad';
+                    ctx.fillRect(centerX + 25, centerY - 35, 8, 50);
+                    ctx.fillRect(centerX + 20, centerY - 30, 18, 12);
+                    
+                    if (isAttacking) {
+                        ctx.fillStyle = '#9370db';
+                        ctx.beginPath();
+                        ctx.arc(centerX, centerY - 35, 12, 0, Math.PI * 2);
+                        ctx.fill();
+                        
+                        ctx.fillStyle = '#d8bfd8';
+                        ctx.beginPath();
+                        ctx.arc(centerX, centerY - 35, 8, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
                 }
             }
             
@@ -3042,6 +3134,21 @@
                 if (this.type === 'elite' && Math.random() < 0.3) {
                     player.addStatusEffect({ type: 'burn', duration: 3 });
                     damage += 5;
+                } else if (this.type === 'darkMage') {
+                    // Mago Negro tem 70% de chance de usar magia negra
+                    if (Math.random() < 0.7) {
+                        damage = this.attack;
+                        if (Math.random() < 0.1) {
+                            player.addStatusEffect({ type: 'stun', duration: 1 });
+                        }
+                    } else {
+                        // 30% de chance de usar cura das trevas
+                        this.health = Math.min(this.maxHealth, this.health + 20);
+                        damage = 0;
+                        if (Math.random() < 0.2) {
+                            player.addStatusEffect({ type: 'stun', duration: 1 });
+                        }
+                    }
                 }
                 
                 return damage;
@@ -3054,18 +3161,24 @@
                 // Ajustar drops baseado no nível do monstro
                 let dropMultiplier = 1 + (this.level - 1) * 0.1;
                 
+                // Função para gerar quantidade aleatória de itens
+                const getRandomQuantity = () => Math.floor(Math.random() * 5) + 1;
+                
                 if (this.type === 'weak') {
                     if (Math.random() < 0.4 * dropMultiplier * luckMultiplier) {
-                        player.addItem('mace');
-                        droppedItems.push("maçã");
+                        const quantity = getRandomQuantity();
+                        player.addItem('mace', quantity);
+                        droppedItems.push(`maçã (x${quantity})`);
                     }
                     if (Math.random() < 0.25 * dropMultiplier * luckMultiplier) {
-                        player.addItem('ham');
-                        droppedItems.push("pernil");
+                        const quantity = getRandomQuantity();
+                        player.addItem('ham', quantity);
+                        droppedItems.push(`pernil (x${quantity})`);
                     }
                     if (Math.random() < 0.005 * dropMultiplier * luckMultiplier) {
-                        player.addItem('steak');
-                        droppedItems.push("bife");
+                        const quantity = getRandomQuantity();
+                        player.addItem('steak', quantity);
+                        droppedItems.push(`bife (x${quantity})`);
                     }
                     if (Math.random() < 0.05 * dropMultiplier * luckMultiplier) {
                         player.addRecipe('dragonSlayer');
@@ -3077,20 +3190,24 @@
                     }
                 } else if (this.type === 'strong') {
                     if (Math.random() < 0.40 * dropMultiplier * luckMultiplier) {
-                        player.addItem('mace');
-                        droppedItems.push("maçã");
+                        const quantity = getRandomQuantity();
+                        player.addItem('mace', quantity);
+                        droppedItems.push(`maçã (x${quantity})`);
                     }
                     if (Math.random() < 0.35 * dropMultiplier * luckMultiplier) {
-                        player.addItem('ham');
-                        droppedItems.push("pernil");
+                        const quantity = getRandomQuantity();
+                        player.addItem('ham', quantity);
+                        droppedItems.push(`pernil (x${quantity})`);
                     }
                     if (Math.random() < 0.10 * dropMultiplier * luckMultiplier) {
-                        player.addItem('steak');
-                        droppedItems.push("bife");
+                        const quantity = getRandomQuantity();
+                        player.addItem('steak', quantity);
+                        droppedItems.push(`bife (x${quantity})`);
                     }
                     if (Math.random() < 0.15 * dropMultiplier * luckMultiplier) {
-                        player.addItem('strengthPotion');
-                        droppedItems.push("poção de força");
+                        const quantity = getRandomQuantity();
+                        player.addItem('strengthPotion', quantity);
+                        droppedItems.push(`poção de força (x${quantity})`);
                     }
                     if (Math.random() < 0.05 * dropMultiplier * luckMultiplier) {
                         player.addRecipe('dragonSlayer');
@@ -3102,30 +3219,74 @@
                     }
                 } else if (this.type === 'elite') {
                     if (Math.random() < 0.45 * dropMultiplier * luckMultiplier) {
-                        player.addItem('mace');
-                        droppedItems.push("maçã");
+                        const quantity = getRandomQuantity();
+                        player.addItem('mace', quantity);
+                        droppedItems.push(`maçã (x${quantity})`);
                     }
                     if (Math.random() < 0.30 * dropMultiplier * luckMultiplier) {
-                        player.addItem('ham');
-                        droppedItems.push("pernil");
+                        const quantity = getRandomQuantity();
+                        player.addItem('ham', quantity);
+                        droppedItems.push(`pernil (x${quantity})`);
                     }
                     if (Math.random() < 0.20 * dropMultiplier * luckMultiplier) {
-                        player.addItem('steak');
-                        droppedItems.push("bife");
+                        const quantity = getRandomQuantity();
+                        player.addItem('steak', quantity);
+                        droppedItems.push(`bife (x${quantity})`);
                     }
                     if (Math.random() < 0.20 * dropMultiplier * luckMultiplier) {
-                        player.addItem('strengthPotion');
-                        droppedItems.push("poção de força");
+                        const quantity = getRandomQuantity();
+                        player.addItem('strengthPotion', quantity);
+                        droppedItems.push(`poção de força (x${quantity})`);
                     }
                     if (Math.random() < 0.15 * dropMultiplier * luckMultiplier) {
-                        player.addItem('dragonScales');
-                        droppedItems.push("escamas de dragão");
+                        const quantity = getRandomQuantity();
+                        player.addItem('dragonScales', quantity);
+                        droppedItems.push(`escamas de dragão (x${quantity})`);
                     }
                     if (Math.random() < 0.05 * dropMultiplier * luckMultiplier) {
                         player.addRecipe('dragonSlayer');
                         droppedItems.push("receita da Dragon Slayer");
                     }
                     if (Math.random() < 0.05 * dropMultiplier * luckMultiplier) {
+                        player.addRecipe('blackWolfArmor');
+                        droppedItems.push("receita da Armadura do Lobo Negro");
+                    }
+                } else if (this.type === 'darkMage') {
+                    if (Math.random() < 0.70 * dropMultiplier * luckMultiplier) {
+                        const quantity = getRandomQuantity();
+                        player.addItem('mace', quantity);
+                        droppedItems.push(`maçã (x${quantity})`);
+                    }
+                    if (Math.random() < 0.50 * dropMultiplier * luckMultiplier) {
+                        const quantity = getRandomQuantity();
+                        player.addItem('ham', quantity);
+                        droppedItems.push(`pernil (x${quantity})`);
+                    }
+                    if (Math.random() < 0.45 * dropMultiplier * luckMultiplier) {
+                        const quantity = getRandomQuantity();
+                        player.addItem('steak', quantity);
+                        droppedItems.push(`bife (x${quantity})`);
+                    }
+                    if (Math.random() < 0.30 * dropMultiplier * luckMultiplier) {
+                        const quantity = getRandomQuantity();
+                        player.addItem('strengthPotion', quantity);
+                        droppedItems.push(`poção de força (x${quantity})`);
+                    }
+                    if (Math.random() < 0.25 * dropMultiplier * luckMultiplier) {
+                        const quantity = getRandomQuantity();
+                        player.addItem('luckPotion', quantity);
+                        droppedItems.push(`poção da sorte (x${quantity})`);
+                    }
+                    if (Math.random() < 0.20 * dropMultiplier * luckMultiplier) {
+                        const quantity = getRandomQuantity();
+                        player.addItem('dragonScales', quantity);
+                        droppedItems.push(`escamas de dragão (x${quantity})`);
+                    }
+                    if (Math.random() < 0.10 * dropMultiplier * luckMultiplier) {
+                        player.addRecipe('dragonSlayer');
+                        droppedItems.push("receita da Dragon Slayer");
+                    }
+                    if (Math.random() < 0.10 * dropMultiplier * luckMultiplier) {
                         player.addRecipe('blackWolfArmor');
                         droppedItems.push("receita da Armadura do Lobo Negro");
                     }
@@ -3136,7 +3297,8 @@
         }
 
         class Merchant {
-            constructor(worldMap) {
+            constructor(worldMap, biome) {
+                this.biome = biome;
                 let validPosition = false;
                 let attempts = 0;
                 
@@ -3144,7 +3306,7 @@
                     this.x = Math.floor(Math.random() * (WORLD_SIZE - 10)) + 5;
                     this.y = Math.floor(Math.random() * (WORLD_SIZE - 10)) + 5;
                     
-                    if (worldMap[this.y][this.x] === 2) {
+                    if (worldMap[this.y][this.x] === biome) {
                         validPosition = true;
                     }
                     
@@ -3208,41 +3370,56 @@
         function generateWorldMap() {
             const map = Array(WORLD_SIZE).fill().map(() => Array(WORLD_SIZE).fill(0));
             
-            for (let i = 0; i < 10; i++) {
+            // Criar biomas organizados
+            createBiome(map, 2, 15, 20); // Floresta
+            createBiome(map, 3, 10, 15); // Montanha
+            createBiome(map, 6, 8, 12);  // Deserto
+            createBiome(map, 9, 5, 8);   // Floresta Negra
+            
+            // Adicionar áreas vulcânicas
+            addVolcanicArea(map);
+            
+            // Adicionar lagos
+            for (let i = 0; i < 5; i++) {
                 const x = Math.floor(Math.random() * WORLD_SIZE);
                 const y = Math.floor(Math.random() * WORLD_SIZE);
                 addWaterBody(map, x, y);
             }
             
-            for (let i = 0; i < 20; i++) {
-                const x = Math.floor(Math.random() * WORLD_SIZE);
-                const y = Math.floor(Math.random() * WORLD_SIZE);
-                addForest(map, x, y);
-            }
-            
-            for (let i = 0; i < 15; i++) {
-                const x = Math.floor(Math.random() * WORLD_SIZE);
-                const y = Math.floor(Math.random() * WORLD_SIZE);
-                addMountain(map, x, y);
-            }
-            
-            for (let i = 0; i < 8; i++) {
+            // Adicionar caminhos
+            for (let i = 0; i < 5; i++) {
                 const x = Math.floor(Math.random() * WORLD_SIZE);
                 const y = Math.floor(Math.random() * WORLD_SIZE);
                 addPath(map, x, y);
             }
             
-            for (let i = 0; i < 5; i++) {
-                const x = Math.floor(Math.random() * WORLD_SIZE);
-                const y = Math.floor(Math.random() * WORLD_SIZE);
-                addSandArea(map, x, y);
-            }
-            
-            addVolcanicArea(map);
-            
+            // Adicionar flores
             addFlowers(map);
             
             return map;
+        }
+        
+        function createBiome(map, biomeType, minSize, maxSize) {
+            const numBiomes = 3 + Math.floor(Math.random() * 3);
+            
+            for (let b = 0; b < numBiomes; b++) {
+                const size = minSize + Math.floor(Math.random() * (maxSize - minSize));
+                const x = Math.floor(Math.random() * (WORLD_SIZE - size * 2)) + size;
+                const y = Math.floor(Math.random() * (WORLD_SIZE - size * 2)) + size;
+                
+                for (let i = -size; i < size; i++) {
+                    for (let j = -size; j < size; j++) {
+                        const newX = x + i;
+                        const newY = y + j;
+                        if (newX >= 0 && newX < WORLD_SIZE && newY >= 0 && newY < WORLD_SIZE) {
+                            const dist = Math.sqrt(i*i + j*j);
+                            if (dist < size && Math.random() < 0.8 && map[newY][newX] === 0) {
+                                map[newY][newX] = biomeType;
+                            }
+                        }
+                    }
+                }
+            }
         }
         
         function addWaterBody(map, x, y) {
@@ -3255,38 +3432,6 @@
                         const dist = Math.sqrt(i*i + j*j);
                         if (dist < size * (0.7 + Math.random() * 0.3)) {
                             map[newY][newX] = 1;
-                        }
-                    }
-                }
-            }
-        }
-        
-        function addForest(map, x, y) {
-            const size = 6 + Math.floor(Math.random() * 10);
-            for (let i = -size; i < size; i++) {
-                for (let j = -size; j < size; j++) {
-                    const newX = x + i;
-                    const newY = y + j;
-                    if (newX >= 0 && newX < WORLD_SIZE && newY >= 0 && newY < WORLD_SIZE) {
-                        const dist = Math.sqrt(i*i + j*j);
-                        if (dist < size && Math.random() < 0.8 && map[newY][newX] === 0) {
-                            map[newY][newX] = 2;
-                        }
-                    }
-                }
-            }
-        }
-        
-        function addMountain(map, x, y) {
-            const size = 5 + Math.floor(Math.random() * 6);
-            for (let i = -size; i < size; i++) {
-                for (let j = -size; j < size; j++) {
-                    const newX = x + i;
-                    const newY = y + j;
-                    if (newX >= 0 && newX < WORLD_SIZE && newY >= 0 && newY < WORLD_SIZE) {
-                        const dist = Math.sqrt(i*i + j*j);
-                        if (dist < size * (0.8 + Math.random() * 0.2) && Math.random() < 0.8 && map[newY][newX] === 0) {
-                            map[newY][newX] = 3;
                         }
                     }
                 }
@@ -3319,22 +3464,6 @@
                     
                     x += dirX;
                     y += dirY;
-                }
-            }
-        }
-        
-        function addSandArea(map, x, y) {
-            const size = 4 + Math.floor(Math.random() * 5);
-            for (let i = -size; i < size; i++) {
-                for (let j = -size; j < size; j++) {
-                    const newX = x + i;
-                    const newY = y + j;
-                    if (newX >= 0 && newX < WORLD_SIZE && newY >= 0 && newY < WORLD_SIZE) {
-                        const dist = Math.sqrt(i*i + j*j);
-                        if (dist < size && Math.random() < 0.7 && map[newY][newX] === 0) {
-                            map[newY][newX] = 6;
-                        }
-                    }
                 }
             }
         }
@@ -3415,6 +3544,9 @@
                             break;
                         case 8:
                             color = COLORS.LAVA;
+                            break;
+                        case 9:
+                            color = COLORS.DARK_FOREST;
                             break;
                     }
                     
@@ -3544,13 +3676,40 @@
                             ctx.arc(bubbleX, bubbleY, 3, 0, Math.PI * 2);
                             ctx.fill();
                         }
+                    } else if (tileType === 9) {
+                        ctx.fillStyle = COLORS.DARK_FOREST_DARK;
+                        for (let i = 0; i < 8; i++) {
+                            const detailX = x * TILE_SIZE + 3 + Math.random() * (TILE_SIZE - 6);
+                            const detailY = y * TILE_SIZE + 3 + Math.random() * (TILE_SIZE - 6);
+                            ctx.fillRect(detailX, detailY, 2, 2);
+                        }
+                        
+                        const treeX = x * TILE_SIZE + TILE_SIZE / 2;
+                        const treeY = y * TILE_SIZE + TILE_SIZE / 2;
+                        
+                        ctx.fillStyle = '#2c3e50';
+                        ctx.fillRect(treeX - 4, treeY, 8, TILE_SIZE / 2);
+                        
+                        ctx.fillStyle = '#1b2631';
+                        ctx.beginPath();
+                        ctx.arc(treeX, treeY - 8, TILE_SIZE / 3, 0, Math.PI * 2);
+                        ctx.fill();
+                        
+                        ctx.fillStyle = '#1b5e20';
+                        ctx.beginPath();
+                        ctx.arc(treeX - 5, treeY - 10, TILE_SIZE / 4, 0, Math.PI * 2);
+                        ctx.arc(treeX + 5, treeY - 10, TILE_SIZE / 4, 0, Math.PI * 2);
+                        ctx.fill();
                     }
                 }
             }
             
-            merchant.draw();
+            // Desenhar ambas as lojas
+            merchantForest.draw();
+            merchantMountain.draw();
             
-            if (merchant.isPlayerNearby(player)) {
+            // Verificar se o jogador está perto de alguma loja
+            if (merchantForest.isPlayerNearby(player) || merchantMountain.isPlayerNearby(player)) {
                 ctx.fillStyle = '#f8c555';
                 ctx.font = 'bold 14px MedievalSharp';
                 ctx.textAlign = 'center';
@@ -3563,17 +3722,33 @@
         let battleAnimation = null;
         let currentRound = 1;
         let battleEffects = [];
+        let attackAnimations = [];
         
         function startBattle() {
             const rand = Math.random();
             let monsterType = 'weak';
             
-            if (rand < 0.6) {
+            // Chance base de spawn para cada tipo de monstro
+            if (rand < 0.5) {
                 monsterType = 'weak';
-            } else if (rand < 0.9) {
+            } else if (rand < 0.8) {
                 monsterType = 'strong';
-            } else {
+            } else if (rand < 0.95) {
                 monsterType = 'elite';
+            } else {
+                monsterType = 'darkMage';
+            }
+            
+            // Ajustar tipo de monstro baseado no bioma atual
+            const currentTile = worldMap[Math.floor(player.y)][Math.floor(player.x)];
+            if (currentTile === 7 && Math.random() < 0.5) {
+                monsterType = 'elite';
+            } else if (currentTile === 3 && Math.random() < 0.3) {
+                monsterType = 'strong';
+            } else if (currentTile === 2 && Math.random() < 0.3) {
+                monsterType = 'weak';
+            } else if (currentTile === 9 && Math.random() < 0.4) {
+                monsterType = 'darkMage';
             }
             
             currentMonster = new Monster(monsterType, worldMap, player.x, player.y, player.level);
@@ -3581,6 +3756,7 @@
             battleAnimation = null;
             currentRound = 1;
             battleEffects = [];
+            attackAnimations = [];
             
             player.clearStatusEffects();
             if (currentMonster) currentMonster.statusEffects = [];
@@ -3626,6 +3802,9 @@
                 
                 message = "O cavaleiro usa sua espada para atacar seu oponente!";
                 
+                // Criar animação de espada
+                createSwordAnimation();
+                
                 battleAnimation = {
                     type: 'playerAttack',
                     step: 0,
@@ -3647,6 +3826,9 @@
                 isCritical = attackResult.isCritical;
                 
                 message = "O cavaleiro avança rapidamente e investe contra o inimigo!";
+                
+                // Criar animação de investida
+                createChargeAnimation();
                 
                 battleAnimation = {
                     type: 'playerAttack',
@@ -3691,6 +3873,90 @@
                 isPlayerTurn = false;
                 setTimeout(monsterTurn, 1000);
             }, attackType === 'charge' ? 1000 : 800);
+        }
+        
+        function createSwordAnimation() {
+            const animation = {
+                type: 'sword',
+                x: 100,
+                y: 100,
+                step: 0,
+                maxSteps: 15,
+                angle: 0
+            };
+            attackAnimations.push(animation);
+        }
+        
+        function createChargeAnimation() {
+            const animation = {
+                type: 'charge',
+                x: 50,
+                y: 100,
+                step: 0,
+                maxSteps: 20,
+                targetX: 150
+            };
+            attackAnimations.push(animation);
+        }
+        
+        function createFireballAnimation() {
+            const animation = {
+                type: 'fireball',
+                x: 100,
+                y: 100,
+                step: 0,
+                maxSteps: 25,
+                radius: 5
+            };
+            attackAnimations.push(animation);
+        }
+        
+        function createFreezeAnimation() {
+            const animation = {
+                type: 'freeze',
+                x: 100,
+                y: 100,
+                step: 0,
+                maxSteps: 30,
+                radius: 10
+            };
+            attackAnimations.push(animation);
+        }
+        
+        function createPossessionAnimation() {
+            const animation = {
+                type: 'possession',
+                x: 100,
+                y: 100,
+                step: 0,
+                maxSteps: 25,
+                radius: 8
+            };
+            attackAnimations.push(animation);
+        }
+        
+        function createDarkMagicAnimation() {
+            const animation = {
+                type: 'darkMagic',
+                x: 150,
+                y: 100,
+                step: 0,
+                maxSteps: 20,
+                targetX: 50
+            };
+            attackAnimations.push(animation);
+        }
+        
+        function createDarkHealAnimation() {
+            const animation = {
+                type: 'darkHeal',
+                x: 150,
+                y: 100,
+                step: 0,
+                maxSteps: 15,
+                radius: 10
+            };
+            attackAnimations.push(animation);
         }
         
         function playerHeavyArmor() {
@@ -3751,6 +4017,9 @@
                     damage = 20 + Math.floor(player.magic * 0.8);
                     message = "O cavaleiro conjura uma Bola de Fogo!";
                     burnChance = 0.5;
+                    
+                    // Criar animação de bola de fogo
+                    createFireballAnimation();
                     break;
                     
                 case 'freeze':
@@ -3770,6 +4039,9 @@
                     damage = 10 + Math.floor(player.magic * 0.5);
                     message = "O cavaleiro invoca uma Brisa Congelante!";
                     statusEffect = { type: 'slow', duration: 3 };
+                    
+                    // Criar animação de congelamento
+                    createFreezeAnimation();
                     break;
                     
                 case 'possession':
@@ -3789,6 +4061,9 @@
                     damage = 25 + Math.floor(player.magic * 1.2);
                     message = "O cavaleiro lança um feitiço de Posseção!";
                     statusEffect = { type: 'stun', duration: 3 };
+                    
+                    // Criar animação de possessão
+                    createPossessionAnimation();
                     break;
             }
             
@@ -3904,8 +4179,30 @@
                 return;
             }
             
-            const damage = currentMonster.attackPlayer(player);
-            addBattleLog(`O ${currentMonster.name} ataca o cavaleiro!`);
+            let damage = 0;
+            let message = "";
+            
+            if (currentMonster.type === 'darkMage') {
+                // Mago Negro tem 70% de chance de usar magia negra e 30% de cura
+                if (Math.random() < 0.7) {
+                    damage = currentMonster.attackPlayer(player);
+                    message = `O ${currentMonster.name} lança uma magia negra!`;
+                    
+                    // Criar animação de magia negra
+                    createDarkMagicAnimation();
+                } else {
+                    currentMonster.health = Math.min(currentMonster.maxHealth, currentMonster.health + 20);
+                    message = `O ${currentMonster.name} usa cura das trevas e recupera 20 de HP!`;
+                    
+                    // Criar animação de cura das trevas
+                    createDarkHealAnimation();
+                }
+            } else {
+                damage = currentMonster.attackPlayer(player);
+                message = `O ${currentMonster.name} ataca o cavaleiro!`;
+            }
+            
+            addBattleLog(message);
             
             battleAnimation = {
                 type: 'monsterAttack',
@@ -3929,6 +4226,11 @@
                     if (currentMonster.type === 'elite' && player.hasStatusEffect('burn')) {
                         addBattleLog(" O cavaleiro está queimando!");
                         createBattleEffect('burn', playerCanvas, 100, 30);
+                    }
+                    
+                    if (currentMonster.type === 'darkMage' && player.hasStatusEffect('stun')) {
+                        addBattleLog(" O cavaleiro está atordoado!");
+                        createBattleEffect('stun', playerCanvas, 100, 30);
                     }
                     
                     player.updateUI();
@@ -3957,15 +4259,29 @@
             const enemyCanvas = document.getElementById('enemyBattleCanvas');
             const enemyCtx = enemyCanvas.getContext('2d');
             
+            // Limpar os canvases
+            playerCtx.clearRect(0, 0, 200, 200);
+            enemyCtx.clearRect(0, 0, 200, 200);
+            
+            // Desenhar fundo
+            playerCtx.fillStyle = 'rgba(26, 58, 95, 0.5)';
+            playerCtx.fillRect(0, 0, 200, 200);
+            enemyCtx.fillStyle = 'rgba(26, 58, 95, 0.5)';
+            enemyCtx.fillRect(0, 0, 200, 200);
+            
+            // Desenhar personagens
+            player.drawBattle(playerCtx, false);
+            currentMonster.drawBattle(enemyCtx, false);
+            
+            // Desenhar animações de ataque
+            drawAttackAnimations(playerCtx, enemyCtx);
+            
             if (battleAnimation.type === 'playerAttack') {
                 player.drawBattle(playerCtx, battleAnimation.step < battleAnimation.maxSteps / 2, battleAnimation.attackType);
-                currentMonster.drawBattle(enemyCtx, false);
             } else if (battleAnimation.type === 'monsterAttack') {
-                player.drawBattle(playerCtx, false);
                 currentMonster.drawBattle(enemyCtx, battleAnimation.step < battleAnimation.maxSteps / 2);
             } else if (battleAnimation.type === 'playerMagic') {
                 player.drawBattle(playerCtx, true);
-                currentMonster.drawBattle(enemyCtx, false);
                 
                 enemyCtx.fillStyle = getSpellColor(battleAnimation.spell);
                 enemyCtx.globalAlpha = 0.5 - (battleAnimation.step / battleAnimation.maxSteps) * 0.5;
@@ -3973,7 +4289,6 @@
                 enemyCtx.globalAlpha = 1.0;
             } else if (battleAnimation.type === 'playerEffect') {
                 player.drawBattle(playerCtx, true);
-                currentMonster.drawBattle(enemyCtx, false);
                 
                 playerCtx.fillStyle = 'rgba(149, 165, 166, 0.5)';
                 playerCtx.globalAlpha = 0.5 - (battleAnimation.step / battleAnimation.maxSteps) * 0.5;
@@ -3990,8 +4305,96 @@
             } else {
                 battleAnimation = null;
                 
+                // Limpar animações de ataque
+                attackAnimations = [];
+                
                 player.drawBattle(playerCtx, false);
                 currentMonster.drawBattle(enemyCtx, false);
+            }
+        }
+        
+        function drawAttackAnimations(playerCtx, enemyCtx) {
+            for (let i = attackAnimations.length - 1; i >= 0; i--) {
+                const anim = attackAnimations[i];
+                
+                anim.step++;
+                
+                if (anim.step >= anim.maxSteps) {
+                    attackAnimations.splice(i, 1);
+                    continue;
+                }
+                
+                const progress = anim.step / anim.maxSteps;
+                
+                switch(anim.type) {
+                    case 'sword':
+                        enemyCtx.save();
+                        enemyCtx.translate(anim.x, anim.y);
+                        enemyCtx.rotate(anim.angle + progress * Math.PI);
+                        enemyCtx.fillStyle = '#f8c555';
+                        enemyCtx.fillRect(-20, -2, 40, 4);
+                        enemyCtx.fillStyle = '#bdc3c7';
+                        enemyCtx.fillRect(20, -3, 10, 6);
+                        enemyCtx.restore();
+                        anim.angle += 0.3;
+                        break;
+                        
+                    case 'charge':
+                        playerCtx.save();
+                        playerCtx.fillStyle = 'rgba(255, 165, 0, 0.7)';
+                        const chargeX = anim.x + (anim.targetX - anim.x) * progress;
+                        playerCtx.beginPath();
+                        playerCtx.arc(chargeX, anim.y, 15, 0, Math.PI * 2);
+                        playerCtx.fill();
+                        playerCtx.restore();
+                        break;
+                        
+                    case 'fireball':
+                        enemyCtx.save();
+                        enemyCtx.fillStyle = '#ff6b6b';
+                        enemyCtx.beginPath();
+                        enemyCtx.arc(anim.x, anim.y, anim.radius + progress * 20, 0, Math.PI * 2);
+                        enemyCtx.fill();
+                        enemyCtx.restore();
+                        break;
+                        
+                    case 'freeze':
+                        enemyCtx.save();
+                        enemyCtx.fillStyle = 'rgba(173, 216, 230, 0.7)';
+                        enemyCtx.beginPath();
+                        enemyCtx.arc(anim.x, anim.y, anim.radius + progress * 25, 0, Math.PI * 2);
+                        enemyCtx.fill();
+                        enemyCtx.restore();
+                        break;
+                        
+                    case 'possession':
+                        enemyCtx.save();
+                        enemyCtx.fillStyle = 'rgba(138, 43, 226, 0.7)';
+                        enemyCtx.beginPath();
+                        enemyCtx.arc(anim.x, anim.y, anim.radius + progress * 22, 0, Math.PI * 2);
+                        enemyCtx.fill();
+                        enemyCtx.restore();
+                        break;
+                        
+                    case 'darkMagic':
+                        playerCtx.save();
+                        playerCtx.fillStyle = 'rgba(75, 0, 130, 0.7)';
+                        const magicX = anim.x + (anim.targetX - anim.x) * progress;
+                        playerCtx.beginPath();
+                        playerCtx.arc(magicX, anim.y, 12, 0, Math.PI * 2);
+                        playerCtx.fill();
+                        playerCtx.restore();
+                        break;
+                        
+                    case 'darkHeal':
+                        enemyCtx.save();
+                        enemyCtx.fillStyle = 'rgba(106, 13, 173, 0.7)';
+                        enemyCtx.beginPath();
+                        enemyCtx.arc(anim.x, anim.y, anim.radius + progress * 15, 0, Math.PI * 2);
+                        enemyCtx.fill();
+                        enemyCtx.restore();
+                        break;
+                }
             }
         }
         
@@ -4334,7 +4737,8 @@
 
         const player = new Player();
         const worldMap = generateWorldMap();
-        const merchant = new Merchant(worldMap);
+        const merchantForest = new Merchant(worldMap, 2); // Loja na floresta
+        const merchantMountain = new Merchant(worldMap, 3); // Loja na montanha
         let lastTime = 0;
         
         player.updateUI();
@@ -4350,7 +4754,7 @@
             
             keys[e.key.toLowerCase()] = true;
             
-            if (e.key.toLowerCase() === 'e' && merchant.isPlayerNearby(player)) {
+            if (e.key.toLowerCase() === 'e' && (merchantForest.isPlayerNearby(player) || merchantMountain.isPlayerNearby(player))) {
                 openShop();
             }
         });
