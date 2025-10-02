@@ -925,24 +925,13 @@
             color: #ccc;
         }
         
-        .crafting-glow {
-            animation: craftingGlow 1.5s infinite alternate;
-        }
         
-        @keyframes craftingGlow {
-            0% { box-shadow: 0 0 5px rgba(248, 197, 85, 0.5); }
-            100% { box-shadow: 0 0 20px rgba(248, 197, 85, 1), 0 0 30px rgba(231, 76, 60, 0.7); }
-        }
         
-        .glowing-border {
-            animation: glowing 2s infinite;
-        }
+       
         
-        @keyframes glowing {
-            0% { box-shadow: 0 0 5px #f8c555; }
-            50% { box-shadow: 0 0 20px #f8c555, 0 0 30px #f8c555; }
-            100% { box-shadow: 0 0 5px #f8c555; }
-        }
+        
+        
+        
         
         .level-indicator {
             position: absolute;
@@ -1445,7 +1434,7 @@
                 this.level = 1;
                 this.x = WORLD_SIZE / 2;
                 this.y = WORLD_SIZE / 2;
-                this.money = 100;
+                this.money = 0;
                 this.exp = 0;
                 this.expToNextLevel = 40;
                 this.upgradePoints = 0;
