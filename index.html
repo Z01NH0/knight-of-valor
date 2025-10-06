@@ -27,7 +27,7 @@
         .game-container {
             position: relative;
             width: 100%;
-            max-width: 1000px;
+            max-width: 1200px;
         }
         
         .game-header {
@@ -47,7 +47,7 @@
         .game-board {
             position: relative;
             width: 100%;
-            height: 600px;
+            height: 700px;
             border: 4px solid #f8c555;
             border-radius: 8px;
             overflow: hidden;
@@ -100,7 +100,6 @@
             height: 100%;
             border-radius: 8px;
             transition: width 0.3s ease;
-            box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
         }
         
         .health-bar {
@@ -167,8 +166,8 @@
         }
         
         .battle-container {
-            width: 90%;
-            height: 90%;
+            width: 95%;
+            height: 95%;
             background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%231a3a5f"/><path d="M0,0 L100,100 M100,0 L0,100" stroke="%23f8c555" stroke-width="1" opacity="0.1"/></svg>');
             border: 4px solid #f8c555;
             border-radius: 12px;
@@ -209,8 +208,8 @@
         }
         
         .character-canvas {
-            width: 200px;
-            height: 200px;
+            width: 250px;
+            height: 250px;
             margin-bottom: 10px;
         }
         
@@ -227,7 +226,7 @@
             background: rgba(0, 0, 0, 0.7);
             padding: 10px 15px;
             border-radius: 8px;
-            min-width: 180px;
+            min-width: 200px;
             border: 2px solid #f8c555;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
         }
@@ -320,7 +319,7 @@
         }
         
         .battle-log {
-            height: 100px;
+            height: 120px;
             background: rgba(0, 0, 0, 0.7);
             border-radius: 8px;
             padding: 10px;
@@ -493,16 +492,19 @@
             font-size: 1.5rem;
             position: relative;
             cursor: pointer;
+            transition: all 0.3s;
         }
         
-        .crafting-pulse {
+        .crafting-ready {
+            border-color: #e74c3c;
+            box-shadow: 0 0 15px #e74c3c;
             animation: pulse 1s infinite;
         }
         
         @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.7); }
-            70% { box-shadow: 0 0 0 10px rgba(231, 76, 60, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0); }
+            0% { box-shadow: 0 0 5px #e74c3c; }
+            50% { box-shadow: 0 0 20px #e74c3c; }
+            100% { box-shadow: 0 0 5px #e74c3c; }
         }
         
         .items-grid {
@@ -938,8 +940,268 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
         }
         
-        .glowing-border {
-            box-shadow: 0 0 5px #f8c555, 0 0 10px #f8c555, 0 0 15px #f8c555;
+        .notification-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 50;
+            backdrop-filter: blur(5px);
+        }
+        
+        .notification-container {
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%231a3a5f"/><path d="M0,0 L100,100 M100,0 L0,100" stroke="%23f8c555" stroke-width="1" opacity="0.1"/></svg>');
+            border: 4px solid #f8c555;
+            border-radius: 12px;
+            padding: 30px;
+            width: 60%;
+            max-width: 500px;
+            text-align: center;
+            box-shadow: 0 0 30px rgba(248, 197, 85, 0.3);
+        }
+        
+        .notification-title {
+            color: #f8c555;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .notification-message {
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        
+        .dark-shop-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 35;
+            backdrop-filter: blur(5px);
+        }
+        
+        .dark-shop-container {
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%230f0f23"/><path d="M0,0 L100,100 M100,0 L0,100" stroke="%23e74c3c" stroke-width="1" opacity="0.1"/></svg>');
+            border: 4px solid #e74c3c;
+            border-radius: 12px;
+            padding: 20px;
+            width: 80%;
+            max-width: 800px;
+            max-height: 80%;
+            overflow-y: auto;
+            box-shadow: 0 0 30px rgba(231, 76, 60, 0.3);
+        }
+        
+        .dark-shop-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid rgba(231, 76, 60, 0.3);
+            padding-bottom: 10px;
+        }
+        
+        .dark-shop-categories {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+        
+        .dark-shop-category {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid rgba(231, 76, 60, 0.2);
+        }
+        
+        .dark-shop-category.active {
+            background: rgba(231, 76, 60, 0.2);
+            border-color: #e74c3c;
+        }
+        
+        .dark-shop-items {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+        
+        .dark-shop-item {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid rgba(231, 76, 60, 0.2);
+        }
+        
+        .dark-shop-item-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        
+        .dark-shop-item-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .dark-shop-item-price {
+            color: #e74c3c;
+            margin-bottom: 10px;
+        }
+        
+        .dark-shop-buy-btn {
+            background: linear-gradient(to bottom, #8e44ad, #6c3483);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+        }
+        
+        .dark-shop-buy-btn:hover:not(:disabled) {
+            background: linear-gradient(to bottom, #9b59b6, #8e44ad);
+        }
+        
+        .dark-shop-buy-btn:disabled {
+            background: #666;
+            cursor: not-allowed;
+        }
+        
+        .battle-effects-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 5;
+        }
+        
+        .effect {
+            position: absolute;
+            pointer-events: none;
+            z-index: 10;
+        }
+        
+        .sword-slash {
+            width: 100px;
+            height: 20px;
+            background: linear-gradient(90deg, transparent, #f8c555, transparent);
+            transform-origin: 0 50%;
+            animation: slash 0.3s forwards;
+        }
+        
+        @keyframes slash {
+            0% { transform: scaleX(0) rotate(0deg); opacity: 1; }
+            100% { transform: scaleX(1) rotate(45deg); opacity: 0; }
+        }
+        
+        .fireball {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #ff6b6b, #e74c3c);
+            animation: fireballMove 0.5s forwards;
+        }
+        
+        @keyframes fireballMove {
+            0% { transform: translateX(0) scale(0.5); opacity: 1; }
+            100% { transform: translateX(200px) scale(1.5); opacity: 0; }
+        }
+        
+        .freeze {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #74b9ff, #3498db);
+            animation: freezeExpand 0.7s forwards;
+        }
+        
+        @keyframes freezeExpand {
+            0% { transform: scale(0); opacity: 1; }
+            100% { transform: scale(2); opacity: 0; }
+        }
+        
+        .possession {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #a29bfe, #6c5ce7);
+            animation: possessionPulse 0.8s forwards;
+        }
+        
+        @keyframes possessionPulse {
+            0% { transform: scale(0.5); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.7; }
+            100% { transform: scale(1.5); opacity: 0; }
+        }
+        
+        .charge {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #f39c12, #d35400);
+            animation: chargeMove 0.6s forwards;
+        }
+        
+        @keyframes chargeMove {
+            0% { transform: translateX(0) scale(0.8); opacity: 1; }
+            100% { transform: translateX(150px) scale(1.2); opacity: 0; }
+        }
+        
+        .dark-magic {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #8e44ad, #6c3483);
+            animation: darkMagicMove 0.5s forwards;
+        }
+        
+        @keyframes darkMagicMove {
+            0% { transform: translateX(0) scale(0.7); opacity: 1; }
+            100% { transform: translateX(-200px) scale(1.3); opacity: 0; }
+        }
+        
+        .dark-heal {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #9b59b6, #8e44ad);
+            animation: darkHealPulse 0.7s forwards;
+        }
+        
+        @keyframes darkHealPulse {
+            0% { transform: scale(0.5); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+            100% { transform: scale(1.3); opacity: 0; }
+        }
+        
+        .dragon-fire {
+            width: 120px;
+            height: 60px;
+            background: linear-gradient(90deg, #ff6b6b, #f39c12, #ff6b6b);
+            border-radius: 30px;
+            animation: dragonFire 0.8s forwards;
+        }
+        
+        @keyframes dragonFire {
+            0% { transform: scaleX(0); opacity: 1; }
+            100% { transform: scaleX(1.5); opacity: 0; }
         }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap" rel="stylesheet">
@@ -947,11 +1209,11 @@
 <body>
     <div class="game-container">
         <div class="game-header">
-            <h1></h1>
+            <h1>Knight of Valor</h1>
         </div>
         
         <div class="game-board">
-            <canvas id="gameCanvas" width="1000" height="600"></canvas>
+            <canvas id="gameCanvas" width="1200" height="700"></canvas>
             
             <div class="ui-overlay">
                 <div class="stat-bar">
@@ -1045,14 +1307,16 @@
                     
                     <div class="battle-scene">
                         <div class="battle-character">
-                            <canvas id="playerBattleCanvas" class="character-canvas" width="200" height="200"></canvas>
+                            <canvas id="playerBattleCanvas" class="character-canvas" width="250" height="250"></canvas>
                             <div>Cavaleiro</div>
                         </div>
                         <div class="battle-character">
-                            <canvas id="enemyBattleCanvas" class="character-canvas" width="200" height="200"></canvas>
+                            <canvas id="enemyBattleCanvas" class="character-canvas" width="250" height="250"></canvas>
                             <div id="enemyBattleName">Monstro</div>
                         </div>
                     </div>
+                    
+                    <div class="battle-effects-container" id="battleEffectsContainer"></div>
                     
                     <div class="battle-log" id="battleLog">
                         <div class="log-entry">Uma batalha começou!</div>
@@ -1060,24 +1324,24 @@
                     
                     <div class="battle-actions" id="battleActions">
                         <button class="back-btn" id="backBtn" style="display: none;">← Voltar</button>
-                        <button class="battle-btn glowing-border" id="attackBtn">ATACAR</button>
-                        <button class="battle-btn glowing-border" id="magicBtn">PODER MÁGICO</button>
-                        <button class="battle-btn glowing-border" id="itemsBtn">ITENS</button>
-                        <button class="battle-btn glowing-border" id="actBtn">AGIR</button>
+                        <button class="battle-btn" id="attackBtn">ATACAR</button>
+                        <button class="battle-btn" id="magicBtn">PODER MÁGICO</button>
+                        <button class="battle-btn" id="itemsBtn">ITENS</button>
+                        <button class="battle-btn" id="actBtn">AGIR</button>
                     </div>
                     
                     <div class="attack-options" id="attackOptions">
                         <button class="back-btn" id="backFromAttackBtn">← Voltar</button>
-                        <button class="battle-btn glowing-border" id="swordAttackBtn">ESPADADA</button>
-                        <button class="battle-btn glowing-border" id="chargeBtn" disabled>INVESTIDA (Bloqueada)</button>
-                        <button class="battle-btn glowing-border" id="heavyArmorBtn" disabled>ARMADURA PESADA (Bloqueada)</button>
+                        <button class="battle-btn" id="swordAttackBtn">ESPADADA</button>
+                        <button class="battle-btn" id="chargeBtn" disabled>INVESTIDA (Bloqueada)</button>
+                        <button class="battle-btn" id="heavyArmorBtn" disabled>ARMADURA PESADA (Bloqueada)</button>
                     </div>
                     
                     <div class="magic-options" id="magicOptions">
                         <button class="back-btn" id="backFromMagicBtn">← Voltar</button>
-                        <button class="battle-btn glowing-border" id="fireballBtn" disabled>BOLA DE FOGO (Bloqueada)</button>
-                        <button class="battle-btn glowing-border" id="freezeBtn" disabled>BRISA CONGELANTE (Bloqueada)</button>
-                        <button class="battle-btn glowing-border" id="possessionBtn" disabled>POSSEÇÃO (Bloqueada)</button>
+                        <button class="battle-btn" id="fireballBtn" disabled>BOLA DE FOGO (Bloqueada)</button>
+                        <button class="battle-btn" id="freezeBtn" disabled>BRISA CONGELANTE (Bloqueada)</button>
+                        <button class="battle-btn" id="possessionBtn" disabled>POSSEÇÃO (Bloqueada)</button>
                     </div>
                     
                     <div class="items-options" id="itemsOptions">
@@ -1088,7 +1352,9 @@
                     
                     <div class="act-options" id="actOptions">
                         <button class="back-btn" id="backFromActBtn">← Voltar</button>
-                        <button class="battle-btn glowing-border" id="meditateBtn">MEDITAR</button>
+                        <button class="battle-btn" id="meditateBtn">MEDITAR</button>
+                        <button class="battle-btn" id="restBtn" disabled>DESCANSAR (Bloqueada)</button>
+                        <button class="battle-btn" id="fleeBtn">TENTAR FUGIR</button>
                     </div>
                 </div>
             </div>
@@ -1123,31 +1389,38 @@
                         <h3>Atributos</h3>
                         <div class="stat-item">
                             <span>HP: <span id="statHp">10</span></span>
-                            <button class="upgrade-btn glowing-border" data-stat="hp">+</button>
+                            <button class="upgrade-btn" data-stat="hp">+</button>
                         </div>
                         <div class="stat-item">
                             <span>Força: <span id="statStr">10</span></span>
-                            <button class="upgrade-btn glowing-border" data-stat="str">+</button>
+                            <button class="upgrade-btn" data-stat="str">+</button>
                         </div>
                         <div class="stat-item">
                             <span>Agilidade: <span id="statAgi">10</span></span>
-                            <button class="upgrade-btn glowing-border" data-stat="agi">+</button>
+                            <button class="upgrade-btn" data-stat="agi">+</button>
                         </div>
                         <div class="stat-item">
                             <span>Defesa: <span id="statDef">10</span></span>
-                            <button class="upgrade-btn glowing-border" data-stat="def">+</button>
+                            <button class="upgrade-btn" data-stat="def">+</button>
                         </div>
                         <div class="stat-item">
                             <span>Magia: <span id="statMag">10</span></span>
-                            <button class="upgrade-btn glowing-border" data-stat="mag">+</button>
+                            <button class="upgrade-btn" data-stat="mag">+</button>
                         </div>
                     </div>
                     
                     <div class="upgrade-points">
-                        <h3>Habilidades Desbloqueadas</h3>
-                        <div id="unlockedSkills">
+                        <h3>Habilidades de Força</h3>
+                        <div id="unlockedStrengthSkills">
                             <div>Investida: <span id="chargeStatus">Bloqueada</span></div>
                             <div>Armadura Pesada: <span id="heavyArmorStatus">Bloqueada</span></div>
+                            <div>Descansar: <span id="restStatus">Bloqueada</span></div>
+                        </div>
+                    </div>
+                    
+                    <div class="upgrade-points">
+                        <h3>Habilidades de Magia</h3>
+                        <div id="unlockedMagicSkills">
                             <div>Bola de Fogo: <span id="fireballStatus">Bloqueada</span></div>
                             <div>Brisa Congelante: <span id="freezeStatus">Bloqueada</span></div>
                             <div>Posseção: <span id="possessionStatus">Bloqueada</span></div>
@@ -1209,7 +1482,7 @@
                     </div>
                     
                     <div style="text-align: center; margin-top: 20px;">
-                        <button class="battle-btn glowing-border" id="equipmentBtn">Ver Equipamentos</button>
+                        <button class="battle-btn" id="equipmentBtn">Ver Equipamentos</button>
                     </div>
                 </div>
             </div>
@@ -1237,7 +1510,7 @@
                         </div>
                     </div>
                     
-                    <button class="inventory-btn-equipment glowing-border" id="inventoryBtnEquipment">Inventário</button>
+                    <button class="inventory-btn-equipment" id="inventoryBtnEquipment">Inventário</button>
                     
                     <div class="equipment-collection" id="equipmentCollection" style="display: none;">
                         <h3 class="collection-title">Coleção de Equipamentos</h3>
@@ -1255,12 +1528,30 @@
                     </div>
                     
                     <div class="shop-categories">
-                        <div class="shop-category active glowing-border" data-category="food">Comidas</div>
-                        <div class="shop-category glowing-border" data-category="weapons">Armamentos</div>
-                        <div class="shop-category glowing-border" data-category="potions">Poções</div>
+                        <div class="shop-category active" data-category="food">Comidas</div>
+                        <div class="shop-category" data-category="weapons">Armamentos</div>
+                        <div class="shop-category" data-category="potions">Poções</div>
                     </div>
                     
                     <div class="shop-items" id="shopItems">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="dark-shop-screen" id="darkShopScreen">
+                <div class="dark-shop-container">
+                    <div class="dark-shop-header">
+                        <h2>Loja Negra</h2>
+                        <button class="close-btn" id="closeDarkShopBtn">Fechar</button>
+                    </div>
+                    
+                    <div class="dark-shop-categories">
+                        <div class="dark-shop-category active" data-category="food">Comidas</div>
+                        <div class="dark-shop-category" data-category="weapons">Armamentos</div>
+                        <div class="dark-shop-category" data-category="orbs">Orbes de Invocação</div>
+                    </div>
+                    
+                    <div class="dark-shop-items" id="darkShopItems">
                     </div>
                 </div>
             </div>
@@ -1269,20 +1560,30 @@
                 <h2>Você Morreu</h2>
                 <p>Seus itens e Sua Experiência Talvez Foram Junto Com Você...</p>
             </div>
+            
+            <div class="notification-screen" id="notificationScreen">
+                <div class="notification-container">
+                    <h2 class="notification-title" id="notificationTitle">Notificação</h2>
+                    <p class="notification-message" id="notificationMessage"></p>
+                    <button class="battle-btn" id="closeNotificationBtn">Fechar</button>
+                </div>
+            </div>
         </div>
         
         <div class="instructions">
-            >
+            <p>Use WASD ou setas para mover | Pressione E perto de lojas para interagir</p>
+            <p>Clique no ícone da mochila para abrir inventário</p>
         </div>
     </div>
 
     <script>
         const TILE_SIZE = 64;
-        const MAP_WIDTH = 16;
-        const MAP_HEIGHT = 10;
+        const MAP_WIDTH = 18;
+        const MAP_HEIGHT = 11;
         const WORLD_SIZE = 120;
         const MOVE_COOLDOWN = 200;
         const MONSTER_SPAWN_CHANCE = 0.1;
+        const GOLDEN_MONSTER_CHANCE = 0.0001;
 
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
@@ -1330,6 +1631,8 @@
         const possessionBtn = document.getElementById('possessionBtn');
         const actBtn = document.getElementById('actBtn');
         const meditateBtn = document.getElementById('meditateBtn');
+        const restBtn = document.getElementById('restBtn');
+        const fleeBtn = document.getElementById('fleeBtn');
         const roundIndicator = document.getElementById('roundIndicator');
         const playerStatusEffects = document.getElementById('playerStatusEffects');
         const enemyStatusEffects = document.getElementById('enemyStatusEffects');
@@ -1339,6 +1642,7 @@
         const backFromItemsBtn = document.getElementById('backFromItemsBtn');
         const backFromActBtn = document.getElementById('backFromActBtn');
         const battleItemsGrid = document.getElementById('battleItemsGrid');
+        const battleEffectsContainer = document.getElementById('battleEffectsContainer');
         
         const inventoryScreen = document.getElementById('inventoryScreen');
         const inventoryBtn = document.getElementById('inventoryBtn');
@@ -1358,6 +1662,7 @@
         const fireballStatus = document.getElementById('fireballStatus');
         const freezeStatus = document.getElementById('freezeStatus');
         const possessionStatus = document.getElementById('possessionStatus');
+        const restStatus = document.getElementById('restStatus');
         
         const inventoryMaceCount = document.getElementById('inventoryMaceCount');
         const inventoryHamCount = document.getElementById('inventoryHamCount');
@@ -1398,7 +1703,17 @@
         const shopCategories = document.querySelectorAll('.shop-category');
         const shopItems = document.getElementById('shopItems');
         
+        const darkShopScreen = document.getElementById('darkShopScreen');
+        const closeDarkShopBtn = document.getElementById('closeDarkShopBtn');
+        const darkShopCategories = document.querySelectorAll('.dark-shop-category');
+        const darkShopItems = document.getElementById('darkShopItems');
+        
         const deathScreen = document.getElementById('deathScreen');
+        
+        const notificationScreen = document.getElementById('notificationScreen');
+        const notificationTitle = document.getElementById('notificationTitle');
+        const notificationMessage = document.getElementById('notificationMessage');
+        const closeNotificationBtn = document.getElementById('closeNotificationBtn');
 
         const COLORS = {
             GRASS: '#2ecc71',
@@ -1423,14 +1738,16 @@
             LAVA: '#FF4500',
             LAVA_DARK: '#CC3700',
             DARK_FOREST: '#1b5e20',
-            DARK_FOREST_DARK: '#0d3b0d'
+            DARK_FOREST_DARK: '#0d3b0d',
+            DARK_SHOP: '#4a235a',
+            DARK_SHOP_DARK: '#2e1a47'
         };
 
         class Player {
             constructor() {
                 this.level = 1;
-                this.x = WORLD_SIZE / 2;
-                this.y = WORLD_SIZE / 2;
+                this.x = 15;
+                this.y = 15;
                 this.money = 0;
                 this.exp = 0;
                 this.expToNextLevel = 40;
@@ -1522,7 +1839,9 @@
                     diamondSword: false,
                     chainMail: false,
                     goldArmor: false,
-                    diamondArmor: false
+                    diamondArmor: false,
+                    doomSword: false,
+                    soulArmor: false
                 };
                 
                 this.luckMultiplier = 1.0;
@@ -1573,7 +1892,6 @@
                     ctx.fillStyle = '#0984e3';
                     ctx.fillRect(x - 12, y - 7, 24, 14);
                     
-                    // Brilho do diamante
                     ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
                     ctx.beginPath();
                     ctx.moveTo(x - 5, y - 5);
@@ -1582,6 +1900,21 @@
                     ctx.lineTo(x, y);
                     ctx.closePath();
                     ctx.fill();
+                } else if (this.armor.name === "Armadura de Almas") {
+                    ctx.fillStyle = '#8e44ad';
+                    ctx.fillRect(x - 20, y - 15, 40, 30);
+                    
+                    ctx.fillStyle = '#6c3483';
+                    ctx.fillRect(x - 18, y - 13, 36, 26);
+                    
+                    ctx.fillStyle = '#9b59b6';
+                    for (let i = 0; i < 3; i++) {
+                        for (let j = 0; j < 2; j++) {
+                            ctx.beginPath();
+                            ctx.arc(x - 10 + i * 10, y - 8 + j * 8, 3, 0, Math.PI * 2);
+                            ctx.fill();
+                        }
+                    }
                 } else if (this.hasBlackWolfArmor) {
                     ctx.fillStyle = '#2c3e50';
                     ctx.fillRect(x - 20, y - 15, 40, 30);
@@ -1610,6 +1943,8 @@
                     ctx.fillStyle = '#f8c555';
                 } else if (this.armor.name === "Armadura de Diamante") {
                     ctx.fillStyle = '#74b9ff';
+                } else if (this.armor.name === "Armadura de Almas") {
+                    ctx.fillStyle = '#9b59b6';
                 } else {
                     ctx.fillStyle = '#95a5a6';
                 }
@@ -1686,7 +2021,6 @@
                     ctx.fillRect(x + 11, y - 14, 11, 4);
                     ctx.fillRect(x + 16, y - 10, 1, 20);
                     
-                    // Brilho do diamante
                     ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
                     ctx.beginPath();
                     ctx.moveTo(x + 12, y - 10);
@@ -1694,6 +2028,24 @@
                     ctx.lineTo(x + 16, y - 10);
                     ctx.lineTo(x + 14, y - 8);
                     ctx.closePath();
+                    ctx.fill();
+                } else if (this.weapon.name === "Espada da Perdição") {
+                    ctx.fillStyle = '#2c3e50';
+                    ctx.fillRect(x + 15, y - 12, 4, 30);
+                    
+                    ctx.fillStyle = '#e74c3c';
+                    ctx.fillRect(x + 10, y - 15, 14, 8);
+                    
+                    ctx.fillStyle = '#c0392b';
+                    for (let i = 0; i < 3; i++) {
+                        ctx.beginPath();
+                        ctx.arc(x + 12 + i * 4, y - 11, 2, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+                    
+                    ctx.fillStyle = 'rgba(231, 76, 60, 0.3)';
+                    ctx.beginPath();
+                    ctx.arc(x + 17, y, 10, 0, Math.PI * 2);
                     ctx.fill();
                 } else {
                     ctx.fillStyle = '#bdc3c7';
@@ -1707,218 +2059,226 @@
             }
             
             drawBattle(ctx, isAttacking = false, attackType = null) {
-                ctx.clearRect(0, 0, 200, 200);
+                ctx.clearRect(0, 0, 250, 250);
                 
                 ctx.fillStyle = 'rgba(26, 58, 95, 0.5)';
-                ctx.fillRect(0, 0, 200, 200);
+                ctx.fillRect(0, 0, 250, 250);
                 
-                if (isAttacking) {
-                    if (attackType === 'sword') {
-                        ctx.fillStyle = 'rgba(255, 215, 0, 0.3)';
-                        ctx.fillRect(0, 0, 200, 200);
-                    } else if (attackType === 'charge') {
-                        ctx.fillStyle = 'rgba(255, 165, 0, 0.4)';
-                        ctx.beginPath();
-                        ctx.arc(100, 100, 80, 0, Math.PI * 2);
-                        ctx.fill();
-                    } else if (attackType === 'fireball') {
-                        ctx.fillStyle = 'rgba(255, 69, 0, 0.5)';
-                        ctx.beginPath();
-                        ctx.arc(100, 100, 90, 0, Math.PI * 2);
-                        ctx.fill();
-                    } else if (attackType === 'freeze') {
-                        ctx.fillStyle = 'rgba(173, 216, 230, 0.5)';
-                        ctx.beginPath();
-                        ctx.arc(100, 100, 90, 0, Math.PI * 2);
-                        ctx.fill();
-                    } else if (attackType === 'possession') {
-                        ctx.fillStyle = 'rgba(138, 43, 226, 0.5)';
-                        ctx.beginPath();
-                        ctx.arc(100, 100, 90, 0, Math.PI * 2);
-                        ctx.fill();
-                    }
-                }
-                
-                const centerX = 100;
-                const centerY = 100;
+                const centerX = 125;
+                const centerY = 125;
                 
                 if (this.armor.name === "Armadura de Malha") {
                     ctx.fillStyle = '#7f8c8d';
-                    ctx.fillRect(centerX - 35, centerY - 15, 70, 50);
+                    ctx.fillRect(centerX - 40, centerY - 20, 80, 60);
                     
                     ctx.fillStyle = '#95a5a6';
                     for (let i = 0; i < 5; i++) {
                         for (let j = 0; j < 4; j++) {
-                            ctx.fillRect(centerX - 33 + i * 14, centerY - 13 + j * 12, 10, 10);
+                            ctx.fillRect(centerX - 38 + i * 16, centerY - 18 + j * 15, 12, 12);
                         }
                     }
                 } else if (this.armor.name === "Armadura de Ouro") {
                     ctx.fillStyle = '#f8c555';
-                    ctx.fillRect(centerX - 35, centerY - 15, 70, 50);
+                    ctx.fillRect(centerX - 40, centerY - 20, 80, 60);
                     
                     ctx.fillStyle = '#d4a017';
-                    ctx.fillRect(centerX - 33, centerY - 13, 66, 46);
+                    ctx.fillRect(centerX - 38, centerY - 18, 76, 56);
                     
                     ctx.fillStyle = '#f8c555';
-                    ctx.fillRect(centerX - 28, centerY - 8, 56, 36);
+                    ctx.fillRect(centerX - 32, centerY - 12, 64, 44);
                     
                     ctx.fillStyle = '#d4a017';
-                    ctx.fillRect(centerX - 25, centerY - 5, 50, 30);
+                    ctx.fillRect(centerX - 28, centerY - 8, 56, 36);
                 } else if (this.armor.name === "Armadura de Diamante") {
                     ctx.fillStyle = '#74b9ff';
-                    ctx.fillRect(centerX - 35, centerY - 15, 70, 50);
+                    ctx.fillRect(centerX - 40, centerY - 20, 80, 60);
                     
                     ctx.fillStyle = '#0984e3';
-                    ctx.fillRect(centerX - 33, centerY - 13, 66, 46);
+                    ctx.fillRect(centerX - 38, centerY - 18, 76, 56);
                     
                     ctx.fillStyle = '#74b9ff';
-                    ctx.fillRect(centerX - 28, centerY - 8, 56, 36);
+                    ctx.fillRect(centerX - 32, centerY - 12, 64, 44);
                     
                     ctx.fillStyle = '#0984e3';
-                    ctx.fillRect(centerX - 25, centerY - 5, 50, 30);
+                    ctx.fillRect(centerX - 28, centerY - 8, 56, 36);
                     
-                    // Brilho do diamante
                     ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
                     ctx.beginPath();
-                    ctx.moveTo(centerX - 10, centerY - 5);
-                    ctx.lineTo(centerX, centerY - 10);
-                    ctx.lineTo(centerX + 10, centerY - 5);
+                    ctx.moveTo(centerX - 12, centerY - 8);
+                    ctx.lineTo(centerX, centerY - 15);
+                    ctx.lineTo(centerX + 12, centerY - 8);
                     ctx.lineTo(centerX, centerY);
                     ctx.closePath();
                     ctx.fill();
+                } else if (this.armor.name === "Armadura de Almas") {
+                    ctx.fillStyle = '#8e44ad';
+                    ctx.fillRect(centerX - 40, centerY - 20, 80, 60);
+                    
+                    ctx.fillStyle = '#6c3483';
+                    ctx.fillRect(centerX - 38, centerY - 18, 76, 56);
+                    
+                    ctx.fillStyle = '#9b59b6';
+                    for (let i = 0; i < 4; i++) {
+                        for (let j = 0; j < 3; j++) {
+                            ctx.beginPath();
+                            ctx.arc(centerX - 30 + i * 20, centerY - 10 + j * 15, 4, 0, Math.PI * 2);
+                            ctx.fill();
+                        }
+                    }
                 } else if (this.hasBlackWolfArmor) {
                     ctx.fillStyle = '#2c3e50';
-                    ctx.fillRect(centerX - 35, centerY - 15, 70, 50);
+                    ctx.fillRect(centerX - 40, centerY - 20, 80, 60);
                     
                     ctx.fillStyle = '#34495e';
-                    ctx.fillRect(centerX - 33, centerY - 13, 66, 46);
+                    ctx.fillRect(centerX - 38, centerY - 18, 76, 56);
                     
                     ctx.fillStyle = '#e74c3c';
                     for (let i = 0; i < 5; i++) {
                         for (let j = 0; j < 3; j++) {
                             ctx.beginPath();
-                            ctx.arc(centerX - 25 + i * 12, centerY - 10 + j * 10, 3, 0, Math.PI * 2);
+                            ctx.arc(centerX - 30 + i * 15, centerY - 12 + j * 12, 4, 0, Math.PI * 2);
                             ctx.fill();
                         }
                     }
                 } else {
                     ctx.fillStyle = '#2c3e50';
-                    ctx.fillRect(centerX - 35, centerY - 15, 70, 50);
+                    ctx.fillRect(centerX - 40, centerY - 20, 80, 60);
                     
                     ctx.fillStyle = '#34495e';
-                    ctx.fillRect(centerX - 33, centerY - 13, 66, 46);
+                    ctx.fillRect(centerX - 38, centerY - 18, 76, 56);
                 }
                 
                 ctx.fillStyle = '#ecf0f1';
-                ctx.fillRect(centerX - 20, centerY - 40, 40, 25);
+                ctx.fillRect(centerX - 25, centerY - 45, 50, 25);
                 
                 if (this.armor.name === "Armadura de Ouro") {
                     ctx.fillStyle = '#f8c555';
                 } else if (this.armor.name === "Armadura de Diamante") {
                     ctx.fillStyle = '#74b9ff';
+                } else if (this.armor.name === "Armadura de Almas") {
+                    ctx.fillStyle = '#9b59b6';
                 } else {
                     ctx.fillStyle = '#7f8c8d';
                 }
                 
-                ctx.fillRect(centerX - 25, centerY - 45, 50, 10);
-                ctx.fillRect(centerX - 30, centerY - 35, 60, 5);
+                ctx.fillRect(centerX - 30, centerY - 50, 60, 10);
+                ctx.fillRect(centerX - 35, centerY - 40, 70, 5);
                 
                 ctx.fillStyle = '#3498db';
-                ctx.fillRect(centerX - 15, centerY - 38, 30, 10);
+                ctx.fillRect(centerX - 20, centerY - 43, 40, 12);
                 
                 ctx.fillStyle = '#34495e';
-                ctx.fillRect(centerX - 55, centerY - 10, 20, 40);
+                ctx.fillRect(centerX - 60, centerY - 15, 25, 45);
                 
                 ctx.fillStyle = '#f8c555';
-                ctx.fillRect(centerX - 53, centerY, 16, 30);
+                ctx.fillRect(centerX - 58, centerY - 5, 21, 35);
                 ctx.fillStyle = '#e74c3c';
                 ctx.beginPath();
-                ctx.arc(centerX - 45, centerY + 15, 8, 0, Math.PI * 2);
+                ctx.arc(centerX - 48, centerY + 10, 10, 0, Math.PI * 2);
                 ctx.fill();
                 
                 this.drawBattleWeapon(ctx, centerX, centerY, isAttacking);
                 
                 ctx.strokeStyle = '#1c2833';
                 ctx.lineWidth = 2;
-                ctx.strokeRect(centerX - 35, centerY - 15, 70, 50);
+                ctx.strokeRect(centerX - 40, centerY - 20, 80, 60);
             }
             
             drawBattleWeapon(ctx, x, y, isAttacking) {
                 if (this.hasDragonSlayer) {
                     ctx.fillStyle = '#e74c3c';
-                    ctx.fillRect(x + 25, y - 20, 8, 50);
-                    ctx.fillRect(x + 20, y - 25, 18, 12);
+                    ctx.fillRect(x + 30, y - 25, 10, 60);
+                    ctx.fillRect(x + 25, y - 30, 20, 15);
                     ctx.fillStyle = '#8B4513';
-                    ctx.fillRect(x + 25, y + 30, 8, 20);
+                    ctx.fillRect(x + 30, y + 35, 10, 25);
                     
                     if (isAttacking) {
                         ctx.fillStyle = '#f39c12';
                         ctx.beginPath();
-                        ctx.moveTo(x + 33, y - 20);
-                        ctx.lineTo(x + 45, y - 35);
-                        ctx.lineTo(x + 33, y - 5);
+                        ctx.moveTo(x + 40, y - 25);
+                        ctx.lineTo(x + 55, y - 40);
+                        ctx.lineTo(x + 40, y - 5);
                         ctx.closePath();
                         ctx.fill();
                         
                         ctx.beginPath();
-                        ctx.moveTo(x + 33, y + 5);
-                        ctx.lineTo(x + 45, y - 10);
-                        ctx.lineTo(x + 33, y + 20);
+                        ctx.moveTo(x + 40, y + 10);
+                        ctx.lineTo(x + 55, y - 5);
+                        ctx.lineTo(x + 40, y + 25);
                         ctx.closePath();
                         ctx.fill();
                         
                         ctx.beginPath();
-                        ctx.moveTo(x + 33, y + 30);
-                        ctx.lineTo(x + 45, y + 15);
-                        ctx.lineTo(x + 33, y + 45);
+                        ctx.moveTo(x + 40, y + 35);
+                        ctx.lineTo(x + 55, y + 20);
+                        ctx.lineTo(x + 40, y + 50);
                         ctx.closePath();
                         ctx.fill();
                     }
                 } else if (this.weapon.name === "Espada de Pedra") {
                     ctx.fillStyle = '#95a5a6';
-                    ctx.fillRect(x + 25, y - 20, 6, 50);
-                    ctx.fillRect(x + 20, y - 25, 16, 12);
+                    ctx.fillRect(x + 30, y - 25, 7, 60);
+                    ctx.fillRect(x + 25, y - 30, 20, 15);
                     ctx.fillStyle = '#8B4513';
-                    ctx.fillRect(x + 25, y + 30, 6, 20);
+                    ctx.fillRect(x + 30, y + 35, 7, 25);
                     
                     ctx.fillStyle = '#7f8c8d';
-                    ctx.fillRect(x + 26, y - 15, 4, 40);
+                    ctx.fillRect(x + 31, y - 20, 5, 50);
                 } else if (this.weapon.name === "Espada de Ouro") {
                     ctx.fillStyle = '#f8c555';
-                    ctx.fillRect(x + 25, y - 20, 6, 50);
-                    ctx.fillRect(x + 20, y - 25, 16, 12);
+                    ctx.fillRect(x + 30, y - 25, 7, 60);
+                    ctx.fillRect(x + 25, y - 30, 20, 15);
                     ctx.fillStyle = '#8B4513';
-                    ctx.fillRect(x + 25, y + 30, 6, 20);
+                    ctx.fillRect(x + 30, y + 35, 7, 25);
                     
                     ctx.fillStyle = '#d4a017';
-                    ctx.fillRect(x + 21, y - 24, 14, 10);
-                    ctx.fillRect(x + 26, y - 15, 4, 40);
+                    ctx.fillRect(x + 26, y - 29, 18, 13);
+                    ctx.fillRect(x + 31, y - 20, 5, 50);
                 } else if (this.weapon.name === "Espada de Diamante") {
                     ctx.fillStyle = '#74b9ff';
-                    ctx.fillRect(x + 25, y - 20, 6, 50);
-                    ctx.fillRect(x + 20, y - 25, 16, 12);
+                    ctx.fillRect(x + 30, y - 25, 7, 60);
+                    ctx.fillRect(x + 25, y - 30, 20, 15);
                     ctx.fillStyle = '#8B4513';
-                    ctx.fillRect(x + 25, y + 30, 6, 20);
+                    ctx.fillRect(x + 30, y + 35, 7, 25);
                     
                     ctx.fillStyle = '#0984e3';
-                    ctx.fillRect(x + 21, y - 24, 14, 10);
-                    ctx.fillRect(x + 26, y - 15, 4, 40);
+                    ctx.fillRect(x + 26, y - 29, 18, 13);
+                    ctx.fillRect(x + 31, y - 20, 5, 50);
                     
-                    // Brilho do diamante
                     ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
                     ctx.beginPath();
-                    ctx.moveTo(x + 22, y - 10);
-                    ctx.lineTo(x + 24, y - 12);
-                    ctx.lineTo(x + 26, y - 10);
-                    ctx.lineTo(x + 24, y - 8);
+                    ctx.moveTo(x + 27, y - 15);
+                    ctx.lineTo(x + 29, y - 17);
+                    ctx.lineTo(x + 31, y - 15);
+                    ctx.lineTo(x + 29, y - 13);
                     ctx.closePath();
                     ctx.fill();
+                } else if (this.weapon.name === "Espada da Perdição") {
+                    ctx.fillStyle = '#2c3e50';
+                    ctx.fillRect(x + 30, y - 25, 8, 60);
+                    ctx.fillRect(x + 25, y - 30, 18, 15);
+                    ctx.fillStyle = '#8B4513';
+                    ctx.fillRect(x + 30, y + 35, 8, 25);
+                    
+                    ctx.fillStyle = '#e74c3c';
+                    for (let i = 0; i < 4; i++) {
+                        ctx.beginPath();
+                        ctx.arc(x + 27 + i * 4, y - 25, 3, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+                    
+                    if (isAttacking) {
+                        ctx.fillStyle = 'rgba(231, 76, 60, 0.5)';
+                        ctx.beginPath();
+                        ctx.arc(x + 34, y, 15, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
                 } else {
                     ctx.fillStyle = '#bdc3c7';
-                    ctx.fillRect(x + 25, y - 20, 6, 50);
-                    ctx.fillRect(x + 20, y - 25, 16, 12);
+                    ctx.fillRect(x + 30, y - 25, 7, 60);
+                    ctx.fillRect(x + 25, y - 30, 20, 15);
                     ctx.fillStyle = '#8B4513';
-                    ctx.fillRect(x + 25, y + 30, 6, 20);
+                    ctx.fillRect(x + 30, y + 35, 7, 25);
                 }
             }
             
@@ -1939,14 +2299,13 @@
                             let spawnChance = MONSTER_SPAWN_CHANCE;
                             const currentTile = worldMap[Math.floor(this.y)][Math.floor(this.x)];
                             
-                            // Aumento de chance de spawn baseado no bioma
-                            if (currentTile === 2) { // Floresta
+                            if (currentTile === 2) {
                                 spawnChance *= 1.3;
-                            } else if (currentTile === 3) { // Montanha
+                            } else if (currentTile === 3) {
                                 spawnChance *= 1.3;
-                            } else if (currentTile === 7) { // Vulcão
+                            } else if (currentTile === 7) {
                                 spawnChance *= 1.5;
-                            } else if (currentTile === 9) { // Floresta Negra
+                            } else if (currentTile === 9) {
                                 spawnChance *= 1.4;
                             }
                             
@@ -2043,6 +2402,11 @@
                     possessionStatus.textContent = "Desbloqueada";
                     possessionBtn.disabled = false;
                     possessionBtn.textContent = "POSSEÇÃO";
+                }
+                if (this.baseStr >= 16) {
+                    restStatus.textContent = "Desbloqueada";
+                    restBtn.disabled = false;
+                    restBtn.textContent = "DESCANSAR";
                 }
                 
                 inventoryMaceCount.textContent = this.items.mace;
@@ -2152,9 +2516,26 @@
                     this.strength = Math.floor(this.strength * 11);
                 }
                 
-                this.strength = Math.floor(this.strength * this.weapon.damageMultiplier);
+                if (this.weapon.name === "Espada da Perdição") {
+                    this.strength = Math.floor(this.strength * 15);
+                    this.maxHealth = Math.floor(this.maxHealth * 0.65);
+                    if (this.health > this.maxHealth) {
+                        this.health = this.maxHealth;
+                    }
+                } else {
+                    this.strength = Math.floor(this.strength * this.weapon.damageMultiplier);
+                }
                 
-                this.defense = Math.floor(this.defense * this.armor.defenseMultiplier);
+                if (this.armor.name === "Armadura de Almas") {
+                    this.defense = Math.floor(this.defense * 3.4);
+                    this.agility = Math.floor(this.agility * 3.4);
+                    this.maxHealth = Math.floor(this.maxHealth * 0.8);
+                    if (this.health > this.maxHealth) {
+                        this.health = this.maxHealth;
+                    }
+                } else {
+                    this.defense = Math.floor(this.defense * this.armor.defenseMultiplier);
+                }
                 
                 if (this.hasBlackWolfArmor) {
                     this.defense = Math.floor(this.defense * 2.5);
@@ -2241,6 +2622,11 @@
                 return "O cavaleiro medita e recupera 20 de mana!";
             }
             
+            rest() {
+                this.stamina = Math.min(this.maxStamina, this.stamina + 10);
+                return "O cavaleiro descansa e recupera 10 de stamina!";
+            }
+            
             addItem(item, quantity = 1) {
                 this.items[item] += quantity;
                 this.updateUI();
@@ -2312,11 +2698,13 @@
             }
             
             showRecipe(recipeType) {
+                let message = "";
                 if (recipeType === 'dragonSlayer') {
-                    alert("Receita da Dragon Slayer:\n\n🐉 🐉 🐉\n🐉 🐉 \n      🍗\n\nColoque 5 escamas de dragão e 1 pernil no centro inferior");
+                    message = "Receita da Dragon Slayer:\n\n🐉 🐉 🐉\n🐉 🐉 []\n[] 🍗 []\n\nColoque 5 escamas de dragão e 1 pernil no centro inferior";
                 } else if (recipeType === 'blackWolfArmor') {
-                    alert("Receita da Armadura do Lobo Negro:\n\n🐉 🐉 🐉\n🐉 🧪 🐉\n🐉 🐉 🐉\n\nColoque 8 escamas de dragão e 1 poção de força no centro");
+                    message = "Receita da Armadura do Lobo Negro:\n\n🐉 🐉 🐉\n🐉 🧪 🐉\n🐉 🐉 🐉\n\nColoque 8 escamas de dragão e 1 poção de força no centro";
                 }
+                showNotification("Receita", message);
             }
             
             updateCraftingUI() {
@@ -2352,10 +2740,10 @@
                 }
                 
                 if ((dragonSlayerCorrect && !this.hasDragonSlayer) || (blackWolfArmorCorrect && !this.hasBlackWolfArmor)) {
-                    craftingResult.classList.add('crafting-glow');
+                    craftingResult.classList.add('crafting-ready');
                     craftingResult.title = "Clique para criar o item!";
                 } else {
-                    craftingResult.classList.remove('crafting-glow');
+                    craftingResult.classList.remove('crafting-ready');
                     craftingResult.title = this.hasDragonSlayer && this.hasBlackWolfArmor ? 
                         "Você já possui todos os itens lendários!" : "Receita incompleta";
                 }
@@ -2404,9 +2792,11 @@
                         this.recalculateStats();
                         this.craftingSlots = Array(9).fill(null);
                         this.updateUI();
-                        return "Você criou a Dragon Slayer! Seu dano aumentou 11x!";
+                        showNotification("Sucesso", "Você criou a Dragon Slayer! Seu dano aumentou 11x!");
+                        return;
                     } else {
-                        return "Você não tem itens suficientes para criar a Dragon Slayer!";
+                        showNotification("Erro", "Você não tem itens suficientes para criar a Dragon Slayer!");
+                        return;
                     }
                 }
                 
@@ -2429,13 +2819,15 @@
                         this.recalculateStats();
                         this.craftingSlots = Array(9).fill(null);
                         this.updateUI();
-                        return "Você criou a Armadura do Lobo Negro! Sua defesa aumentou 2.5x!";
+                        showNotification("Sucesso", "Você criou a Armadura do Lobo Negro! Sua defesa aumentou 2.5x!");
+                        return;
                     } else {
-                        return "Você não tem itens suficientes para criar a Armadura do Lobo Negro!";
+                        showNotification("Erro", "Você não tem itens suficientes para criar a Armadura do Lobo Negro!");
+                        return;
                     }
                 }
                 
-                return "Receita incorreta ou você já possui o item!";
+                showNotification("Aviso", "Receita incorreta ou você já possui o item!");
             }
             
             addToCraftingSlot(slotIndex, item) {
@@ -2565,7 +2957,7 @@
                     itemSlot.innerHTML = `
                         <div class="item-icon">🍎</div>
                         <div>Maçã (x${this.items.mace})</div>
-                        <button class="battle-btn use-item-btn glowing-border" data-item="mace">Usar</button>
+                        <button class="battle-btn use-item-btn" data-item="mace">Usar</button>
                     `;
                     battleItemsGrid.appendChild(itemSlot);
                 }
@@ -2576,7 +2968,7 @@
                     itemSlot.innerHTML = `
                         <div class="item-icon">🍗</div>
                         <div>Pernil (x${this.items.ham})</div>
-                        <button class="battle-btn use-item-btn glowing-border" data-item="ham">Usar</button>
+                        <button class="battle-btn use-item-btn" data-item="ham">Usar</button>
                     `;
                     battleItemsGrid.appendChild(itemSlot);
                 }
@@ -2587,7 +2979,7 @@
                     itemSlot.innerHTML = `
                         <div class="item-icon">🥩</div>
                         <div>Bife (x${this.items.steak})</div>
-                        <button class="battle-btn use-item-btn glowing-border" data-item="steak">Usar</button>
+                        <button class="battle-btn use-item-btn" data-item="steak">Usar</button>
                     `;
                     battleItemsGrid.appendChild(itemSlot);
                 }
@@ -2598,7 +2990,7 @@
                     itemSlot.innerHTML = `
                         <div class="item-icon">🧪</div>
                         <div>Poção de Força (x${this.items.strengthPotion})</div>
-                        <button class="battle-btn use-item-btn glowing-border" data-item="strengthPotion">Usar</button>
+                        <button class="battle-btn use-item-btn" data-item="strengthPotion">Usar</button>
                     `;
                     battleItemsGrid.appendChild(itemSlot);
                 }
@@ -2609,7 +3001,7 @@
                     itemSlot.innerHTML = `
                         <div class="item-icon">🍀</div>
                         <div>Poção da Sorte (x${this.items.luckPotion})</div>
-                        <button class="battle-btn use-item-btn glowing-border" data-item="luckPotion">Usar</button>
+                        <button class="battle-btn use-item-btn" data-item="luckPotion">Usar</button>
                     `;
                     battleItemsGrid.appendChild(itemSlot);
                 }
@@ -2624,116 +3016,165 @@
                 });
             }
             
-            buyItem(item, price) {
-                if (this.money >= price) {
-                    this.money -= price;
-                    
-                    switch(item) {
-                        case 'mace':
-                            this.items.mace++;
-                            break;
-                        case 'ham':
-                            this.items.ham++;
-                            break;
-                        case 'steak':
-                            this.items.steak++;
-                            break;
-                        case 'strengthPotion':
-                            this.items.strengthPotion++;
-                            break;
-                        case 'luckPotion':
-                            this.items.luckPotion++;
-                            break;
-                        case 'stoneSword':
-                            if (!this.purchasedItems.stoneSword) {
-                                this.addToEquipmentCollection({
-                                    name: "Espada de Pedra",
-                                    damageMultiplier: 1.2,
-                                    description: "Uma espada feita de pedra afiada",
-                                    icon: "⚔️",
-                                    type: "weapon",
-                                    equipped: false
-                                });
-                                this.purchasedItems.stoneSword = true;
-                            }
-                            break;
-                        case 'goldSword':
-                            if (!this.purchasedItems.goldSword) {
-                                this.addToEquipmentCollection({
-                                    name: "Espada de Ouro",
-                                    damageMultiplier: 1.42,
-                                    description: "Uma espada forjada em ouro puro",
-                                    icon: "⚔️",
-                                    type: "weapon",
-                                    equipped: false
-                                });
-                                this.purchasedItems.goldSword = true;
-                            }
-                            break;
-                        case 'diamondSword':
-                            if (!this.purchasedItems.diamondSword) {
-                                this.addToEquipmentCollection({
-                                    name: "Espada de Diamante",
-                                    damageMultiplier: 1.75,
-                                    description: "Uma espada forjada com diamantes puros",
-                                    icon: "⚔️",
-                                    type: "weapon",
-                                    equipped: false
-                                });
-                                this.purchasedItems.diamondSword = true;
-                                this.baseHp += 2;
-                                this.maxHealth = Math.floor(this.baseHp * 10);
-                                this.health = this.maxHealth;
-                            }
-                            break;
-                        case 'chainMail':
-                            if (!this.purchasedItems.chainMail) {
-                                this.addToEquipmentCollection({
-                                    name: "Armadura de Malha",
-                                    defenseMultiplier: 1.3,
-                                    agilityPenalty: 2,
-                                    description: "Uma armadura de malha pesada",
-                                    icon: "🛡️",
-                                    type: "armor",
-                                    equipped: false
-                                });
-                                this.purchasedItems.chainMail = true;
-                            }
-                            break;
-                        case 'goldArmor':
-                            if (!this.purchasedItems.goldArmor) {
-                                this.addToEquipmentCollection({
-                                    name: "Armadura de Ouro",
-                                    defenseMultiplier: 1.6,
-                                    agilityPenalty: 3,
-                                    description: "Uma armadura de ouro ornamentada",
-                                    icon: "🛡️",
-                                    type: "armor",
-                                    equipped: false
-                                });
-                                this.purchasedItems.goldArmor = true;
-                            }
-                            break;
-                        case 'diamondArmor':
-                            if (!this.purchasedItems.diamondArmor) {
-                                this.addToEquipmentCollection({
-                                    name: "Armadura de Diamante",
-                                    defenseMultiplier: 1.85,
-                                    agilityPenalty: 5,
-                                    description: "Uma armadura forjada com diamantes puros",
-                                    icon: "🛡️",
-                                    type: "armor",
-                                    equipped: false
-                                });
-                                this.purchasedItems.diamondArmor = true;
-                            }
-                            break;
+            buyItem(item, price, isDarkShop = false) {
+                if (isDarkShop) {
+                    if (this.items.dragonScales >= price) {
+                        this.items.dragonScales -= price;
+                        
+                        switch(item) {
+                            case 'mace':
+                                this.items.mace += 10;
+                                break;
+                            case 'ham':
+                                this.items.ham += 10;
+                                break;
+                            case 'steak':
+                                this.items.steak += 10;
+                                break;
+                            case 'doomSword':
+                                if (!this.purchasedItems.doomSword) {
+                                    this.addToEquipmentCollection({
+                                        name: "Espada da Perdição",
+                                        damageMultiplier: 15.0,
+                                        description: "Uma espada amaldiçoada que drena a vida do usuário",
+                                        icon: "⚔️",
+                                        type: "weapon",
+                                        equipped: false
+                                    });
+                                    this.purchasedItems.doomSword = true;
+                                }
+                                break;
+                            case 'soulArmor':
+                                if (!this.purchasedItems.soulArmor) {
+                                    this.addToEquipmentCollection({
+                                        name: "Armadura de Almas",
+                                        defenseMultiplier: 3.4,
+                                        agilityPenalty: 0,
+                                        description: "Uma armadura que consome a vitalidade do usuário",
+                                        icon: "🛡️",
+                                        type: "armor",
+                                        equipped: false
+                                    });
+                                    this.purchasedItems.soulArmor = true;
+                                }
+                                break;
+                        }
+                        
+                        this.updateUI();
+                        return true;
                     }
-                    
-                    this.updateUI();
-                    return true;
+                    return false;
+                } else {
+                    if (this.money >= price) {
+                        this.money -= price;
+                        
+                        switch(item) {
+                            case 'mace':
+                                this.items.mace++;
+                                break;
+                            case 'ham':
+                                this.items.ham++;
+                                break;
+                            case 'steak':
+                                this.items.steak++;
+                                break;
+                            case 'strengthPotion':
+                                this.items.strengthPotion++;
+                                break;
+                            case 'luckPotion':
+                                this.items.luckPotion++;
+                                break;
+                            case 'stoneSword':
+                                if (!this.purchasedItems.stoneSword) {
+                                    this.addToEquipmentCollection({
+                                        name: "Espada de Pedra",
+                                        damageMultiplier: 1.2,
+                                        description: "Uma espada feita de pedra afiada",
+                                        icon: "⚔️",
+                                        type: "weapon",
+                                        equipped: false
+                                    });
+                                    this.purchasedItems.stoneSword = true;
+                                }
+                                break;
+                            case 'goldSword':
+                                if (!this.purchasedItems.goldSword) {
+                                    this.addToEquipmentCollection({
+                                        name: "Espada de Ouro",
+                                        damageMultiplier: 1.42,
+                                        description: "Uma espada forjada em ouro puro",
+                                        icon: "⚔️",
+                                        type: "weapon",
+                                        equipped: false
+                                    });
+                                    this.purchasedItems.goldSword = true;
+                                }
+                                break;
+                            case 'diamondSword':
+                                if (!this.purchasedItems.diamondSword) {
+                                    this.addToEquipmentCollection({
+                                        name: "Espada de Diamante",
+                                        damageMultiplier: 1.75,
+                                        description: "Uma espada forjada com diamantes puros",
+                                        icon: "⚔️",
+                                        type: "weapon",
+                                        equipped: false
+                                    });
+                                    this.purchasedItems.diamondSword = true;
+                                    this.baseHp += 2;
+                                    this.maxHealth = Math.floor(this.baseHp * 10);
+                                    this.health = this.maxHealth;
+                                }
+                                break;
+                            case 'chainMail':
+                                if (!this.purchasedItems.chainMail) {
+                                    this.addToEquipmentCollection({
+                                        name: "Armadura de Malha",
+                                        defenseMultiplier: 1.3,
+                                        agilityPenalty: 2,
+                                        description: "Uma armadura de malha pesada",
+                                        icon: "🛡️",
+                                        type: "armor",
+                                        equipped: false
+                                    });
+                                    this.purchasedItems.chainMail = true;
+                                }
+                                break;
+                            case 'goldArmor':
+                                if (!this.purchasedItems.goldArmor) {
+                                    this.addToEquipmentCollection({
+                                        name: "Armadura de Ouro",
+                                        defenseMultiplier: 1.6,
+                                        agilityPenalty: 3,
+                                        description: "Uma armadura de ouro ornamentada",
+                                        icon: "🛡️",
+                                        type: "armor",
+                                        equipped: false
+                                    });
+                                    this.purchasedItems.goldArmor = true;
+                                }
+                                break;
+                            case 'diamondArmor':
+                                if (!this.purchasedItems.diamondArmor) {
+                                    this.addToEquipmentCollection({
+                                        name: "Armadura de Diamante",
+                                        defenseMultiplier: 1.85,
+                                        agilityPenalty: 5,
+                                        description: "Uma armadura forjada com diamantes puros",
+                                        icon: "🛡️",
+                                        type: "armor",
+                                        equipped: false
+                                    });
+                                    this.purchasedItems.diamondArmor = true;
+                                }
+                                break;
+                        }
+                        
+                        this.updateUI();
+                        return true;
+                    }
+                    return false;
                 }
-                return false;
             }
             
             loseRandomItems() {
@@ -2758,20 +3199,22 @@
         class Monster {
             constructor(type, worldMap, playerX, playerY, playerLevel) {
                 this.type = type;
+                this.isGolden = Math.random() < GOLDEN_MONSTER_CHANCE;
                 
-                // Sistema de níveis para monstros baseado no nível do jogador
                 if (playerLevel >= 5) {
                     this.level = Math.floor(Math.random() * 10) + 1;
                 } else {
                     this.level = 1;
                 }
                 
-                // Para dragões de elite, só ativar sistema de níveis após o jogador ser nível 8
                 if (type === 'elite' && playerLevel < 8) {
                     this.level = 1;
                 }
                 
-                // Ajustar stats baseado no nível
+                if (type === 'darkMage' && playerLevel < 10) {
+                    this.level = 1;
+                }
+                
                 let baseHealth, baseAttack, healthPerLevel, attackPerLevel;
                 
                 if (type === 'weak') {
@@ -2804,6 +3247,12 @@
                     this.agility = 6;
                 }
                 
+                if (this.isGolden) {
+                    baseHealth = Math.floor(baseHealth * 1.5);
+                    baseAttack = Math.floor(baseAttack * 1.5);
+                    this.name = "⭐ " + this.name + " Dourado ⭐";
+                }
+                
                 this.maxHealth = baseHealth + (this.level - 1) * healthPerLevel;
                 this.health = this.maxHealth;
                 this.attack = baseAttack + (this.level - 1) * attackPerLevel;
@@ -2817,7 +3266,6 @@
                 
                 const currentTile = worldMap[Math.floor(playerY)][Math.floor(playerX)];
                 
-                // Aumento de chance de spawn baseado no bioma
                 if (currentTile === 7 && type !== 'elite' && Math.random() < 0.5) {
                     this.type = 'elite';
                     this.name = "Dragão de Elite";
@@ -2851,79 +3299,26 @@
             }
             
             drawBattle(ctx, isAttacking = false) {
-                ctx.clearRect(0, 0, 200, 200);
+                ctx.clearRect(0, 0, 250, 250);
                 
                 ctx.fillStyle = 'rgba(26, 58, 95, 0.5)';
-                ctx.fillRect(0, 0, 200, 200);
+                ctx.fillRect(0, 0, 250, 250);
                 
-                if (isAttacking) {
-                    if (this.type === 'elite' && Math.random() < 0.3) {
-                        ctx.fillStyle = 'rgba(255, 69, 0, 0.5)';
-                        ctx.beginPath();
-                        ctx.arc(100, 100, 90, 0, Math.PI * 2);
-                        ctx.fill();
-                    } else if (this.type === 'darkMage') {
-                        ctx.fillStyle = 'rgba(75, 0, 130, 0.5)';
-                        ctx.beginPath();
-                        ctx.arc(100, 100, 90, 0, Math.PI * 2);
-                        ctx.fill();
-                    } else {
-                        ctx.fillStyle = 'rgba(231, 76, 60, 0.3)';
-                        ctx.fillRect(0, 0, 200, 200);
-                    }
+                const centerX = 125;
+                const centerY = 125;
+                
+                if (this.isGolden) {
+                    ctx.fillStyle = 'rgba(255, 215, 0, 0.3)';
+                    ctx.fillRect(0, 0, 250, 250);
                 }
-                
-                const centerX = 100;
-                const centerY = 100;
                 
                 if (this.type === 'weak') {
                     ctx.fillStyle = '#27ae60';
                     ctx.beginPath();
-                    ctx.ellipse(centerX, centerY, 35, 45, 0, 0, Math.PI * 2);
+                    ctx.ellipse(centerX, centerY, 40, 55, 0, 0, Math.PI * 2);
                     ctx.fill();
                     
                     ctx.fillStyle = '#2ecc71';
-                    ctx.beginPath();
-                    ctx.arc(centerX, centerY - 30, 25, 0, Math.PI * 2);
-                    ctx.fill();
-                    
-                    ctx.fillStyle = '#e74c3c';
-                    ctx.beginPath();
-                    ctx.arc(centerX - 10, centerY - 32, 6, 0, Math.PI * 2);
-                    ctx.arc(centerX + 10, centerY - 32, 6, 0, Math.PI * 2);
-                    ctx.fill();
-                    
-                    ctx.fillStyle = '#c0392b';
-                    ctx.beginPath();
-                    ctx.arc(centerX, centerY - 20, 8, 0, Math.PI, false);
-                    ctx.fill();
-                    
-                    ctx.fillStyle = '#d35400';
-                    ctx.beginPath();
-                    ctx.moveTo(centerX - 20, centerY - 50);
-                    ctx.lineTo(centerX - 35, centerY - 65);
-                    ctx.lineTo(centerX - 15, centerY - 55);
-                    ctx.closePath();
-                    ctx.fill();
-                    
-                    ctx.beginPath();
-                    ctx.moveTo(centerX + 20, centerY - 50);
-                    ctx.lineTo(centerX + 35, centerY - 65);
-                    ctx.lineTo(centerX + 15, centerY - 55);
-                    ctx.closePath();
-                    ctx.fill();
-                    
-                    ctx.fillStyle = '#8B4513';
-                    ctx.fillRect(centerX + 25, centerY - 20, 5, 40);
-                    ctx.fillRect(centerX + 20, centerY - 25, 15, 10);
-                    
-                } else if (this.type === 'strong') {
-                    ctx.fillStyle = '#34495e';
-                    ctx.beginPath();
-                    ctx.ellipse(centerX, centerY, 40, 50, 0, 0, Math.PI * 2);
-                    ctx.fill();
-                    
-                    ctx.fillStyle = '#2c3e50';
                     ctx.beginPath();
                     ctx.arc(centerX, centerY - 35, 30, 0, Math.PI * 2);
                     ctx.fill();
@@ -2934,145 +3329,186 @@
                     ctx.arc(centerX + 12, centerY - 38, 8, 0, Math.PI * 2);
                     ctx.fill();
                     
-                    ctx.fillStyle = '#ecf0f1';
-                    ctx.beginPath();
-                    ctx.moveTo(centerX - 15, centerY - 20);
-                    ctx.lineTo(centerX - 20, centerY - 5);
-                    ctx.lineTo(centerX - 10, centerY - 15);
-                    ctx.closePath();
-                    ctx.fill();
-                    
-                    ctx.beginPath();
-                    ctx.moveTo(centerX + 15, centerY - 20);
-                    ctx.lineTo(centerX + 20, centerY - 5);
-                    ctx.lineTo(centerX + 10, centerY - 15);
-                    ctx.closePath();
-                    ctx.fill();
-                    
-                    ctx.fillStyle = '#bdc3c7';
-                    ctx.fillRect(centerX + 25, centerY - 35, 8, 50);
-                    ctx.fillRect(centerX + 20, centerY - 30, 18, 12);
-                    
-                    ctx.fillStyle = '#95a5a6';
-                    ctx.fillRect(centerX + 23, centerY - 25, 2, 30);
-                    
-                } else if (this.type === 'elite') {
-                    ctx.fillStyle = '#e74c3c';
-                    ctx.beginPath();
-                    ctx.ellipse(centerX, centerY, 45, 35, 0, 0, Math.PI * 2);
-                    ctx.fill();
-                    
                     ctx.fillStyle = '#c0392b';
                     ctx.beginPath();
-                    ctx.arc(centerX, centerY - 40, 25, 0, Math.PI * 2);
-                    ctx.fill();
-                    
-                    ctx.fillStyle = '#f39c12';
-                    ctx.beginPath();
-                    ctx.arc(centerX - 10, centerY - 42, 8, 0, Math.PI * 2);
-                    ctx.arc(centerX + 10, centerY - 42, 8, 0, Math.PI * 2);
-                    ctx.fill();
-                    
-                    ctx.fillStyle = '#2c3e50';
-                    ctx.beginPath();
-                    ctx.arc(centerX - 10, centerY - 42, 4, 0, Math.PI * 2);
-                    ctx.arc(centerX + 10, centerY - 42, 4, 0, Math.PI * 2);
+                    ctx.arc(centerX, centerY - 25, 10, 0, Math.PI, false);
                     ctx.fill();
                     
                     ctx.fillStyle = '#d35400';
                     ctx.beginPath();
-                    ctx.moveTo(centerX - 15, centerY - 55);
-                    ctx.lineTo(centerX - 25, centerY - 70);
-                    ctx.lineTo(centerX - 10, centerY - 58);
+                    ctx.moveTo(centerX - 25, centerY - 55);
+                    ctx.lineTo(centerX - 40, centerY - 75);
+                    ctx.lineTo(centerX - 20, centerY - 60);
                     ctx.closePath();
                     ctx.fill();
                     
                     ctx.beginPath();
-                    ctx.moveTo(centerX + 15, centerY - 55);
-                    ctx.lineTo(centerX + 25, centerY - 70);
-                    ctx.lineTo(centerX + 10, centerY - 58);
+                    ctx.moveTo(centerX + 25, centerY - 55);
+                    ctx.lineTo(centerX + 40, centerY - 75);
+                    ctx.lineTo(centerX + 20, centerY - 60);
+                    ctx.closePath();
+                    ctx.fill();
+                    
+                    ctx.fillStyle = '#8B4513';
+                    ctx.fillRect(centerX + 30, centerY - 25, 6, 45);
+                    ctx.fillRect(centerX + 25, centerY - 30, 18, 12);
+                    
+                } else if (this.type === 'strong') {
+                    ctx.fillStyle = '#34495e';
+                    ctx.beginPath();
+                    ctx.ellipse(centerX, centerY, 45, 60, 0, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    ctx.fillStyle = '#2c3e50';
+                    ctx.beginPath();
+                    ctx.arc(centerX, centerY - 40, 35, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    ctx.fillStyle = '#e74c3c';
+                    ctx.beginPath();
+                    ctx.arc(centerX - 15, centerY - 43, 10, 0, Math.PI * 2);
+                    ctx.arc(centerX + 15, centerY - 43, 10, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    ctx.fillStyle = '#ecf0f1';
+                    ctx.beginPath();
+                    ctx.moveTo(centerX - 18, centerY - 25);
+                    ctx.lineTo(centerX - 25, centerY - 10);
+                    ctx.lineTo(centerX - 12, centerY - 20);
+                    ctx.closePath();
+                    ctx.fill();
+                    
+                    ctx.beginPath();
+                    ctx.moveTo(centerX + 18, centerY - 25);
+                    ctx.lineTo(centerX + 25, centerY - 10);
+                    ctx.lineTo(centerX + 12, centerY - 20);
+                    ctx.closePath();
+                    ctx.fill();
+                    
+                    ctx.fillStyle = '#bdc3c7';
+                    ctx.fillRect(centerX + 30, centerY - 40, 10, 60);
+                    ctx.fillRect(centerX + 25, centerY - 35, 22, 15);
+                    
+                    ctx.fillStyle = '#95a5a6';
+                    ctx.fillRect(centerX + 28, centerY - 30, 4, 40);
+                    
+                } else if (this.type === 'elite') {
+                    ctx.fillStyle = '#e74c3c';
+                    ctx.beginPath();
+                    ctx.ellipse(centerX, centerY, 50, 40, 0, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    ctx.fillStyle = '#c0392b';
+                    ctx.beginPath();
+                    ctx.arc(centerX, centerY - 45, 30, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    ctx.fillStyle = '#f39c12';
+                    ctx.beginPath();
+                    ctx.arc(centerX - 12, centerY - 47, 10, 0, Math.PI * 2);
+                    ctx.arc(centerX + 12, centerY - 47, 10, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    ctx.fillStyle = '#2c3e50';
+                    ctx.beginPath();
+                    ctx.arc(centerX - 12, centerY - 47, 5, 0, Math.PI * 2);
+                    ctx.arc(centerX + 12, centerY - 47, 5, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    ctx.fillStyle = '#d35400';
+                    ctx.beginPath();
+                    ctx.moveTo(centerX - 18, centerY - 60);
+                    ctx.lineTo(centerX - 30, centerY - 80);
+                    ctx.lineTo(centerX - 12, centerY - 65);
+                    ctx.closePath();
+                    ctx.fill();
+                    
+                    ctx.beginPath();
+                    ctx.moveTo(centerX + 18, centerY - 60);
+                    ctx.lineTo(centerX + 30, centerY - 80);
+                    ctx.lineTo(centerX + 12, centerY - 65);
                     ctx.closePath();
                     ctx.fill();
                     
                     ctx.fillStyle = 'rgba(231, 76, 60, 0.7)';
                     ctx.beginPath();
-                    ctx.ellipse(centerX - 40, centerY - 15, 25, 20, Math.PI/4, 0, Math.PI * 2);
-                    ctx.ellipse(centerX + 40, centerY - 15, 25, 20, -Math.PI/4, 0, Math.PI * 2);
+                    ctx.ellipse(centerX - 45, centerY - 20, 30, 25, Math.PI/4, 0, Math.PI * 2);
+                    ctx.ellipse(centerX + 45, centerY - 20, 30, 25, -Math.PI/4, 0, Math.PI * 2);
                     ctx.fill();
                     
                     if (isAttacking) {
                         ctx.fillStyle = '#f39c12';
                         ctx.beginPath();
-                        ctx.arc(centerX, centerY - 35, 12, 0, Math.PI * 2);
+                        ctx.arc(centerX, centerY - 40, 15, 0, Math.PI * 2);
                         ctx.fill();
                         
                         ctx.fillStyle = '#ff6b6b';
                         ctx.beginPath();
-                        ctx.arc(centerX, centerY - 35, 8, 0, Math.PI * 2);
+                        ctx.arc(centerX, centerY - 40, 10, 0, Math.PI * 2);
                         ctx.fill();
                     }
                     
                     ctx.fillStyle = '#c0392b';
-                    for (let i = 0; i < 8; i++) {
+                    for (let i = 0; i < 10; i++) {
                         ctx.beginPath();
-                        ctx.arc(centerX - 20 + i * 5, centerY, 5, 0, Math.PI * 2);
+                        ctx.arc(centerX - 25 + i * 5, centerY, 6, 0, Math.PI * 2);
                         ctx.fill();
                     }
                 } else if (this.type === 'darkMage') {
                     ctx.fillStyle = '#4b0082';
                     ctx.beginPath();
-                    ctx.ellipse(centerX, centerY, 40, 50, 0, 0, Math.PI * 2);
+                    ctx.ellipse(centerX, centerY, 45, 60, 0, 0, Math.PI * 2);
                     ctx.fill();
                     
                     ctx.fillStyle = '#6a0dad';
                     ctx.beginPath();
-                    ctx.arc(centerX, centerY - 35, 30, 0, Math.PI * 2);
+                    ctx.arc(centerX, centerY - 40, 35, 0, Math.PI * 2);
                     ctx.fill();
                     
                     ctx.fillStyle = '#9370db';
                     ctx.beginPath();
-                    ctx.arc(centerX - 12, centerY - 38, 8, 0, Math.PI * 2);
-                    ctx.arc(centerX + 12, centerY - 38, 8, 0, Math.PI * 2);
+                    ctx.arc(centerX - 15, centerY - 43, 10, 0, Math.PI * 2);
+                    ctx.arc(centerX + 15, centerY - 43, 10, 0, Math.PI * 2);
                     ctx.fill();
                     
                     ctx.fillStyle = '#d8bfd8';
                     ctx.beginPath();
-                    ctx.arc(centerX, centerY - 25, 12, 0, Math.PI, false);
+                    ctx.arc(centerX, centerY - 30, 15, 0, Math.PI, false);
                     ctx.fill();
                     
                     ctx.fillStyle = '#4b0082';
                     ctx.beginPath();
-                    ctx.arc(centerX, centerY - 35, 15, 0, Math.PI * 2);
+                    ctx.arc(centerX, centerY - 40, 20, 0, Math.PI * 2);
                     ctx.fill();
                     
                     ctx.fillStyle = '#9370db';
                     ctx.beginPath();
-                    ctx.moveTo(centerX - 20, centerY - 50);
-                    ctx.lineTo(centerX - 35, centerY - 65);
-                    ctx.lineTo(centerX - 15, centerY - 55);
+                    ctx.moveTo(centerX - 25, centerY - 55);
+                    ctx.lineTo(centerX - 40, centerY - 75);
+                    ctx.lineTo(centerX - 20, centerY - 60);
                     ctx.closePath();
                     ctx.fill();
                     
                     ctx.beginPath();
-                    ctx.moveTo(centerX + 20, centerY - 50);
-                    ctx.lineTo(centerX + 35, centerY - 65);
-                    ctx.lineTo(centerX + 15, centerY - 55);
+                    ctx.moveTo(centerX + 25, centerY - 55);
+                    ctx.lineTo(centerX + 40, centerY - 75);
+                    ctx.lineTo(centerX + 20, centerY - 60);
                     ctx.closePath();
                     ctx.fill();
                     
                     ctx.fillStyle = '#6a0dad';
-                    ctx.fillRect(centerX + 25, centerY - 35, 8, 50);
-                    ctx.fillRect(centerX + 20, centerY - 30, 18, 12);
+                    ctx.fillRect(centerX + 30, centerY - 40, 10, 60);
+                    ctx.fillRect(centerX + 25, centerY - 35, 22, 15);
                     
                     if (isAttacking) {
                         ctx.fillStyle = '#9370db';
                         ctx.beginPath();
-                        ctx.arc(centerX, centerY - 35, 12, 0, Math.PI * 2);
+                        ctx.arc(centerX, centerY - 40, 15, 0, Math.PI * 2);
                         ctx.fill();
                         
                         ctx.fillStyle = '#d8bfd8';
                         ctx.beginPath();
-                        ctx.arc(centerX, centerY - 35, 8, 0, Math.PI * 2);
+                        ctx.arc(centerX, centerY - 40, 10, 0, Math.PI * 2);
                         ctx.fill();
                     }
                 }
@@ -3135,14 +3571,12 @@
                     player.addStatusEffect({ type: 'burn', duration: 3 });
                     damage += 5;
                 } else if (this.type === 'darkMage') {
-                    // Mago Negro tem 70% de chance de usar magia negra
                     if (Math.random() < 0.7) {
                         damage = this.attack;
                         if (Math.random() < 0.1) {
                             player.addStatusEffect({ type: 'stun', duration: 1 });
                         }
                     } else {
-                        // 30% de chance de usar cura das trevas
                         this.health = Math.min(this.maxHealth, this.health + 20);
                         damage = 0;
                         if (Math.random() < 0.2) {
@@ -3158,11 +3592,14 @@
                 let droppedItems = [];
                 let luckMultiplier = player.luckMultiplier;
                 
-                // Ajustar drops baseado no nível do monstro
                 let dropMultiplier = 1 + (this.level - 1) * 0.1;
                 
-                // Função para gerar quantidade aleatória de itens
                 const getRandomQuantity = () => Math.floor(Math.random() * 5) + 1;
+                
+                if (this.isGolden) {
+                    dropMultiplier *= 20;
+                    luckMultiplier *= 5;
+                }
                 
                 if (this.type === 'weak') {
                     if (Math.random() < 0.4 * dropMultiplier * luckMultiplier) {
@@ -3187,6 +3624,11 @@
                     if (Math.random() < 0.05 * dropMultiplier * luckMultiplier) {
                         player.addRecipe('blackWolfArmor');
                         droppedItems.push("receita da Armadura do Lobo Negro");
+                    }
+                    if (Math.random() < 0.1 * dropMultiplier * luckMultiplier) {
+                        const quantity = Math.floor(Math.random() * 3) + 1;
+                        player.addItem('dragonScales', quantity);
+                        droppedItems.push(`escamas de dragão (x${quantity})`);
                     }
                 } else if (this.type === 'strong') {
                     if (Math.random() < 0.40 * dropMultiplier * luckMultiplier) {
@@ -3217,6 +3659,11 @@
                         player.addRecipe('blackWolfArmor');
                         droppedItems.push("receita da Armadura do Lobo Negro");
                     }
+                    if (Math.random() < 0.15 * dropMultiplier * luckMultiplier) {
+                        const quantity = Math.floor(Math.random() * 3) + 1;
+                        player.addItem('dragonScales', quantity);
+                        droppedItems.push(`escamas de dragão (x${quantity})`);
+                    }
                 } else if (this.type === 'elite') {
                     if (Math.random() < 0.45 * dropMultiplier * luckMultiplier) {
                         const quantity = getRandomQuantity();
@@ -3238,8 +3685,8 @@
                         player.addItem('strengthPotion', quantity);
                         droppedItems.push(`poção de força (x${quantity})`);
                     }
-                    if (Math.random() < 0.15 * dropMultiplier * luckMultiplier) {
-                        const quantity = getRandomQuantity();
+                    if (Math.random() < 0.25 * dropMultiplier * luckMultiplier) {
+                        const quantity = Math.floor(Math.random() * 3) + 1;
                         player.addItem('dragonScales', quantity);
                         droppedItems.push(`escamas de dragão (x${quantity})`);
                     }
@@ -3277,8 +3724,8 @@
                         player.addItem('luckPotion', quantity);
                         droppedItems.push(`poção da sorte (x${quantity})`);
                     }
-                    if (Math.random() < 0.20 * dropMultiplier * luckMultiplier) {
-                        const quantity = getRandomQuantity();
+                    if (Math.random() < 0.30 * dropMultiplier * luckMultiplier) {
+                        const quantity = Math.floor(Math.random() * 3) + 1;
                         player.addItem('dragonScales', quantity);
                         droppedItems.push(`escamas de dragão (x${quantity})`);
                     }
@@ -3294,11 +3741,66 @@
                 
                 return droppedItems;
             }
+            
+            getExpReward() {
+                let baseExp = 0;
+                let expPerLevel = 0;
+                
+                if (this.type === 'weak') {
+                    baseExp = 10;
+                    expPerLevel = 3;
+                } else if (this.type === 'strong') {
+                    baseExp = 30;
+                    expPerLevel = 15;
+                } else if (this.type === 'elite') {
+                    baseExp = 60;
+                    expPerLevel = 20;
+                } else if (this.type === 'darkMage') {
+                    baseExp = 200;
+                    expPerLevel = 50;
+                }
+                
+                let exp = baseExp + (this.level - 1) * expPerLevel;
+                
+                if (this.isGolden) {
+                    exp *= 150;
+                }
+                
+                return exp;
+            }
+            
+            getMoneyReward() {
+                let baseMoney = 0;
+                let moneyPerLevel = 0;
+                
+                if (this.type === 'weak') {
+                    baseMoney = 5;
+                    moneyPerLevel = 2;
+                } else if (this.type === 'strong') {
+                    baseMoney = 10;
+                    moneyPerLevel = 5;
+                } else if (this.type === 'elite') {
+                    baseMoney = 30;
+                    moneyPerLevel = 15;
+                } else if (this.type === 'darkMage') {
+                    baseMoney = 100;
+                    moneyPerLevel = 70;
+                }
+                
+                let money = baseMoney + (this.level - 1) * moneyPerLevel;
+                
+                if (this.isGolden) {
+                    money *= 200;
+                }
+                
+                return money;
+            }
         }
 
         class Merchant {
-            constructor(worldMap, biome) {
+            constructor(worldMap, biome, isDarkShop = false) {
                 this.biome = biome;
+                this.isDarkShop = isDarkShop;
                 let validPosition = false;
                 let attempts = 0;
                 
@@ -3330,34 +3832,65 @@
                     const x = screenX * TILE_SIZE;
                     const y = screenY * TILE_SIZE;
                     
-                    ctx.fillStyle = COLORS.SHOP;
-                    ctx.fillRect(x + 10, y + 20, TILE_SIZE - 20, TILE_SIZE - 30);
-                    
-                    ctx.fillStyle = COLORS.SHOP_DARK;
-                    ctx.beginPath();
-                    ctx.moveTo(x, y + 20);
-                    ctx.lineTo(x + TILE_SIZE / 2, y);
-                    ctx.lineTo(x + TILE_SIZE, y + 20);
-                    ctx.closePath();
-                    ctx.fill();
-                    
-                    ctx.fillStyle = '#8B4513';
-                    ctx.fillRect(x + TILE_SIZE / 2 - 10, y + 30, 20, 30);
-                    
-                    ctx.fillStyle = '#3498db';
-                    ctx.fillRect(x + 15, y + 30, 15, 15);
-                    ctx.fillRect(x + TILE_SIZE - 30, y + 30, 15, 15);
-                    
-                    ctx.fillStyle = '#D2691E';
-                    ctx.fillRect(x, y + TILE_SIZE - 10, TILE_SIZE, 10);
-                    
-                    ctx.fillStyle = '#f8c555';
-                    ctx.fillRect(x + TILE_SIZE / 2 - 5, y + TILE_SIZE - 20, 10, 15);
-                    
-                    ctx.fillStyle = '#f8c555';
-                    ctx.font = 'bold 12px MedievalSharp';
-                    ctx.textAlign = 'center';
-                    ctx.fillText('Loja', x + TILE_SIZE / 2, y - 5);
+                    if (this.isDarkShop) {
+                        ctx.fillStyle = COLORS.DARK_SHOP;
+                        ctx.fillRect(x + 10, y + 20, TILE_SIZE - 20, TILE_SIZE - 30);
+                        
+                        ctx.fillStyle = COLORS.DARK_SHOP_DARK;
+                        ctx.beginPath();
+                        ctx.moveTo(x, y + 20);
+                        ctx.lineTo(x + TILE_SIZE / 2, y);
+                        ctx.lineTo(x + TILE_SIZE, y + 20);
+                        ctx.closePath();
+                        ctx.fill();
+                        
+                        ctx.fillStyle = '#4a235a';
+                        ctx.fillRect(x + TILE_SIZE / 2 - 10, y + 30, 20, 30);
+                        
+                        ctx.fillStyle = '#8e44ad';
+                        ctx.fillRect(x + 15, y + 30, 15, 15);
+                        ctx.fillRect(x + TILE_SIZE - 30, y + 30, 15, 15);
+                        
+                        ctx.fillStyle = '#2c3e50';
+                        ctx.fillRect(x, y + TILE_SIZE - 10, TILE_SIZE, 10);
+                        
+                        ctx.fillStyle = '#e74c3c';
+                        ctx.fillRect(x + TILE_SIZE / 2 - 5, y + TILE_SIZE - 20, 10, 15);
+                        
+                        ctx.fillStyle = '#e74c3c';
+                        ctx.font = 'bold 12px MedievalSharp';
+                        ctx.textAlign = 'center';
+                        ctx.fillText('Loja Negra', x + TILE_SIZE / 2, y - 5);
+                    } else {
+                        ctx.fillStyle = COLORS.SHOP;
+                        ctx.fillRect(x + 10, y + 20, TILE_SIZE - 20, TILE_SIZE - 30);
+                        
+                        ctx.fillStyle = COLORS.SHOP_DARK;
+                        ctx.beginPath();
+                        ctx.moveTo(x, y + 20);
+                        ctx.lineTo(x + TILE_SIZE / 2, y);
+                        ctx.lineTo(x + TILE_SIZE, y + 20);
+                        ctx.closePath();
+                        ctx.fill();
+                        
+                        ctx.fillStyle = '#8B4513';
+                        ctx.fillRect(x + TILE_SIZE / 2 - 10, y + 30, 20, 30);
+                        
+                        ctx.fillStyle = '#3498db';
+                        ctx.fillRect(x + 15, y + 30, 15, 15);
+                        ctx.fillRect(x + TILE_SIZE - 30, y + 30, 15, 15);
+                        
+                        ctx.fillStyle = '#D2691E';
+                        ctx.fillRect(x, y + TILE_SIZE - 10, TILE_SIZE, 10);
+                        
+                        ctx.fillStyle = '#f8c555';
+                        ctx.fillRect(x + TILE_SIZE / 2 - 5, y + TILE_SIZE - 20, 10, 15);
+                        
+                        ctx.fillStyle = '#f8c555';
+                        ctx.font = 'bold 12px MedievalSharp';
+                        ctx.textAlign = 'center';
+                        ctx.fillText('Loja', x + TILE_SIZE / 2, y - 5);
+                    }
                 }
             }
             
@@ -3370,30 +3903,25 @@
         function generateWorldMap() {
             const map = Array(WORLD_SIZE).fill().map(() => Array(WORLD_SIZE).fill(0));
             
-            // Criar biomas organizados
-            createBiome(map, 2, 15, 20); // Floresta
-            createBiome(map, 3, 10, 15); // Montanha
-            createBiome(map, 6, 8, 12);  // Deserto
-            createBiome(map, 9, 5, 8);   // Floresta Negra
+            createBiome(map, 2, 15, 20);
+            createBiome(map, 3, 10, 15);
+            createBiome(map, 6, 8, 12);
+            createBiome(map, 9, 5, 8);
             
-            // Adicionar áreas vulcânicas
             addVolcanicArea(map);
             
-            // Adicionar lagos
             for (let i = 0; i < 5; i++) {
                 const x = Math.floor(Math.random() * WORLD_SIZE);
                 const y = Math.floor(Math.random() * WORLD_SIZE);
                 addWaterBody(map, x, y);
             }
             
-            // Adicionar caminhos
             for (let i = 0; i < 5; i++) {
                 const x = Math.floor(Math.random() * WORLD_SIZE);
                 const y = Math.floor(Math.random() * WORLD_SIZE);
                 addPath(map, x, y);
             }
             
-            // Adicionar flores
             addFlowers(map);
             
             return map;
@@ -3704,13 +4232,17 @@
                 }
             }
             
-            // Desenhar ambas as lojas
             merchantForest.draw();
             merchantMountain.draw();
+            darkMerchant.draw();
             
-            // Verificar se o jogador está perto de alguma loja
             if (merchantForest.isPlayerNearby(player) || merchantMountain.isPlayerNearby(player)) {
                 ctx.fillStyle = '#f8c555';
+                ctx.font = 'bold 14px MedievalSharp';
+                ctx.textAlign = 'center';
+                ctx.fillText('Pressione E para interagir', canvas.width / 2, canvas.height - 20);
+            } else if (darkMerchant.isPlayerNearby(player)) {
+                ctx.fillStyle = '#e74c3c';
                 ctx.font = 'bold 14px MedievalSharp';
                 ctx.textAlign = 'center';
                 ctx.fillText('Pressione E para interagir', canvas.width / 2, canvas.height - 20);
@@ -3722,13 +4254,11 @@
         let battleAnimation = null;
         let currentRound = 1;
         let battleEffects = [];
-        let attackAnimations = [];
         
         function startBattle() {
             const rand = Math.random();
             let monsterType = 'weak';
             
-            // Chance base de spawn para cada tipo de monstro
             if (rand < 0.5) {
                 monsterType = 'weak';
             } else if (rand < 0.8) {
@@ -3739,7 +4269,6 @@
                 monsterType = 'darkMage';
             }
             
-            // Ajustar tipo de monstro baseado no bioma atual
             const currentTile = worldMap[Math.floor(player.y)][Math.floor(player.x)];
             if (currentTile === 7 && Math.random() < 0.5) {
                 monsterType = 'elite';
@@ -3756,7 +4285,6 @@
             battleAnimation = null;
             currentRound = 1;
             battleEffects = [];
-            attackAnimations = [];
             
             player.clearStatusEffects();
             if (currentMonster) currentMonster.statusEffects = [];
@@ -3788,6 +4316,20 @@
             currentMonster.drawBattle(enemyCtx);
         }
         
+        function createBattleEffect(type, x, y) {
+            const effect = document.createElement('div');
+            effect.className = `effect ${type}`;
+            effect.style.left = `${x}px`;
+            effect.style.top = `${y}px`;
+            battleEffectsContainer.appendChild(effect);
+            
+            setTimeout(() => {
+                if (battleEffectsContainer.contains(effect)) {
+                    battleEffectsContainer.removeChild(effect);
+                }
+            }, 1000);
+        }
+        
         function playerAttack(attackType) {
             if (!isPlayerTurn || battleAnimation) return;
             
@@ -3802,8 +4344,7 @@
                 
                 message = "O cavaleiro usa sua espada para atacar seu oponente!";
                 
-                // Criar animação de espada
-                createSwordAnimation();
+                createBattleEffect('sword-slash', 300, 200);
                 
                 battleAnimation = {
                     type: 'playerAttack',
@@ -3827,8 +4368,7 @@
                 
                 message = "O cavaleiro avança rapidamente e investe contra o inimigo!";
                 
-                // Criar animação de investida
-                createChargeAnimation();
+                createBattleEffect('charge', 150, 200);
                 
                 battleAnimation = {
                     type: 'playerAttack',
@@ -3845,15 +4385,15 @@
             setTimeout(() => {
                 if (Math.random() < currentMonster.dodgeChance) {
                     addBattleLog("Mas o inimigo desviou do ataque!");
-                    createBattleEffect('miss', enemyCanvas, 100, 50);
+                    createBattleEffect('miss', 400, 150);
                 } else {
                     const actualDamage = currentMonster.takeDamage(damage);
                     
-                    createBattleEffect('damage', enemyCanvas, 100, 50, actualDamage);
+                    createBattleEffect('damage', 400, 150);
                     
                     if (isCritical) {
                         addBattleLog(` CRÍTICO! Causou ${actualDamage} de dano ao inimigo!`);
-                        createBattleEffect('critical', enemyCanvas, 100, 30);
+                        createBattleEffect('critical', 400, 120);
                     } else {
                         addBattleLog(` Causou ${actualDamage} de dano ao inimigo!`);
                     }
@@ -3875,90 +4415,6 @@
             }, attackType === 'charge' ? 1000 : 800);
         }
         
-        function createSwordAnimation() {
-            const animation = {
-                type: 'sword',
-                x: 100,
-                y: 100,
-                step: 0,
-                maxSteps: 15,
-                angle: 0
-            };
-            attackAnimations.push(animation);
-        }
-        
-        function createChargeAnimation() {
-            const animation = {
-                type: 'charge',
-                x: 50,
-                y: 100,
-                step: 0,
-                maxSteps: 20,
-                targetX: 150
-            };
-            attackAnimations.push(animation);
-        }
-        
-        function createFireballAnimation() {
-            const animation = {
-                type: 'fireball',
-                x: 100,
-                y: 100,
-                step: 0,
-                maxSteps: 25,
-                radius: 5
-            };
-            attackAnimations.push(animation);
-        }
-        
-        function createFreezeAnimation() {
-            const animation = {
-                type: 'freeze',
-                x: 100,
-                y: 100,
-                step: 0,
-                maxSteps: 30,
-                radius: 10
-            };
-            attackAnimations.push(animation);
-        }
-        
-        function createPossessionAnimation() {
-            const animation = {
-                type: 'possession',
-                x: 100,
-                y: 100,
-                step: 0,
-                maxSteps: 25,
-                radius: 8
-            };
-            attackAnimations.push(animation);
-        }
-        
-        function createDarkMagicAnimation() {
-            const animation = {
-                type: 'darkMagic',
-                x: 150,
-                y: 100,
-                step: 0,
-                maxSteps: 20,
-                targetX: 50
-            };
-            attackAnimations.push(animation);
-        }
-        
-        function createDarkHealAnimation() {
-            const animation = {
-                type: 'darkHeal',
-                x: 150,
-                y: 100,
-                step: 0,
-                maxSteps: 15,
-                radius: 10
-            };
-            attackAnimations.push(animation);
-        }
-        
         function playerHeavyArmor() {
             if (!isPlayerTurn || battleAnimation) return;
             
@@ -3972,7 +4428,7 @@
             
             addBattleLog(result.message);
             
-            createBattleEffect('heavy-armor', playerCanvas, 100, 50);
+            createBattleEffect('heavy-armor', 150, 200);
             
             battleAnimation = {
                 type: 'playerEffect',
@@ -4018,8 +4474,7 @@
                     message = "O cavaleiro conjura uma Bola de Fogo!";
                     burnChance = 0.5;
                     
-                    // Criar animação de bola de fogo
-                    createFireballAnimation();
+                    createBattleEffect('fireball', 150, 200);
                     break;
                     
                 case 'freeze':
@@ -4040,8 +4495,7 @@
                     message = "O cavaleiro invoca uma Brisa Congelante!";
                     statusEffect = { type: 'slow', duration: 3 };
                     
-                    // Criar animação de congelamento
-                    createFreezeAnimation();
+                    createBattleEffect('freeze', 400, 200);
                     break;
                     
                 case 'possession':
@@ -4062,8 +4516,7 @@
                     message = "O cavaleiro lança um feitiço de Posseção!";
                     statusEffect = { type: 'stun', duration: 3 };
                     
-                    // Criar animação de possessão
-                    createPossessionAnimation();
+                    createBattleEffect('possession', 400, 200);
                     break;
             }
             
@@ -4081,23 +4534,23 @@
             setTimeout(() => {
                 if (Math.random() < currentMonster.dodgeChance) {
                     addBattleLog("Mas o inimigo desviou do feitiço!");
-                    createBattleEffect('miss', enemyCanvas, 100, 50);
+                    createBattleEffect('miss', 400, 150);
                 } else {
                     const actualDamage = currentMonster.takeDamage(damage);
                     
-                    createBattleEffect('damage', enemyCanvas, 100, 50, actualDamage);
+                    createBattleEffect('damage', 400, 150);
                     
                     addBattleLog(` O feitiço causou ${actualDamage} de dano!`);
                     
                     if (spellType === 'fireball' && Math.random() < burnChance) {
                         currentMonster.addStatusEffect({ type: 'burn', duration: 3 });
                         addBattleLog(" O inimigo foi queimado!");
-                        createBattleEffect('burn', enemyCanvas, 100, 30);
+                        createBattleEffect('burn', 400, 120);
                     } else if (statusEffect) {
                         currentMonster.addStatusEffect(statusEffect);
                         addBattleLog(` O inimigo foi afetado por ${statusEffect.type.toUpperCase()}!`);
                         
-                        createBattleEffect(statusEffect.type, enemyCanvas, 100, 30);
+                        createBattleEffect(statusEffect.type, 400, 120);
                     }
                     
                     battleEnemyHealth.textContent = currentMonster.health;
@@ -4126,11 +4579,11 @@
                 addBattleLog(result.message);
                 
                 if (itemType === 'mace' || itemType === 'ham' || itemType === 'steak') {
-                    createBattleEffect('heal', playerCanvas, 100, 50);
+                    createBattleEffect('heal', 150, 200);
                 } else if (itemType === 'strengthPotion') {
-                    createBattleEffect('strength-potion', playerCanvas, 100, 50);
+                    createBattleEffect('strength-potion', 150, 200);
                 } else if (itemType === 'luckPotion') {
-                    createBattleEffect('luck-potion', playerCanvas, 100, 50);
+                    createBattleEffect('luck-potion', 150, 200);
                 }
                 
                 player.updateUI();
@@ -4152,12 +4605,54 @@
                 message = player.meditate();
                 addBattleLog(message);
                 
-                createBattleEffect('meditate', playerCanvas, 100, 50);
+                createBattleEffect('meditate', 150, 200);
                 
                 player.updateUI();
                 
                 isPlayerTurn = false;
                 setTimeout(monsterTurn, 1000);
+            } else if (actionType === 'rest') {
+                if (player.baseStr < 16) {
+                    addBattleLog("Você precisa de pelo menos 16 pontos em Força para usar Descansar!");
+                    showMainActions();
+                    return;
+                }
+                
+                message = player.rest();
+                addBattleLog(message);
+                
+                createBattleEffect('rest', 150, 200);
+                
+                player.updateUI();
+                
+                isPlayerTurn = false;
+                setTimeout(monsterTurn, 1000);
+            } else if (actionType === 'flee') {
+                let fleeChance = 0;
+                
+                if (currentMonster.type === 'weak') {
+                    fleeChance = 0.2 + (player.baseAgi - 10) * 0.005;
+                } else if (currentMonster.type === 'strong') {
+                    fleeChance = 0.1 + (player.baseAgi - 10) * 0.005;
+                } else if (currentMonster.type === 'elite') {
+                    fleeChance = 0.05 + (player.baseAgi - 10) * 0.005;
+                } else if (currentMonster.type === 'darkMage') {
+                    fleeChance = 0.01 + (player.baseAgi - 10) * 0.005;
+                }
+                
+                if (Math.random() < fleeChance) {
+                    addBattleLog("Você conseguiu fugir da batalha!");
+                    
+                    setTimeout(() => {
+                        battleScreen.style.display = 'none';
+                        player.updateUI();
+                    }, 1500);
+                } else {
+                    addBattleLog("Você não conseguiu fugir!");
+                    
+                    isPlayerTurn = false;
+                    setTimeout(monsterTurn, 1000);
+                }
             }
         }
         
@@ -4183,23 +4678,27 @@
             let message = "";
             
             if (currentMonster.type === 'darkMage') {
-                // Mago Negro tem 70% de chance de usar magia negra e 30% de cura
                 if (Math.random() < 0.7) {
                     damage = currentMonster.attackPlayer(player);
                     message = `O ${currentMonster.name} lança uma magia negra!`;
                     
-                    // Criar animação de magia negra
-                    createDarkMagicAnimation();
+                    createBattleEffect('dark-magic', 400, 200);
                 } else {
                     currentMonster.health = Math.min(currentMonster.maxHealth, currentMonster.health + 20);
                     message = `O ${currentMonster.name} usa cura das trevas e recupera 20 de HP!`;
                     
-                    // Criar animação de cura das trevas
-                    createDarkHealAnimation();
+                    createBattleEffect('dark-heal', 400, 200);
                 }
+            } else if (currentMonster.type === 'elite') {
+                damage = currentMonster.attackPlayer(player);
+                message = `O ${currentMonster.name} cospe fogo!`;
+                
+                createBattleEffect('dragon-fire', 400, 200);
             } else {
                 damage = currentMonster.attackPlayer(player);
                 message = `O ${currentMonster.name} ataca o cavaleiro!`;
+                
+                createBattleEffect('sword-slash', 400, 200);
             }
             
             addBattleLog(message);
@@ -4215,22 +4714,22 @@
             setTimeout(() => {
                 if (Math.random() < player.dodgeChance) {
                     addBattleLog("Mas o cavaleiro desviou do ataque!");
-                    createBattleEffect('miss', playerCanvas, 100, 50);
+                    createBattleEffect('miss', 150, 200);
                 } else {
                     const actualDamage = player.takeDamage(damage);
                     
-                    createBattleEffect('damage', playerCanvas, 100, 50, actualDamage);
+                    createBattleEffect('damage', 150, 200);
                     
                     addBattleLog(` Causou ${actualDamage} de dano ao cavaleiro!`);
                     
                     if (currentMonster.type === 'elite' && player.hasStatusEffect('burn')) {
                         addBattleLog(" O cavaleiro está queimando!");
-                        createBattleEffect('burn', playerCanvas, 100, 30);
+                        createBattleEffect('burn', 150, 170);
                     }
                     
                     if (currentMonster.type === 'darkMage' && player.hasStatusEffect('stun')) {
                         addBattleLog(" O cavaleiro está atordoado!");
-                        createBattleEffect('stun', playerCanvas, 100, 30);
+                        createBattleEffect('stun', 150, 170);
                     }
                     
                     player.updateUI();
@@ -4259,22 +4758,16 @@
             const enemyCanvas = document.getElementById('enemyBattleCanvas');
             const enemyCtx = enemyCanvas.getContext('2d');
             
-            // Limpar os canvases
-            playerCtx.clearRect(0, 0, 200, 200);
-            enemyCtx.clearRect(0, 0, 200, 200);
+            playerCtx.clearRect(0, 0, 250, 250);
+            enemyCtx.clearRect(0, 0, 250, 250);
             
-            // Desenhar fundo
             playerCtx.fillStyle = 'rgba(26, 58, 95, 0.5)';
-            playerCtx.fillRect(0, 0, 200, 200);
+            playerCtx.fillRect(0, 0, 250, 250);
             enemyCtx.fillStyle = 'rgba(26, 58, 95, 0.5)';
-            enemyCtx.fillRect(0, 0, 200, 200);
+            enemyCtx.fillRect(0, 0, 250, 250);
             
-            // Desenhar personagens
             player.drawBattle(playerCtx, false);
             currentMonster.drawBattle(enemyCtx, false);
-            
-            // Desenhar animações de ataque
-            drawAttackAnimations(playerCtx, enemyCtx);
             
             if (battleAnimation.type === 'playerAttack') {
                 player.drawBattle(playerCtx, battleAnimation.step < battleAnimation.maxSteps / 2, battleAnimation.attackType);
@@ -4285,18 +4778,16 @@
                 
                 enemyCtx.fillStyle = getSpellColor(battleAnimation.spell);
                 enemyCtx.globalAlpha = 0.5 - (battleAnimation.step / battleAnimation.maxSteps) * 0.5;
-                enemyCtx.fillRect(0, 0, 200, 200);
+                enemyCtx.fillRect(0, 0, 250, 250);
                 enemyCtx.globalAlpha = 1.0;
             } else if (battleAnimation.type === 'playerEffect') {
                 player.drawBattle(playerCtx, true);
                 
                 playerCtx.fillStyle = 'rgba(149, 165, 166, 0.5)';
                 playerCtx.globalAlpha = 0.5 - (battleAnimation.step / battleAnimation.maxSteps) * 0.5;
-                playerCtx.fillRect(0, 0, 200, 200);
+                playerCtx.fillRect(0, 0, 250, 250);
                 playerCtx.globalAlpha = 1.0;
             }
-            
-            updateBattleEffects();
             
             battleAnimation.step++;
             
@@ -4305,96 +4796,8 @@
             } else {
                 battleAnimation = null;
                 
-                // Limpar animações de ataque
-                attackAnimations = [];
-                
                 player.drawBattle(playerCtx, false);
                 currentMonster.drawBattle(enemyCtx, false);
-            }
-        }
-        
-        function drawAttackAnimations(playerCtx, enemyCtx) {
-            for (let i = attackAnimations.length - 1; i >= 0; i--) {
-                const anim = attackAnimations[i];
-                
-                anim.step++;
-                
-                if (anim.step >= anim.maxSteps) {
-                    attackAnimations.splice(i, 1);
-                    continue;
-                }
-                
-                const progress = anim.step / anim.maxSteps;
-                
-                switch(anim.type) {
-                    case 'sword':
-                        enemyCtx.save();
-                        enemyCtx.translate(anim.x, anim.y);
-                        enemyCtx.rotate(anim.angle + progress * Math.PI);
-                        enemyCtx.fillStyle = '#f8c555';
-                        enemyCtx.fillRect(-20, -2, 40, 4);
-                        enemyCtx.fillStyle = '#bdc3c7';
-                        enemyCtx.fillRect(20, -3, 10, 6);
-                        enemyCtx.restore();
-                        anim.angle += 0.3;
-                        break;
-                        
-                    case 'charge':
-                        playerCtx.save();
-                        playerCtx.fillStyle = 'rgba(255, 165, 0, 0.7)';
-                        const chargeX = anim.x + (anim.targetX - anim.x) * progress;
-                        playerCtx.beginPath();
-                        playerCtx.arc(chargeX, anim.y, 15, 0, Math.PI * 2);
-                        playerCtx.fill();
-                        playerCtx.restore();
-                        break;
-                        
-                    case 'fireball':
-                        enemyCtx.save();
-                        enemyCtx.fillStyle = '#ff6b6b';
-                        enemyCtx.beginPath();
-                        enemyCtx.arc(anim.x, anim.y, anim.radius + progress * 20, 0, Math.PI * 2);
-                        enemyCtx.fill();
-                        enemyCtx.restore();
-                        break;
-                        
-                    case 'freeze':
-                        enemyCtx.save();
-                        enemyCtx.fillStyle = 'rgba(173, 216, 230, 0.7)';
-                        enemyCtx.beginPath();
-                        enemyCtx.arc(anim.x, anim.y, anim.radius + progress * 25, 0, Math.PI * 2);
-                        enemyCtx.fill();
-                        enemyCtx.restore();
-                        break;
-                        
-                    case 'possession':
-                        enemyCtx.save();
-                        enemyCtx.fillStyle = 'rgba(138, 43, 226, 0.7)';
-                        enemyCtx.beginPath();
-                        enemyCtx.arc(anim.x, anim.y, anim.radius + progress * 22, 0, Math.PI * 2);
-                        enemyCtx.fill();
-                        enemyCtx.restore();
-                        break;
-                        
-                    case 'darkMagic':
-                        playerCtx.save();
-                        playerCtx.fillStyle = 'rgba(75, 0, 130, 0.7)';
-                        const magicX = anim.x + (anim.targetX - anim.x) * progress;
-                        playerCtx.beginPath();
-                        playerCtx.arc(magicX, anim.y, 12, 0, Math.PI * 2);
-                        playerCtx.fill();
-                        playerCtx.restore();
-                        break;
-                        
-                    case 'darkHeal':
-                        enemyCtx.save();
-                        enemyCtx.fillStyle = 'rgba(106, 13, 173, 0.7)';
-                        enemyCtx.beginPath();
-                        enemyCtx.arc(anim.x, anim.y, anim.radius + progress * 15, 0, Math.PI * 2);
-                        enemyCtx.fill();
-                        enemyCtx.restore();
-                        break;
-                }
             }
         }
         
@@ -4404,95 +4807,6 @@
                 case 'freeze': return '#74b9ff';
                 case 'possession': return '#a29bfe';
                 default: return '#ffffff';
-            }
-        }
-        
-        function createBattleEffect(type, canvas, x, y, value = null) {
-            const effect = {
-                type: type,
-                x: x,
-                y: y,
-                value: value,
-                step: 0,
-                maxSteps: 60,
-                canvas: canvas
-            };
-            
-            battleEffects.push(effect);
-        }
-        
-        function updateBattleEffects() {
-            const playerCtx = playerCanvas.getContext('2d');
-            const enemyCtx = enemyCanvas.getContext('2d');
-            
-            for (let i = battleEffects.length - 1; i >= 0; i--) {
-                const effect = battleEffects[i];
-                const ctx = effect.canvas === playerCanvas ? playerCtx : enemyCtx;
-                
-                effect.step++;
-                
-                if (effect.step >= effect.maxSteps) {
-                    battleEffects.splice(i, 1);
-                    continue;
-                }
-                
-                const progress = effect.step / effect.maxSteps;
-                const alpha = 1 - progress;
-                const offsetY = progress * 30;
-                
-                ctx.save();
-                ctx.globalAlpha = alpha;
-                ctx.font = 'bold 16px MedievalSharp';
-                ctx.textAlign = 'center';
-                
-                switch(effect.type) {
-                    case 'damage':
-                        ctx.fillStyle = '#e74c3c';
-                        ctx.fillText(`-${effect.value}`, effect.x, effect.y - offsetY);
-                        break;
-                    case 'critical':
-                        ctx.fillStyle = '#f39c12';
-                        ctx.fillText('CRÍTICO!', effect.x, effect.y - offsetY);
-                        break;
-                    case 'miss':
-                        ctx.fillStyle = '#95a5a6';
-                        ctx.fillText('ESQUIVOU!', effect.x, effect.y - offsetY);
-                        break;
-                    case 'heal':
-                        ctx.fillStyle = '#2ecc71';
-                        ctx.fillText('+CURA', effect.x, effect.y - offsetY);
-                        break;
-                    case 'burn':
-                        ctx.fillStyle = '#ff6b6b';
-                        ctx.fillText('QUEIMANDO!', effect.x, effect.y - offsetY);
-                        break;
-                    case 'slow':
-                        ctx.fillStyle = '#74b9ff';
-                        ctx.fillText('LENTIDÃO!', effect.x, effect.y - offsetY);
-                        break;
-                    case 'stun':
-                        ctx.fillStyle = '#a29bfe';
-                        ctx.fillText('ATORDOADO!', effect.x, effect.y - offsetY);
-                        break;
-                    case 'strength-potion':
-                        ctx.fillStyle = '#f39c12';
-                        ctx.fillText('FORÇA+', effect.x, effect.y - offsetY);
-                        break;
-                    case 'heavy-armor':
-                        ctx.fillStyle = '#bdc3c7';
-                        ctx.fillText('DEFESA+', effect.x, effect.y - offsetY);
-                        break;
-                    case 'luck-potion':
-                        ctx.fillStyle = '#f1c40f';
-                        ctx.fillText('SORTE+', effect.x, effect.y - offsetY);
-                        break;
-                    case 'meditate':
-                        ctx.fillStyle = '#3498db';
-                        ctx.fillText('MEDITANDO', effect.x, effect.y - offsetY);
-                        break;
-                }
-                
-                ctx.restore();
             }
         }
         
@@ -4506,8 +4820,8 @@
         
         function endBattle(playerWon) {
             if (playerWon) {
-                const expGained = currentMonster.level * 10;
-                const moneyGained = currentMonster.level * 5;
+                const expGained = currentMonster.getExpReward();
+                const moneyGained = currentMonster.getMoneyReward();
                 
                 player.addExp(expGained);
                 player.money += moneyGained;
@@ -4585,6 +4899,11 @@
             loadShopItems('food');
         }
         
+        function openDarkShop() {
+            darkShopScreen.style.display = 'flex';
+            loadDarkShopItems('food');
+        }
+        
         function loadShopItems(category) {
             shopItems.innerHTML = '';
             
@@ -4595,7 +4914,7 @@
                     <div class="shop-item-icon">🍎</div>
                     <div class="shop-item-name">Maçã</div>
                     <div class="shop-item-price">10 💰</div>
-                    <button class="shop-buy-btn glowing-border" data-item="mace" data-price="10">Comprar</button>
+                    <button class="shop-buy-btn" data-item="mace" data-price="10">Comprar</button>
                 `;
                 shopItems.appendChild(maceItem);
                 
@@ -4605,7 +4924,7 @@
                     <div class="shop-item-icon">🍗</div>
                     <div class="shop-item-name">Pernil</div>
                     <div class="shop-item-price">25 💰</div>
-                    <button class="shop-buy-btn glowing-border" data-item="ham" data-price="25">Comprar</button>
+                    <button class="shop-buy-btn" data-item="ham" data-price="25">Comprar</button>
                 `;
                 shopItems.appendChild(hamItem);
                 
@@ -4615,7 +4934,7 @@
                     <div class="shop-item-icon">🥩</div>
                     <div class="shop-item-name">Bife</div>
                     <div class="shop-item-price">40 💰</div>
-                    <button class="shop-buy-btn glowing-border" data-item="steak" data-price="40">Comprar</button>
+                    <button class="shop-buy-btn" data-item="steak" data-price="40">Comprar</button>
                 `;
                 shopItems.appendChild(steakItem);
             } else if (category === 'weapons') {
@@ -4628,7 +4947,7 @@
                         <div class="shop-item-icon">⚔️</div>
                         <div class="shop-item-name">Espada de Pedra</div>
                         <div class="shop-item-price">130 💰</div>
-                        <button class="shop-buy-btn glowing-border" data-item="stoneSword" data-price="130">
+                        <button class="shop-buy-btn" data-item="stoneSword" data-price="130">
                             Comprar
                         </button>
                     `;
@@ -4640,7 +4959,7 @@
                         <div class="shop-item-icon">⚔️</div>
                         <div class="shop-item-name">Espada de Ouro</div>
                         <div class="shop-item-price">250 💰</div>
-                        <button class="shop-buy-btn glowing-border" data-item="goldSword" data-price="250">
+                        <button class="shop-buy-btn" data-item="goldSword" data-price="250">
                             Comprar
                         </button>
                     `;
@@ -4652,7 +4971,7 @@
                         <div class="shop-item-icon">⚔️</div>
                         <div class="shop-item-name">Espada de Diamante</div>
                         <div class="shop-item-price">320 💰</div>
-                        <button class="shop-buy-btn glowing-border" data-item="diamondSword" data-price="320">
+                        <button class="shop-buy-btn" data-item="diamondSword" data-price="320">
                             Comprar
                         </button>
                     `;
@@ -4668,7 +4987,7 @@
                         <div class="shop-item-icon">🛡️</div>
                         <div class="shop-item-name">Armadura de Malha</div>
                         <div class="shop-item-price">200 💰</div>
-                        <button class="shop-buy-btn glowing-border" data-item="chainMail" data-price="200">
+                        <button class="shop-buy-btn" data-item="chainMail" data-price="200">
                             Comprar
                         </button>
                     `;
@@ -4680,7 +4999,7 @@
                         <div class="shop-item-icon">🛡️</div>
                         <div class="shop-item-name">Armadura de Ouro</div>
                         <div class="shop-item-price">350 💰</div>
-                        <button class="shop-buy-btn glowing-border" data-item="goldArmor" data-price="350">
+                        <button class="shop-buy-btn" data-item="goldArmor" data-price="350">
                             Comprar
                         </button>
                     `;
@@ -4692,7 +5011,7 @@
                         <div class="shop-item-icon">🛡️</div>
                         <div class="shop-item-name">Armadura de Diamante</div>
                         <div class="shop-item-price">500 💰</div>
-                        <button class="shop-buy-btn glowing-border" data-item="diamondArmor" data-price="500">
+                        <button class="shop-buy-btn" data-item="diamondArmor" data-price="500">
                             Comprar
                         </button>
                     `;
@@ -4705,7 +5024,7 @@
                     <div class="shop-item-icon">🧪</div>
                     <div class="shop-item-name">Poção de Força</div>
                     <div class="shop-item-price">55 💰</div>
-                    <button class="shop-buy-btn glowing-border" data-item="strengthPotion" data-price="55">Comprar</button>
+                    <button class="shop-buy-btn" data-item="strengthPotion" data-price="55">Comprar</button>
                 `;
                 shopItems.appendChild(strengthPotionItem);
                 
@@ -4715,7 +5034,7 @@
                     <div class="shop-item-icon">🍀</div>
                     <div class="shop-item-name">Poção da Sorte</div>
                     <div class="shop-item-price">150 💰</div>
-                    <button class="shop-buy-btn glowing-border" data-item="luckPotion" data-price="150">Comprar</button>
+                    <button class="shop-buy-btn" data-item="luckPotion" data-price="150">Comprar</button>
                 `;
                 shopItems.appendChild(luckPotionItem);
             }
@@ -4726,19 +5045,119 @@
                     const price = parseInt(btn.getAttribute('data-price'));
                     
                     if (player.buyItem(item, price)) {
-                        alert('Compra realizada com sucesso!');
+                        showNotification("Sucesso", "Compra realizada com sucesso!");
                         loadShopItems(category);
                     } else {
-                        alert('Dinheiro insuficiente!');
+                        showNotification("Erro", "Dinheiro insuficiente!");
                     }
                 });
             });
         }
+        
+        function loadDarkShopItems(category) {
+            darkShopItems.innerHTML = '';
+            
+            if (category === 'food') {
+                const maceItem = document.createElement('div');
+                maceItem.className = 'dark-shop-item';
+                maceItem.innerHTML = `
+                    <div class="dark-shop-item-icon">🍎</div>
+                    <div class="dark-shop-item-name">10 Maçãs</div>
+                    <div class="dark-shop-item-price">1 🐉</div>
+                    <button class="dark-shop-buy-btn" data-item="mace" data-price="1">Comprar</button>
+                `;
+                darkShopItems.appendChild(maceItem);
+                
+                const hamItem = document.createElement('div');
+                hamItem.className = 'dark-shop-item';
+                hamItem.innerHTML = `
+                    <div class="dark-shop-item-icon">🍗</div>
+                    <div class="dark-shop-item-name">10 Pernis</div>
+                    <div class="dark-shop-item-price">2 🐉</div>
+                    <button class="dark-shop-buy-btn" data-item="ham" data-price="2">Comprar</button>
+                `;
+                darkShopItems.appendChild(hamItem);
+                
+                const steakItem = document.createElement('div');
+                steakItem.className = 'dark-shop-item';
+                steakItem.innerHTML = `
+                    <div class="dark-shop-item-icon">🥩</div>
+                    <div class="dark-shop-item-name">10 Bifes</div>
+                    <div class="dark-shop-item-price">5 🐉</div>
+                    <button class="dark-shop-buy-btn" data-item="steak" data-price="5">Comprar</button>
+                `;
+                darkShopItems.appendChild(steakItem);
+            } else if (category === 'weapons') {
+                if (!player.purchasedItems.doomSword) {
+                    const doomSwordItem = document.createElement('div');
+                    doomSwordItem.className = 'dark-shop-item';
+                    doomSwordItem.innerHTML = `
+                        <div class="dark-shop-item-icon">⚔️</div>
+                        <div class="dark-shop-item-name">Espada da Perdição</div>
+                        <div class="dark-shop-item-description">Aumenta dano em 15x, mas reduz HP em 35%</div>
+                        <div class="dark-shop-item-price">10 🐉</div>
+                        <button class="dark-shop-buy-btn" data-item="doomSword" data-price="10">
+                            Comprar
+                        </button>
+                    `;
+                    darkShopItems.appendChild(doomSwordItem);
+                }
+                
+                if (!player.purchasedItems.soulArmor) {
+                    const soulArmorItem = document.createElement('div');
+                    soulArmorItem.className = 'dark-shop-item';
+                    soulArmorItem.innerHTML = `
+                        <div class="dark-shop-item-icon">🛡️</div>
+                        <div class="dark-shop-item-name">Armadura de Almas</div>
+                        <div class="dark-shop-item-description">Aumenta defesa e agilidade em 3.4x, mas reduz HP em 20%</div>
+                        <div class="dark-shop-item-price">15 🐉</div>
+                        <button class="dark-shop-buy-btn" data-item="soulArmor" data-price="15">
+                            Comprar
+                        </button>
+                    `;
+                    darkShopItems.appendChild(soulArmorItem);
+                }
+            } else if (category === 'orbs') {
+                const orbItem = document.createElement('div');
+                orbItem.className = 'dark-shop-item';
+                orbItem.innerHTML = `
+                    <div class="dark-shop-item-icon">🔮</div>
+                    <div class="dark-shop-item-name">Orbe de Invocação</div>
+                    <div class="dark-shop-item-description">Em breve disponível</div>
+                    <div class="dark-shop-item-price">??? 🐉</div>
+                    <button class="dark-shop-buy-btn" disabled>Indisponível</button>
+                `;
+                darkShopItems.appendChild(orbItem);
+            }
+            
+            document.querySelectorAll('.dark-shop-buy-btn').forEach(btn => {
+                if (!btn.disabled) {
+                    btn.addEventListener('click', () => {
+                        const item = btn.getAttribute('data-item');
+                        const price = parseInt(btn.getAttribute('data-price'));
+                        
+                        if (player.buyItem(item, price, true)) {
+                            showNotification("Sucesso", "Compra realizada com sucesso!");
+                            loadDarkShopItems(category);
+                        } else {
+                            showNotification("Erro", "Escamas de dragão insuficientes!");
+                        }
+                    });
+                }
+            });
+        }
+        
+        function showNotification(title, message) {
+            notificationTitle.textContent = title;
+            notificationMessage.textContent = message;
+            notificationScreen.style.display = 'flex';
+        }
 
         const player = new Player();
         const worldMap = generateWorldMap();
-        const merchantForest = new Merchant(worldMap, 2); // Loja na floresta
-        const merchantMountain = new Merchant(worldMap, 3); // Loja na montanha
+        const merchantForest = new Merchant(worldMap, 2);
+        const merchantMountain = new Merchant(worldMap, 3);
+        const darkMerchant = new Merchant(worldMap, 9, true);
         let lastTime = 0;
         
         player.updateUI();
@@ -4750,12 +5169,18 @@
             if (inventoryScreen.style.display === 'flex') return;
             if (equipmentScreen.style.display === 'flex') return;
             if (shopScreen.style.display === 'flex') return;
+            if (darkShopScreen.style.display === 'flex') return;
             if (deathScreen.style.display === 'flex') return;
+            if (notificationScreen.style.display === 'flex') return;
             
             keys[e.key.toLowerCase()] = true;
             
-            if (e.key.toLowerCase() === 'e' && (merchantForest.isPlayerNearby(player) || merchantMountain.isPlayerNearby(player))) {
-                openShop();
+            if (e.key.toLowerCase() === 'e') {
+                if (merchantForest.isPlayerNearby(player) || merchantMountain.isPlayerNearby(player)) {
+                    openShop();
+                } else if (darkMerchant.isPlayerNearby(player)) {
+                    openDarkShop();
+                }
             }
         });
         
@@ -4813,6 +5238,18 @@
             playerAct('meditate');
         });
         
+        restBtn.addEventListener('click', () => {
+            actOptions.style.display = 'none';
+            backBtn.style.display = 'none';
+            playerAct('rest');
+        });
+        
+        fleeBtn.addEventListener('click', () => {
+            actOptions.style.display = 'none';
+            backBtn.style.display = 'none';
+            playerAct('flee');
+        });
+        
         backBtn.addEventListener('click', showMainActions);
         backFromAttackBtn.addEventListener('click', showMainActions);
         backFromMagicBtn.addEventListener('click', showMainActions);
@@ -4836,45 +5273,7 @@
         });
         
         craftingResult.addEventListener('click', () => {
-            const result = player.craftItem();
-            if (result.includes("criou a Dragon Slayer") || result.includes("criou a Armadura do Lobo Negro")) {
-                const successMessage = document.createElement('div');
-                successMessage.style.position = 'fixed';
-                successMessage.style.top = '50%';
-                successMessage.style.left = '50%';
-                successMessage.style.transform = 'translate(-50%, -50%)';
-                successMessage.style.background = 'rgba(0, 0, 0, 0.9)';
-                successMessage.style.padding = '20px';
-                successMessage.style.border = '4px solid #e74c3c';
-                successMessage.style.borderRadius = '10px';
-                successMessage.style.textAlign = 'center';
-                successMessage.style.zIndex = '100';
-                successMessage.style.color = '#f8c555';
-                successMessage.style.fontSize = '1.5rem';
-                
-                if (result.includes("Dragon Slayer")) {
-                    successMessage.innerHTML = `
-                        <h2>DRAGON SLAYER CRIADA!</h2>
-                        <p>Sua espada agora emana poder dragônico!</p>
-                        <p>Dano aumentado em 11x!</p>
-                    `;
-                } else {
-                    successMessage.innerHTML = `
-                        <h2>ARMADURA DO LOBO NEGRO CRIADA!</h2>
-                        <p>Sua armadura agora possui a força do lobo negro!</p>
-                        <p>Defesa aumentada em 2.5x!</p>
-                    `;
-                }
-                
-                successMessage.innerHTML += `<button id="closeSuccessMsg" style="margin-top: 20px; padding: 10px 20px; background: #e74c3c; color: white; border: none; border-radius: 5px; cursor: pointer;">Fechar</button>`;
-                document.body.appendChild(successMessage);
-                
-                document.getElementById('closeSuccessMsg').addEventListener('click', () => {
-                    document.body.removeChild(successMessage);
-                });
-            } else {
-                alert(result);
-            }
+            player.craftItem();
         });
         
         craftingSlots.forEach((slot, index) => {
@@ -4891,10 +5290,10 @@
                         } else if (itemChoice === 'steak' && player.items.steak > 0) {
                             player.addToCraftingSlot(index, 'steak');
                         } else {
-                            alert("Item inválido ou quantidade insuficiente!");
+                            showNotification("Erro", "Item inválido ou quantidade insuficiente!");
                         }
                     } else {
-                        alert("Você não tem itens para adicionar ao crafting!");
+                        showNotification("Aviso", "Você não tem itens para adicionar ao crafting!");
                     }
                 } else {
                     player.clearCraftingSlot(index);
@@ -4923,11 +5322,27 @@
             shopScreen.style.display = 'none';
         });
         
+        closeDarkShopBtn.addEventListener('click', () => {
+            darkShopScreen.style.display = 'none';
+        });
+        
+        closeNotificationBtn.addEventListener('click', () => {
+            notificationScreen.style.display = 'none';
+        });
+        
         shopCategories.forEach(category => {
             category.addEventListener('click', () => {
                 shopCategories.forEach(c => c.classList.remove('active'));
                 category.classList.add('active');
                 loadShopItems(category.getAttribute('data-category'));
+            });
+        });
+        
+        darkShopCategories.forEach(category => {
+            category.addEventListener('click', () => {
+                darkShopCategories.forEach(c => c.classList.remove('active'));
+                category.classList.add('active');
+                loadDarkShopItems(category.getAttribute('data-category'));
             });
         });
         
