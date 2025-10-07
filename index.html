@@ -1209,7 +1209,7 @@
 <body>
     <div class="game-container">
         <div class="game-header">
-            <h1>Knight of Valor</h1>
+            
         </div>
         
         <div class="game-board">
@@ -1571,8 +1571,7 @@
         </div>
         
         <div class="instructions">
-            <p>Use WASD ou setas para mover | Pressione E perto de lojas para interagir</p>
-            <p>Clique no ícone da mochila para abrir inventário</p>
+            
         </div>
     </div>
 
@@ -1581,9 +1580,9 @@
         const MAP_WIDTH = 18;
         const MAP_HEIGHT = 11;
         const WORLD_SIZE = 120;
-        const MOVE_COOLDOWN = 200;
-        const MONSTER_SPAWN_CHANCE = 0.1;
-        const GOLDEN_MONSTER_CHANCE = 0.0001;
+        const MOVE_COOLDOWN = 200
+        const MONSTER_SPAWN_CHANCE = 0.1
+        const GOLDEN_MONSTER_CHANCE = .0001;
 
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
@@ -3617,21 +3616,17 @@
                         player.addItem('steak', quantity);
                         droppedItems.push(`bife (x${quantity})`);
                     }
-                    if (Math.random() < 0.05 * dropMultiplier * luckMultiplier) {
+                    if (Math.random() < 0.01 * dropMultiplier * luckMultiplier) {
                         player.addRecipe('dragonSlayer');
                         droppedItems.push("receita da Dragon Slayer");
                     }
-                    if (Math.random() < 0.05 * dropMultiplier * luckMultiplier) {
+                    if (Math.random() < 0.01 * dropMultiplier * luckMultiplier) {
                         player.addRecipe('blackWolfArmor');
                         droppedItems.push("receita da Armadura do Lobo Negro");
                     }
-                    if (Math.random() < 0.1 * dropMultiplier * luckMultiplier) {
-                        const quantity = Math.floor(Math.random() * 3) + 1;
-                        player.addItem('dragonScales', quantity);
-                        droppedItems.push(`escamas de dragão (x${quantity})`);
-                    }
+                    
                 } else if (this.type === 'strong') {
-                    if (Math.random() < 0.40 * dropMultiplier * luckMultiplier) {
+                    if (Math.random() < 0.45 * dropMultiplier * luckMultiplier) {
                         const quantity = getRandomQuantity();
                         player.addItem('mace', quantity);
                         droppedItems.push(`maçã (x${quantity})`);
@@ -3659,84 +3654,66 @@
                         player.addRecipe('blackWolfArmor');
                         droppedItems.push("receita da Armadura do Lobo Negro");
                     }
+                    
+                } else if (this.type === 'elite') {
+                    if (Math.random() < 0.50 * dropMultiplier * luckMultiplier) {
+                        const quantity = getRandomQuantity();
+                        player.addItem('mace', quantity);
+                        droppedItems.push(`maçã (x${quantity})`);
+                    }
+                    if (Math.random() < 0.40 * dropMultiplier * luckMultiplier) {
+                        const quantity = getRandomQuantity();
+                        player.addItem('ham', quantity);
+                        droppedItems.push(`pernil (x${quantity})`);
+                    }
+                    if (Math.random() < 0.30 * dropMultiplier * luckMultiplier) {
+                        const quantity = getRandomQuantity();
+                        player.addItem('steak', quantity);
+                        droppedItems.push(`bife (x${quantity})`);
+                    }
+                    if (Math.random() < 0.25 * dropMultiplier * luckMultiplier) {
+                        const quantity = getRandomQuantity();
+                        player.addItem('strengthPotion', quantity);
+                        droppedItems.push(`poção de força (x${quantity})`);
+                    }
                     if (Math.random() < 0.15 * dropMultiplier * luckMultiplier) {
                         const quantity = Math.floor(Math.random() * 3) + 1;
                         player.addItem('dragonScales', quantity);
                         droppedItems.push(`escamas de dragão (x${quantity})`);
                     }
-                } else if (this.type === 'elite') {
-                    if (Math.random() < 0.45 * dropMultiplier * luckMultiplier) {
-                        const quantity = getRandomQuantity();
-                        player.addItem('mace', quantity);
-                        droppedItems.push(`maçã (x${quantity})`);
-                    }
-                    if (Math.random() < 0.30 * dropMultiplier * luckMultiplier) {
-                        const quantity = getRandomQuantity();
-                        player.addItem('ham', quantity);
-                        droppedItems.push(`pernil (x${quantity})`);
-                    }
-                    if (Math.random() < 0.20 * dropMultiplier * luckMultiplier) {
-                        const quantity = getRandomQuantity();
-                        player.addItem('steak', quantity);
-                        droppedItems.push(`bife (x${quantity})`);
-                    }
-                    if (Math.random() < 0.20 * dropMultiplier * luckMultiplier) {
-                        const quantity = getRandomQuantity();
-                        player.addItem('strengthPotion', quantity);
-                        droppedItems.push(`poção de força (x${quantity})`);
-                    }
-                    if (Math.random() < 0.25 * dropMultiplier * luckMultiplier) {
-                        const quantity = Math.floor(Math.random() * 3) + 1;
-                        player.addItem('dragonScales', quantity);
-                        droppedItems.push(`escamas de dragão (x${quantity})`);
-                    }
-                    if (Math.random() < 0.05 * dropMultiplier * luckMultiplier) {
-                        player.addRecipe('dragonSlayer');
-                        droppedItems.push("receita da Dragon Slayer");
-                    }
-                    if (Math.random() < 0.05 * dropMultiplier * luckMultiplier) {
-                        player.addRecipe('blackWolfArmor');
-                        droppedItems.push("receita da Armadura do Lobo Negro");
-                    }
+                    
                 } else if (this.type === 'darkMage') {
-                    if (Math.random() < 0.70 * dropMultiplier * luckMultiplier) {
+                    if (Math.random() < 0.75 * dropMultiplier * luckMultiplier) {
                         const quantity = getRandomQuantity();
                         player.addItem('mace', quantity);
                         droppedItems.push(`maçã (x${quantity})`);
                     }
-                    if (Math.random() < 0.50 * dropMultiplier * luckMultiplier) {
+                    if (Math.random() < 0.55 * dropMultiplier * luckMultiplier) {
                         const quantity = getRandomQuantity();
                         player.addItem('ham', quantity);
                         droppedItems.push(`pernil (x${quantity})`);
                     }
-                    if (Math.random() < 0.45 * dropMultiplier * luckMultiplier) {
+                    if (Math.random() < 0.55 * dropMultiplier * luckMultiplier) {
                         const quantity = getRandomQuantity();
                         player.addItem('steak', quantity);
                         droppedItems.push(`bife (x${quantity})`);
                     }
-                    if (Math.random() < 0.30 * dropMultiplier * luckMultiplier) {
+                    if (Math.random() < 0.35 * dropMultiplier * luckMultiplier) {
                         const quantity = getRandomQuantity();
                         player.addItem('strengthPotion', quantity);
                         droppedItems.push(`poção de força (x${quantity})`);
                     }
-                    if (Math.random() < 0.25 * dropMultiplier * luckMultiplier) {
+                    if (Math.random() < 0.10 * dropMultiplier * luckMultiplier) {
                         const quantity = getRandomQuantity();
                         player.addItem('luckPotion', quantity);
                         droppedItems.push(`poção da sorte (x${quantity})`);
                     }
-                    if (Math.random() < 0.30 * dropMultiplier * luckMultiplier) {
+                    if (Math.random() < 0.35 * dropMultiplier * luckMultiplier) {
                         const quantity = Math.floor(Math.random() * 3) + 1;
                         player.addItem('dragonScales', quantity);
                         droppedItems.push(`escamas de dragão (x${quantity})`);
                     }
-                    if (Math.random() < 0.10 * dropMultiplier * luckMultiplier) {
-                        player.addRecipe('dragonSlayer');
-                        droppedItems.push("receita da Dragon Slayer");
-                    }
-                    if (Math.random() < 0.10 * dropMultiplier * luckMultiplier) {
-                        player.addRecipe('blackWolfArmor');
-                        droppedItems.push("receita da Armadura do Lobo Negro");
-                    }
+                    
                 }
                 
                 return droppedItems;
@@ -4254,6 +4231,7 @@
         let battleAnimation = null;
         let currentRound = 1;
         let battleEffects = [];
+        let attackAnimations = [];
         
         function startBattle() {
             const rand = Math.random();
@@ -4769,6 +4747,9 @@
             player.drawBattle(playerCtx, false);
             currentMonster.drawBattle(enemyCtx, false);
             
+            // Desenhar animações de ataque
+            drawAttackAnimations(playerCtx, enemyCtx);
+            
             if (battleAnimation.type === 'playerAttack') {
                 player.drawBattle(playerCtx, battleAnimation.step < battleAnimation.maxSteps / 2, battleAnimation.attackType);
             } else if (battleAnimation.type === 'monsterAttack') {
@@ -4789,6 +4770,8 @@
                 playerCtx.globalAlpha = 1.0;
             }
             
+            updateBattleEffects();
+            
             battleAnimation.step++;
             
             if (battleAnimation.step < battleAnimation.maxSteps) {
@@ -4796,8 +4779,96 @@
             } else {
                 battleAnimation = null;
                 
+                // Limpar animações de ataque
+                attackAnimations = [];
+                
                 player.drawBattle(playerCtx, false);
                 currentMonster.drawBattle(enemyCtx, false);
+            }
+        }
+        
+        function drawAttackAnimations(playerCtx, enemyCtx) {
+            for (let i = attackAnimations.length - 1; i >= 0; i--) {
+                const anim = attackAnimations[i];
+                
+                anim.step++;
+                
+                if (anim.step >= anim.maxSteps) {
+                    attackAnimations.splice(i, 1);
+                    continue;
+                }
+                
+                const progress = anim.step / anim.maxSteps;
+                
+                switch(anim.type) {
+                    case 'sword':
+                        enemyCtx.save();
+                        enemyCtx.translate(anim.x, anim.y);
+                        enemyCtx.rotate(anim.angle + progress * Math.PI);
+                        enemyCtx.fillStyle = '#f8c555';
+                        enemyCtx.fillRect(-20, -2, 40, 4);
+                        enemyCtx.fillStyle = '#bdc3c7';
+                        enemyCtx.fillRect(20, -3, 10, 6);
+                        enemyCtx.restore();
+                        anim.angle += 0.3;
+                        break;
+                        
+                    case 'charge':
+                        playerCtx.save();
+                        playerCtx.fillStyle = 'rgba(255, 165, 0, 0.7)';
+                        const chargeX = anim.x + (anim.targetX - anim.x) * progress;
+                        playerCtx.beginPath();
+                        playerCtx.arc(chargeX, anim.y, 15, 0, Math.PI * 2);
+                        playerCtx.fill();
+                        playerCtx.restore();
+                        break;
+                        
+                    case 'fireball':
+                        enemyCtx.save();
+                        enemyCtx.fillStyle = '#ff6b6b';
+                        enemyCtx.beginPath();
+                        enemyCtx.arc(anim.x, anim.y, anim.radius + progress * 20, 0, Math.PI * 2);
+                        enemyCtx.fill();
+                        enemyCtx.restore();
+                        break;
+                        
+                    case 'freeze':
+                        enemyCtx.save();
+                        enemyCtx.fillStyle = 'rgba(173, 216, 230, 0.7)';
+                        enemyCtx.beginPath();
+                        enemyCtx.arc(anim.x, anim.y, anim.radius + progress * 25, 0, Math.PI * 2);
+                        enemyCtx.fill();
+                        enemyCtx.restore();
+                        break;
+                        
+                    case 'possession':
+                        enemyCtx.save();
+                        enemyCtx.fillStyle = 'rgba(138, 43, 226, 0.7)';
+                        enemyCtx.beginPath();
+                        enemyCtx.arc(anim.x, anim.y, anim.radius + progress * 22, 0, Math.PI * 2);
+                        enemyCtx.fill();
+                        enemyCtx.restore();
+                        break;
+                        
+                    case 'darkMagic':
+                        playerCtx.save();
+                        playerCtx.fillStyle = 'rgba(75, 0, 130, 0.7)';
+                        const magicX = anim.x + (anim.targetX - anim.x) * progress;
+                        playerCtx.beginPath();
+                        playerCtx.arc(magicX, anim.y, 12, 0, Math.PI * 2);
+                        playerCtx.fill();
+                        playerCtx.restore();
+                        break;
+                        
+                    case 'darkHeal':
+                        enemyCtx.save();
+                        enemyCtx.fillStyle = 'rgba(106, 13, 173, 0.7)';
+                        enemyCtx.beginPath();
+                        enemyCtx.arc(anim.x, anim.y, anim.radius + progress * 15, 0, Math.PI * 2);
+                        enemyCtx.fill();
+                        enemyCtx.restore();
+                        break;
+                }
             }
         }
         
@@ -4807,6 +4878,95 @@
                 case 'freeze': return '#74b9ff';
                 case 'possession': return '#a29bfe';
                 default: return '#ffffff';
+            }
+        }
+        
+        function createBattleEffect(type, canvas, x, y, value = null) {
+            const effect = {
+                type: type,
+                x: x,
+                y: y,
+                value: value,
+                step: 0,
+                maxSteps: 60,
+                canvas: canvas
+            };
+            
+            battleEffects.push(effect);
+        }
+        
+        function updateBattleEffects() {
+            const playerCtx = playerCanvas.getContext('2d');
+            const enemyCtx = enemyCanvas.getContext('2d');
+            
+            for (let i = battleEffects.length - 1; i >= 0; i--) {
+                const effect = battleEffects[i];
+                const ctx = effect.canvas === playerCanvas ? playerCtx : enemyCtx;
+                
+                effect.step++;
+                
+                if (effect.step >= effect.maxSteps) {
+                    battleEffects.splice(i, 1);
+                    continue;
+                }
+                
+                const progress = effect.step / effect.maxSteps;
+                const alpha = 1 - progress;
+                const offsetY = progress * 30;
+                
+                ctx.save();
+                ctx.globalAlpha = alpha;
+                ctx.font = 'bold 16px MedievalSharp';
+                ctx.textAlign = 'center';
+                
+                switch(effect.type) {
+                    case 'damage':
+                        ctx.fillStyle = '#e74c3c';
+                        ctx.fillText(`-${effect.value}`, effect.x, effect.y - offsetY);
+                        break;
+                    case 'critical':
+                        ctx.fillStyle = '#f39c12';
+                        ctx.fillText('CRÍTICO!', effect.x, effect.y - offsetY);
+                        break;
+                    case 'miss':
+                        ctx.fillStyle = '#95a5a6';
+                        ctx.fillText('ESQUIVOU!', effect.x, effect.y - offsetY);
+                        break;
+                    case 'heal':
+                        ctx.fillStyle = '#2ecc71';
+                        ctx.fillText('+CURA', effect.x, effect.y - offsetY);
+                        break;
+                    case 'burn':
+                        ctx.fillStyle = '#ff6b6b';
+                        ctx.fillText('QUEIMANDO!', effect.x, effect.y - offsetY);
+                        break;
+                    case 'slow':
+                        ctx.fillStyle = '#74b9ff';
+                        ctx.fillText('LENTIDÃO!', effect.x, effect.y - offsetY);
+                        break;
+                    case 'stun':
+                        ctx.fillStyle = '#a29bfe';
+                        ctx.fillText('ATORDOADO!', effect.x, effect.y - offsetY);
+                        break;
+                    case 'strength-potion':
+                        ctx.fillStyle = '#f39c12';
+                        ctx.fillText('FORÇA+', effect.x, effect.y - offsetY);
+                        break;
+                    case 'heavy-armor':
+                        ctx.fillStyle = '#bdc3c7';
+                        ctx.fillText('DEFESA+', effect.x, effect.y - offsetY);
+                        break;
+                    case 'luck-potion':
+                        ctx.fillStyle = '#f1c40f';
+                        ctx.fillText('SORTE+', effect.x, effect.y - offsetY);
+                        break;
+                    case 'meditate':
+                        ctx.fillStyle = '#3498db';
+                        ctx.fillText('MEDITANDO', effect.x, effect.y - offsetY);
+                        break;
+                }
+                
+                ctx.restore();
             }
         }
         
