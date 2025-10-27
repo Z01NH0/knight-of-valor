@@ -2294,7 +2294,7 @@
         const MAP_WIDTH = 18;
         const MAP_HEIGHT = 11;
         const WORLD_SIZE = 120;
-        const MOVE_COOLDOWN = 200;
+        const MOVE_COOLDOWN = 120;
         const MONSTER_SPAWN_CHANCE = 0.1;
         const GOLDEN_MONSTER_CHANCE = 0.0001;
 
@@ -2739,57 +2739,62 @@
             }
             
             move(dx, dy, worldMap) {
-                if (this.moveCooldown > 0) return false;
+    if (this.moveCooldown > 0) return false;
+    
+    const newX = this.x + dx;
+    const newY = this.y + dy;
+    
+    // Verificar se está tentando sair dos limites do mapa
+    if (newX < 0 || newX >= WORLD_SIZE || newY < 0 || newY >= WORLD_SIZE) {
+        return false; // Não permitir movimento fora dos limites
+    }
+    
+    // Verificar se está tentando entrar no pântano
+    if (worldMap[Math.floor(newY)][Math.floor(newX)] === 10) {
+        if (this.level < 15) {
+            showLevelRequiredMessage();
+            return false;
+        }
+    }
+    
+    if (newX >= 0 && newX < WORLD_SIZE && newY >= 0 && newY < WORLD_SIZE) {
+        if (worldMap[Math.floor(newY)][Math.floor(newX)] !== 1) {
+            this.x = newX;
+            this.y = newY;
+            this.moveCooldown = MOVE_COOLDOWN;
+            this.stepsTaken++;
+            
+            // Verificar se está no pântano para spawnar monstros especiais
+            const currentTile = worldMap[Math.floor(this.y)][Math.floor(this.x)];
+            if (currentTile === 10 && this.stepsTaken % 3 === 0) {
+                let spawnChance = MONSTER_SPAWN_CHANCE * 1.5;
                 
-                const newX = this.x + dx;
-                const newY = this.y + dy;
+                if (Math.random() < spawnChance) {
+                    return 'swampMonster';
+                }
+            } else if (this.stepsTaken % 3 === 0) {
+                let spawnChance = MONSTER_SPAWN_CHANCE;
                 
-                // Verificar se está tentando entrar no pântano
-                if (worldMap[Math.floor(newY)][Math.floor(newX)] === 10) {
-                    if (this.level < 15) {
-                        showLevelRequiredMessage();
-                        return false;
-                    }
+                if (currentTile === 2) {
+                    spawnChance *= 1.3;
+                } else if (currentTile === 3) {
+                    spawnChance *= 1.3;
+                } else if (currentTile === 7) {
+                    spawnChance *= 1.5;
+                } else if (currentTile === 9) {
+                    spawnChance *= 1.4;
                 }
                 
-                if (newX >= 0 && newX < WORLD_SIZE && newY >= 0 && newY < WORLD_SIZE) {
-                    if (worldMap[Math.floor(newY)][Math.floor(newX)] !== 1) {
-                        this.x = newX;
-                        this.y = newY;
-                        this.moveCooldown = MOVE_COOLDOWN;
-                        this.stepsTaken++;
-                        
-                        // Verificar se está no pântano para spawnar monstros especiais
-                        const currentTile = worldMap[Math.floor(this.y)][Math.floor(this.x)];
-                        if (currentTile === 10 && this.stepsTaken % 3 === 0) {
-                            let spawnChance = MONSTER_SPAWN_CHANCE * 1.5;
-                            
-                            if (Math.random() < spawnChance) {
-                                return 'swampMonster';
-                            }
-                        } else if (this.stepsTaken % 3 === 0) {
-                            let spawnChance = MONSTER_SPAWN_CHANCE;
-                            
-                            if (currentTile === 2) {
-                                spawnChance *= 1.3;
-                            } else if (currentTile === 3) {
-                                spawnChance *= 1.3;
-                            } else if (currentTile === 7) {
-                                spawnChance *= 1.5;
-                            } else if (currentTile === 9) {
-                                spawnChance *= 1.4;
-                            }
-                            
-                            if (Math.random() < spawnChance) {
-                                return 'monster';
-                            }
-                        }
-                        
-                        return true;
-                    }
+                if (Math.random() < spawnChance) {
+                    return 'monster';
                 }
-                return false;
             }
+            
+            return true;
+        }
+    }
+    return false;
+}
             
             update(deltaTime) {
                 if (this.moveCooldown > 0) {
@@ -5474,256 +5479,280 @@
 
         // Funções de desenho do mapa
         function drawMap(worldMap, player) {
-            const offsetX = player.x - MAP_WIDTH / 2;
-            const offsetY = player.y - MAP_HEIGHT / 2;
+    const offsetX = player.x - MAP_WIDTH / 2;
+    const offsetY = player.y - MAP_HEIGHT / 2;
+    
+    // Desenhar fundo padrão para áreas fora do mapa
+    ctx.fillStyle = '#1a1a2e';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+    for (let y = 0; y < MAP_HEIGHT; y++) {
+        for (let x = 0; x < MAP_WIDTH; x++) {
+            const mapX = Math.floor(offsetX + x);
+            const mapY = Math.floor(offsetY + y);
             
-            for (let y = 0; y < MAP_HEIGHT; y++) {
-                for (let x = 0; x < MAP_WIDTH; x++) {
-                    const mapX = Math.floor(offsetX + x);
-                    const mapY = Math.floor(offsetY + y);
-                    
-                    let tileType = 0;
-                    let color = COLORS.GRASS;
-                    
-                    if (mapX >= 0 && mapX < WORLD_SIZE && mapY >= 0 && mapY < WORLD_SIZE) {
-                        tileType = worldMap[mapY][mapX];
-                    }
-                    
-                    switch (tileType) {
-                        case 0:
-                            color = COLORS.GRASS;
-                            break;
-                        case 1:
-                            color = COLORS.WATER;
-                            break;
-                        case 2:
-                            color = COLORS.FOREST;
-                            break;
-                        case 3:
-                            color = COLORS.MOUNTAIN;
-                            break;
-                        case 4:
-                            color = COLORS.PATH;
-                            break;
-                        case 5:
-                            color = COLORS.GRASS;
-                            break;
-                        case 6:
-                            color = COLORS.SAND;
-                            break;
-                        case 7:
-                            color = COLORS.VOLCANIC;
-                            break;
-                        case 8:
-                            color = COLORS.LAVA;
-                            break;
-                        case 9:
-                            color = COLORS.DARK_FOREST;
-                            break;
-                        case 10:
-                            color = COLORS.SWAMP;
-                            break;
-                    }
-                    
-                    ctx.fillStyle = color;
-                    ctx.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
-                    
-                    if (tileType === 0) {
-                        ctx.fillStyle = COLORS.GRASS_DARK;
-                        for (let i = 0; i < 8; i++) {
-                            const detailX = x * TILE_SIZE + 3 + Math.random() * (TILE_SIZE - 6);
-                            const detailY = y * TILE_SIZE + 3 + Math.random() * (TILE_SIZE - 6);
-                            ctx.fillRect(detailX, detailY, 2, 2);
-                        }
-                    } else if (tileType === 1) {
-                        ctx.fillStyle = COLORS.WATER_DARK;
-                        for (let i = 0; i < 6; i++) {
-                            const waveX = x * TILE_SIZE + 10 + Math.random() * (TILE_SIZE - 20);
-                            const waveY = y * TILE_SIZE + 10 + Math.random() * (TILE_SIZE - 20);
-                            ctx.beginPath();
-                            ctx.ellipse(waveX, waveY, 12, 6, Math.random() * Math.PI, 0, Math.PI * 2);
-                            ctx.fill();
-                        }
-                    } else if (tileType === 2) {
-                        const treeX = x * TILE_SIZE + TILE_SIZE / 2;
-                        const treeY = y * TILE_SIZE + TILE_SIZE / 2;
-                        
-                        ctx.fillStyle = '#8B4513';
-                        ctx.fillRect(treeX - 4, treeY, 8, TILE_SIZE / 2);
-                        
-                        ctx.fillStyle = COLORS.FOREST_DARK;
-                        ctx.beginPath();
-                        ctx.arc(treeX, treeY - 8, TILE_SIZE / 3, 0, Math.PI * 2);
-                        ctx.fill();
-                        
-                        ctx.fillStyle = '#229954';
-                        ctx.beginPath();
-                        ctx.arc(treeX - 5, treeY - 10, TILE_SIZE / 4, 0, Math.PI * 2);
-                        ctx.arc(treeX + 5, treeY - 10, TILE_SIZE / 4, 0, Math.PI * 2);
-                        ctx.fill();
-                    } else if (tileType === 3) {
-                        ctx.fillStyle = COLORS.MOUNTAIN_DARK;
-                        for (let i = 0; i < 8; i++) {
-                            const rockX = x * TILE_SIZE + 5 + Math.random() * (TILE_SIZE - 10);
-                            const rockY = y * TILE_SIZE + 5 + Math.random() * (TILE_SIZE - 10);
-                            ctx.beginPath();
-                            ctx.ellipse(rockX, rockY, 10, 6, Math.random() * Math.PI, 0, Math.PI * 2);
-                            ctx.fill();
-                        }
-                        
-                        if (Math.random() < 0.4) {
-                            ctx.fillStyle = '#ecf0f1';
-                            ctx.beginPath();
-                            ctx.moveTo(x * TILE_SIZE + 10, y * TILE_SIZE + 15);
-                            ctx.lineTo(x * TILE_SIZE + TILE_SIZE - 10, y * TILE_SIZE + 15);
-                            ctx.lineTo(x * TILE_SIZE + TILE_SIZE / 2, y * TILE_SIZE + 5);
-                            ctx.closePath();
-                            ctx.fill();
-                        }
-                    } else if (tileType === 4) {
-                        ctx.fillStyle = COLORS.PATH_DARK;
-                        for (let i = 0; i < 6; i++) {
-                            const stoneX = x * TILE_SIZE + 5 + Math.random() * (TILE_SIZE - 10);
-                            const stoneY = y * TILE_SIZE + 5 + Math.random() * (TILE_SIZE - 10);
-                            ctx.beginPath();
-                            ctx.ellipse(stoneX, stoneY, 8, 5, 0, 0, Math.PI * 2);
-                            ctx.fill();
-                        }
-                    } else if (tileType === 5) {
-                        const flowerX = x * TILE_SIZE + TILE_SIZE / 2;
-                        const flowerY = y * TILE_SIZE + TILE_SIZE / 2;
-                        
-                        ctx.fillStyle = '#27ae60';
-                        ctx.fillRect(flowerX - 1, flowerY, 2, TILE_SIZE / 3);
-                        
-                        const flowerColor = [COLORS.FLOWER1, COLORS.FLOWER2, COLORS.FLOWER3][Math.floor(Math.random() * 3)];
-                        ctx.fillStyle = flowerColor;
-                        ctx.beginPath();
-                        ctx.arc(flowerX, flowerY - 5, 6, 0, Math.PI * 2);
-                        ctx.fill();
-                        
-                        ctx.fillStyle = '#f1c40f';
-                        ctx.beginPath();
-                        ctx.arc(flowerX, flowerY - 5, 3, 0, Math.PI * 2);
-                        ctx.fill();
-                    } else if (tileType === 6) {
-                        ctx.fillStyle = COLORS.SAND_DARK;
-                        for (let i = 0; i < 10; i++) {
-                            const sandX = x * TILE_SIZE + 3 + Math.random() * (TILE_SIZE - 6);
-                            const sandY = y * TILE_SIZE + 3 + Math.random() * (TILE_SIZE - 6);
-                            ctx.beginPath();
-                            ctx.arc(sandX, sandY, 2, 0, Math.PI * 2);
-                            ctx.fill();
-                        }
-                    } else if (tileType === 7) {
-                        ctx.fillStyle = COLORS.VOLCANIC_DARK;
-                        for (let i = 0; i < 12; i++) {
-                            const rockX = x * TILE_SIZE + 5 + Math.random() * (TILE_SIZE - 10);
-                            const rockY = y * TILE_SIZE + 5 + Math.random() * (TILE_SIZE - 10);
-                            ctx.beginPath();
-                            ctx.ellipse(rockX, rockY, 8, 5, Math.random() * Math.PI, 0, Math.PI * 2);
-                            ctx.fill();
-                        }
-                        
-                        if (Math.random() < 0.3) {
-                            ctx.fillStyle = COLORS.LAVA;
-                            ctx.beginPath();
-                            ctx.arc(x * TILE_SIZE + 10 + Math.random() * (TILE_SIZE - 20), 
-                                   y * TILE_SIZE + 10 + Math.random() * (TILE_SIZE - 20), 
-                                   5, 0, Math.PI * 2);
-                            ctx.fill();
-                        }
-                    } else if (tileType === 8) {
-                        ctx.fillStyle = COLORS.LAVA_DARK;
-                        for (let i = 0; i < 15; i++) {
-                            const lavaX = x * TILE_SIZE + 5 + Math.random() * (TILE_SIZE - 10);
-                            const lavaY = y * TILE_SIZE + 5 + Math.random() * (TILE_SIZE - 10);
-                            ctx.beginPath();
-                            ctx.ellipse(lavaX, lavaY, 6, 4, Math.random() * Math.PI, 0, Math.PI * 2);
-                            ctx.fill();
-                        }
-                        
-                        ctx.fillStyle = COLORS.LAVA;
-                        for (let i = 0; i < 8; i++) {
-                            const bubbleX = x * TILE_SIZE + 10 + Math.random() * (TILE_SIZE - 20);
-                            const bubbleY = y * TILE_SIZE + 10 + Math.random() * (TILE_SIZE - 20);
-                            ctx.beginPath();
-                            ctx.arc(bubbleX, bubbleY, 3, 0, Math.PI * 2);
-                            ctx.fill();
-                        }
-                    } else if (tileType === 9) {
-                        ctx.fillStyle = COLORS.DARK_FOREST_DARK;
-                        for (let i = 0; i < 8; i++) {
-                            const detailX = x * TILE_SIZE + 3 + Math.random() * (TILE_SIZE - 6);
-                            const detailY = y * TILE_SIZE + 3 + Math.random() * (TILE_SIZE - 6);
-                            ctx.fillRect(detailX, detailY, 2, 2);
-                        }
-                        
-                        const treeX = x * TILE_SIZE + TILE_SIZE / 2;
-                        const treeY = y * TILE_SIZE + TILE_SIZE / 2;
-                        
-                        ctx.fillStyle = '#2c3e50';
-                        ctx.fillRect(treeX - 4, treeY, 8, TILE_SIZE / 2);
-                        
-                        ctx.fillStyle = '#1b2631';
-                        ctx.beginPath();
-                        ctx.arc(treeX, treeY - 8, TILE_SIZE / 3, 0, Math.PI * 2);
-                        ctx.fill();
-                        
-                        ctx.fillStyle = '#1b5e20';
-                        ctx.beginPath();
-                        ctx.arc(treeX - 5, treeY - 10, TILE_SIZE / 4, 0, Math.PI * 2);
-                        ctx.arc(treeX + 5, treeY - 10, TILE_SIZE / 4, 0, Math.PI * 2);
-                        ctx.fill();
-                    } else if (tileType === 10) {
-                        ctx.fillStyle = COLORS.SWAMP_DARK;
-                        for (let i = 0; i < 8; i++) {
-                            const detailX = x * TILE_SIZE + 5 + Math.random() * (TILE_SIZE - 10);
-                            const detailY = y * TILE_SIZE + 5 + Math.random() * (TILE_SIZE - 10);
-                            ctx.beginPath();
-                            ctx.ellipse(detailX, detailY, 8, 5, Math.random() * Math.PI, 0, Math.PI * 2);
-                            ctx.fill();
-                        }
-                        
-                        // Adicionar bolhas de gás
-                        if (Math.random() < 0.2) {
-                            ctx.fillStyle = 'rgba(46, 204, 113, 0.5)';
-                            ctx.beginPath();
-                            ctx.arc(x * TILE_SIZE + 10 + Math.random() * (TILE_SIZE - 20), 
-                                   y * TILE_SIZE + 10 + Math.random() * (TILE_SIZE - 20), 
-                                   4, 0, Math.PI * 2);
-                            ctx.fill();
-                        }
+            let tileType = 0;
+            let color = COLORS.GRASS;
+            
+            // Verificar se está dentro dos limites do mapa
+            if (mapX >= 0 && mapX < WORLD_SIZE && mapY >= 0 && mapY < WORLD_SIZE) {
+                tileType = worldMap[mapY][mapX];
+            } else {
+                // Fora do mapa - desenhar barreira
+                tileType = -1;
+            }
+            
+            switch (tileType) {
+                case -1: // Barreira do mapa
+                    color = '#2c3e50';
+                    break;
+                case 0:
+                    color = COLORS.GRASS;
+                    break;
+                case 1:
+                    color = COLORS.WATER;
+                    break;
+                case 2:
+                    color = COLORS.FOREST;
+                    break;
+                case 3:
+                    color = COLORS.MOUNTAIN;
+                    break;
+                case 4:
+                    color = COLORS.PATH;
+                    break;
+                case 5:
+                    color = COLORS.GRASS;
+                    break;
+                case 6:
+                    color = COLORS.SAND;
+                    break;
+                case 7:
+                    color = COLORS.VOLCANIC;
+                    break;
+                case 8:
+                    color = COLORS.LAVA;
+                    break;
+                case 9:
+                    color = COLORS.DARK_FOREST;
+                    break;
+                case 10:
+                    color = COLORS.SWAMP;
+                    break;
+            }
+            
+            ctx.fillStyle = color;
+            ctx.fillRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+            
+            if (tileType === -1) {
+                // Desenhar barreira decorativa
+                ctx.fillStyle = '#34495e';
+                for (let i = 0; i < 4; i++) {
+                    for (let j = 0; j < 4; j++) {
+                        const barrierX = x * TILE_SIZE + 8 + i * 12;
+                        const barrierY = y * TILE_SIZE + 8 + j * 12;
+                        ctx.fillRect(barrierX, barrierY, 8, 8);
                     }
                 }
-            }
-            
-            merchantForest.draw();
-            merchantMountain.draw();
-            darkMerchant.draw();
-            
-            // Desenhar personagem misterioso se existir e não tiver interagido
-            if (mysteriousCharacter && !mysteriousCharacter.hasInteracted) {
-                mysteriousCharacter.draw();
-            }
-            
-            if (merchantForest.isPlayerNearby(player) || merchantMountain.isPlayerNearby(player)) {
-                ctx.fillStyle = '#f8c555';
-                ctx.font = 'bold 14px MedievalSharp';
-                ctx.textAlign = 'center';
-                ctx.fillText('Pressione E para interagir', canvas.width / 2, canvas.height - 20);
-            } else if (darkMerchant.isPlayerNearby(player)) {
-                ctx.fillStyle = '#e74c3c';
-                ctx.font = 'bold 14px MedievalSharp';
-                ctx.textAlign = 'center';
-                ctx.fillText('Pressione E para interagir', canvas.width / 2, canvas.height - 20);
-            } else if (mysteriousCharacter && mysteriousCharacter.isPlayerNearby(player) && !mysteriousCharacter.hasInteracted) {
-                ctx.fillStyle = '#e74c3c';
-                ctx.font = 'bold 14px MedievalSharp';
-                ctx.textAlign = 'center';
-                ctx.fillText('Pressione E para interagir', canvas.width / 2, canvas.height - 20);
+                ctx.strokeStyle = '#7f8c8d';
+                ctx.lineWidth = 2;
+                ctx.strokeRect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+            } else if (tileType === 0) {
+                ctx.fillStyle = COLORS.GRASS_DARK;
+                for (let i = 0; i < 8; i++) {
+                    const detailX = x * TILE_SIZE + 3 + Math.random() * (TILE_SIZE - 6);
+                    const detailY = y * TILE_SIZE + 3 + Math.random() * (TILE_SIZE - 6);
+                    ctx.fillRect(detailX, detailY, 2, 2);
+                }
+            } else if (tileType === 1) {
+                ctx.fillStyle = COLORS.WATER_DARK;
+                for (let i = 0; i < 6; i++) {
+                    const waveX = x * TILE_SIZE + 10 + Math.random() * (TILE_SIZE - 20);
+                    const waveY = y * TILE_SIZE + 10 + Math.random() * (TILE_SIZE - 20);
+                    ctx.beginPath();
+                    ctx.ellipse(waveX, waveY, 12, 6, Math.random() * Math.PI, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            } else if (tileType === 2) {
+                const treeX = x * TILE_SIZE + TILE_SIZE / 2;
+                const treeY = y * TILE_SIZE + TILE_SIZE / 2;
+                
+                ctx.fillStyle = '#8B4513';
+                ctx.fillRect(treeX - 4, treeY, 8, TILE_SIZE / 2);
+                
+                ctx.fillStyle = COLORS.FOREST_DARK;
+                ctx.beginPath();
+                ctx.arc(treeX, treeY - 8, TILE_SIZE / 3, 0, Math.PI * 2);
+                ctx.fill();
+                
+                ctx.fillStyle = '#229954';
+                ctx.beginPath();
+                ctx.arc(treeX - 5, treeY - 10, TILE_SIZE / 4, 0, Math.PI * 2);
+                ctx.arc(treeX + 5, treeY - 10, TILE_SIZE / 4, 0, Math.PI * 2);
+                ctx.fill();
+            } else if (tileType === 3) {
+                ctx.fillStyle = COLORS.MOUNTAIN_DARK;
+                for (let i = 0; i < 8; i++) {
+                    const rockX = x * TILE_SIZE + 5 + Math.random() * (TILE_SIZE - 10);
+                    const rockY = y * TILE_SIZE + 5 + Math.random() * (TILE_SIZE - 10);
+                    ctx.beginPath();
+                    ctx.ellipse(rockX, rockY, 10, 6, Math.random() * Math.PI, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+                
+                if (Math.random() < 0.4) {
+                    ctx.fillStyle = '#ecf0f1';
+                    ctx.beginPath();
+                    ctx.moveTo(x * TILE_SIZE + 10, y * TILE_SIZE + 15);
+                    ctx.lineTo(x * TILE_SIZE + TILE_SIZE - 10, y * TILE_SIZE + 15);
+                    ctx.lineTo(x * TILE_SIZE + TILE_SIZE / 2, y * TILE_SIZE + 5);
+                    ctx.closePath();
+                    ctx.fill();
+                }
+            } else if (tileType === 4) {
+                ctx.fillStyle = COLORS.PATH_DARK;
+                for (let i = 0; i < 6; i++) {
+                    const stoneX = x * TILE_SIZE + 5 + Math.random() * (TILE_SIZE - 10);
+                    const stoneY = y * TILE_SIZE + 5 + Math.random() * (TILE_SIZE - 10);
+                    ctx.beginPath();
+                    ctx.ellipse(stoneX, stoneY, 8, 5, 0, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            } else if (tileType === 5) {
+                const flowerX = x * TILE_SIZE + TILE_SIZE / 2;
+                const flowerY = y * TILE_SIZE + TILE_SIZE / 2;
+                
+                ctx.fillStyle = '#27ae60';
+                ctx.fillRect(flowerX - 1, flowerY, 2, TILE_SIZE / 3);
+                
+                const flowerColor = [COLORS.FLOWER1, COLORS.FLOWER2, COLORS.FLOWER3][Math.floor(Math.random() * 3)];
+                ctx.fillStyle = flowerColor;
+                ctx.beginPath();
+                ctx.arc(flowerX, flowerY - 5, 6, 0, Math.PI * 2);
+                ctx.fill();
+                
+                ctx.fillStyle = '#f1c40f';
+                ctx.beginPath();
+                ctx.arc(flowerX, flowerY - 5, 3, 0, Math.PI * 2);
+                ctx.fill();
+            } else if (tileType === 6) {
+                ctx.fillStyle = COLORS.SAND_DARK;
+                for (let i = 0; i < 10; i++) {
+                    const sandX = x * TILE_SIZE + 3 + Math.random() * (TILE_SIZE - 6);
+                    const sandY = y * TILE_SIZE + 3 + Math.random() * (TILE_SIZE - 6);
+                    ctx.beginPath();
+                    ctx.arc(sandX, sandY, 2, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            } else if (tileType === 7) {
+                ctx.fillStyle = COLORS.VOLCANIC_DARK;
+                for (let i = 0; i < 12; i++) {
+                    const rockX = x * TILE_SIZE + 5 + Math.random() * (TILE_SIZE - 10);
+                    const rockY = y * TILE_SIZE + 5 + Math.random() * (TILE_SIZE - 10);
+                    ctx.beginPath();
+                    ctx.ellipse(rockX, rockY, 8, 5, Math.random() * Math.PI, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+                
+                if (Math.random() < 0.3) {
+                    ctx.fillStyle = COLORS.LAVA;
+                    ctx.beginPath();
+                    ctx.arc(x * TILE_SIZE + 10 + Math.random() * (TILE_SIZE - 20), 
+                           y * TILE_SIZE + 10 + Math.random() * (TILE_SIZE - 20), 
+                           5, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            } else if (tileType === 8) {
+                ctx.fillStyle = COLORS.LAVA_DARK;
+                for (let i = 0; i < 15; i++) {
+                    const lavaX = x * TILE_SIZE + 5 + Math.random() * (TILE_SIZE - 10);
+                    const lavaY = y * TILE_SIZE + 5 + Math.random() * (TILE_SIZE - 10);
+                    ctx.beginPath();
+                    ctx.ellipse(lavaX, lavaY, 6, 4, Math.random() * Math.PI, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+                
+                ctx.fillStyle = COLORS.LAVA;
+                for (let i = 0; i < 8; i++) {
+                    const bubbleX = x * TILE_SIZE + 10 + Math.random() * (TILE_SIZE - 20);
+                    const bubbleY = y * TILE_SIZE + 10 + Math.random() * (TILE_SIZE - 20);
+                    ctx.beginPath();
+                    ctx.arc(bubbleX, bubbleY, 3, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            } else if (tileType === 9) {
+                ctx.fillStyle = COLORS.DARK_FOREST_DARK;
+                for (let i = 0; i < 8; i++) {
+                    const detailX = x * TILE_SIZE + 3 + Math.random() * (TILE_SIZE - 6);
+                    const detailY = y * TILE_SIZE + 3 + Math.random() * (TILE_SIZE - 6);
+                    ctx.fillRect(detailX, detailY, 2, 2);
+                }
+                
+                const treeX = x * TILE_SIZE + TILE_SIZE / 2;
+                const treeY = y * TILE_SIZE + TILE_SIZE / 2;
+                
+                ctx.fillStyle = '#2c3e50';
+                ctx.fillRect(treeX - 4, treeY, 8, TILE_SIZE / 2);
+                
+                ctx.fillStyle = '#1b2631';
+                ctx.beginPath();
+                ctx.arc(treeX, treeY - 8, TILE_SIZE / 3, 0, Math.PI * 2);
+                ctx.fill();
+                
+                ctx.fillStyle = '#1b5e20';
+                ctx.beginPath();
+                ctx.arc(treeX - 5, treeY - 10, TILE_SIZE / 4, 0, Math.PI * 2);
+                ctx.arc(treeX + 5, treeY - 10, TILE_SIZE / 4, 0, Math.PI * 2);
+                ctx.fill();
+            } else if (tileType === 10) {
+                ctx.fillStyle = COLORS.SWAMP_DARK;
+                for (let i = 0; i < 8; i++) {
+                    const detailX = x * TILE_SIZE + 5 + Math.random() * (TILE_SIZE - 10);
+                    const detailY = y * TILE_SIZE + 5 + Math.random() * (TILE_SIZE - 10);
+                    ctx.beginPath();
+                    ctx.ellipse(detailX, detailY, 8, 5, Math.random() * Math.PI, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+                
+                // Adicionar bolhas de gás
+                if (Math.random() < 0.2) {
+                    ctx.fillStyle = 'rgba(46, 204, 113, 0.5)';
+                    ctx.beginPath();
+                    ctx.arc(x * TILE_SIZE + 10 + Math.random() * (TILE_SIZE - 20), 
+                           y * TILE_SIZE + 10 + Math.random() * (TILE_SIZE - 20), 
+                           4, 0, Math.PI * 2);
+                    ctx.fill();
+                }
             }
         }
+    }
+    
+    merchantForest.draw();
+    merchantMountain.draw();
+    darkMerchant.draw();
+    
+    // Desenhar personagem misterioso se existir e não tiver interagido
+    if (mysteriousCharacter && !mysteriousCharacter.hasInteracted) {
+        mysteriousCharacter.draw();
+    }
+    
+    if (merchantForest.isPlayerNearby(player) || merchantMountain.isPlayerNearby(player)) {
+        ctx.fillStyle = '#f8c555';
+        ctx.font = 'bold 14px MedievalSharp';
+        ctx.textAlign = 'center';
+        ctx.fillText('Pressione E para interagir', canvas.width / 2, canvas.height - 20);
+    } else if (darkMerchant.isPlayerNearby(player)) {
+        ctx.fillStyle = '#e74c3c';
+        ctx.font = 'bold 14px MedievalSharp';
+        ctx.textAlign = 'center';
+        ctx.fillText('Pressione E para interagir', canvas.width / 2, canvas.height - 20);
+    } else if (mysteriousCharacter && mysteriousCharacter.isPlayerNearby(player) && !mysteriousCharacter.hasInteracted) {
+        ctx.fillStyle = '#e74c3c';
+        ctx.font = 'bold 14px MedievalSharp';
+        ctx.textAlign = 'center';
+        ctx.fillText('Pressione E para interagir', canvas.width / 2, canvas.height - 20);
+    }
+}
 
         // Funções de batalha
         function startBattle() {
