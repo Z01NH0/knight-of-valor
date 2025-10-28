@@ -2347,8 +2347,8 @@
         const MAP_WIDTH = 18;
         const MAP_HEIGHT = 11;
         const WORLD_SIZE = 120;
-        const MOVE_COOLDOWN = 10;
-        const MONSTER_SPAWN_CHANCE = 0.0;
+        const MOVE_COOLDOWN = 120;
+        const MONSTER_SPAWN_CHANCE = 0.1;
         const GOLDEN_MONSTER_CHANCE = 0.0001;
 
         // Seleção de elementos do DOM
@@ -6229,7 +6229,7 @@ drawBattleWeaponWithEquipment(ctx, x, y, isAttacking, weaponColor) {
             bossBattleScreen.style.display = 'flex';
             showBossMainBattleActions();
             
-           
+            player.drawBossBattle(bossPlayerCtx);
             currentBoss.drawBattle(bossEnemyCtx);
             
             setBossBattleButtonsLocked(false);
