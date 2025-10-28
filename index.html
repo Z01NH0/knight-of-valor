@@ -2347,8 +2347,8 @@
         const MAP_WIDTH = 18;
         const MAP_HEIGHT = 11;
         const WORLD_SIZE = 120;
-        const MOVE_COOLDOWN = 120;
-        const MONSTER_SPAWN_CHANCE = 0.1;
+        const MOVE_COOLDOWN = 10;
+        const MONSTER_SPAWN_CHANCE = 0.0;
         const GOLDEN_MONSTER_CHANCE = 0.0001;
 
         // Seleção de elementos do DOM
@@ -2840,100 +2840,129 @@ drawBattleWeaponWithEquipment(ctx, x, y, isAttacking, weaponColor) {
     }
 }
             drawBattle(ctx, isAttacking = false, attackType = null) {
-                ctx.clearRect(0, 0, 250, 250);
-                
-                ctx.fillStyle = 'rgba(26, 58, 95, 0.5)';
-                ctx.fillRect(0, 0, 250, 250);
-                
-                const centerX = 125;
-                const centerY = 125;
-                
-                // Corpo
-                ctx.fillStyle = '#2c3e50';
-                ctx.fillRect(centerX - 40, centerY - 20, 80, 60);
-                
-                // Detalhes da armadura
-                ctx.fillStyle = '#34495e';
-                ctx.fillRect(centerX - 38, centerY - 18, 76, 56);
-                
-                // Capacete
-                ctx.fillStyle = '#ecf0f1';
-                ctx.fillRect(centerX - 25, centerY - 45, 50, 25);
-                
-                // Visor do capacete
-                ctx.fillStyle = '#3498db';
-                ctx.fillRect(centerX - 20, centerY - 43, 40, 12);
-                
-                // Escudo
-                ctx.fillStyle = '#34495e';
-                ctx.fillRect(centerX - 60, centerY - 15, 25, 45);
-                
-                // Detalhe do escudo
-                ctx.fillStyle = '#f8c555';
-                ctx.fillRect(centerX - 58, centerY - 5, 21, 35);
-                
-                this.drawBattleWeapon(ctx, centerX, centerY, isAttacking);
-                
-                ctx.strokeStyle = '#1c2833';
-                ctx.lineWidth = 2;
-                ctx.strokeRect(centerX - 40, centerY - 20, 80, 60);
+    ctx.clearRect(0, 0, 250, 250);
+    
+    ctx.fillStyle = 'rgba(26, 58, 95, 0.5)';
+    ctx.fillRect(0, 0, 250, 250);
+    
+    const centerX = 125;
+    const centerY = 125;
+    
+    // Determinar cores baseadas no equipamento
+    let armorColor = '#34495e';
+    let armorDetailColor = '#2c3e50';
+    let helmetColor = '#ecf0f1';
+    let shieldColor = '#2c3e50';
+    let weaponColor = '#bdc3c7';
+    
+    // Aplicar cores baseadas na armadura equipada
+    if (this.armor.name.includes("Ouro")) {
+        armorColor = '#f39c12';
+        armorDetailColor = '#d35400';
+        helmetColor = '#f1c40f';
+        shieldColor = '#f39c12';
+    } else if (this.armor.name.includes("Diamante")) {
+        armorColor = '#3498db';
+        armorDetailColor = '#2980b9';
+        helmetColor = '#85c1e9';
+        shieldColor = '#3498db';
+    } else if (this.armor.name.includes("Malha")) {
+        armorColor = '#7f8c8d';
+        armorDetailColor = '#95a5a6';
+        helmetColor = '#bdc3c7';
+        shieldColor = '#7f8c8d';
+    } else if (this.armor.name.includes("Lobo Negro")) {
+        armorColor = '#2c3e50';
+        armorDetailColor = '#34495e';
+        helmetColor = '#e74c3c';
+        shieldColor = '#2c3e50';
+    } else if (this.armor.name.includes("Imperial")) {
+        armorColor = '#e74c3c';
+        armorDetailColor = '#c0392b';
+        helmetColor = '#f1c40f';
+        shieldColor = '#e74c3c';
+    } else if (this.armor.name.includes("Almas")) {
+        armorColor = '#8e44ad';
+        armorDetailColor = '#9b59b6';
+        helmetColor = '#d7bde2';
+        shieldColor = '#8e44ad';
+    }
+    
+    // Ajustar cor da arma
+    if (this.weapon.name.includes("Ouro")) {
+        weaponColor = '#f1c40f';
+    } else if (this.weapon.name.includes("Diamante")) {
+        weaponColor = '#3498db';
+    } else if (this.weapon.name.includes("Pedra")) {
+        weaponColor = '#95a5a6';
+    } else if (this.weapon.name.includes("Dragon")) {
+        weaponColor = '#e74c3c';
+    } else if (this.weapon.name.includes("Perdição")) {
+        weaponColor = '#8e44ad';
+    } else if (this.weapon.name.includes("Longsword")) {
+        weaponColor = '#2c3e50';
+    }
+    
+    // Corpo com equipamento
+    ctx.fillStyle = armorColor;
+    ctx.fillRect(centerX - 40, centerY - 20, 80, 60);
+    
+    // Detalhes da armadura
+    ctx.fillStyle = armorDetailColor;
+    ctx.fillRect(centerX - 38, centerY - 18, 76, 56);
+    
+    // Capacete
+    ctx.fillStyle = helmetColor;
+    ctx.fillRect(centerX - 25, centerY - 45, 50, 25);
+    
+    // Visor do capacete
+    ctx.fillStyle = '#3498db';
+    ctx.fillRect(centerX - 20, centerY - 43, 40, 12);
+    
+    // Escudo
+    ctx.fillStyle = shieldColor;
+    ctx.fillRect(centerX - 60, centerY - 15, 25, 45);
+    
+    // Detalhe do escudo
+    ctx.fillStyle = '#f8c555';
+    ctx.fillRect(centerX - 58, centerY - 5, 21, 35);
+    
+    this.drawBattleWeaponWithEquipment(ctx, centerX, centerY, isAttacking, weaponColor);
+    
+    ctx.strokeStyle = '#1c2833';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(centerX - 40, centerY - 20, 80, 60);
+}
+
+drawBattleWeaponWithEquipment(ctx, x, y, isAttacking, weaponColor) {
+    ctx.fillStyle = weaponColor;
+    ctx.fillRect(x + 30, y - 25, 7, 60);
+    ctx.fillRect(x + 25, y - 30, 20, 15);
+    ctx.fillStyle = '#8B4513';
+    ctx.fillRect(x + 30, y + 35, 7, 25);
+    
+    // Efeitos especiais para armas lendárias durante ataque
+    if (isAttacking) {
+        if (this.weapon.name.includes("Dragon")) {
+            ctx.fillStyle = 'rgba(231, 76, 60, 0.7)';
+            ctx.beginPath();
+            ctx.arc(x + 35, y, 15, 0, Math.PI * 2);
+            ctx.fill();
+        } else if (this.weapon.name.includes("Perdição")) {
+            ctx.fillStyle = 'rgba(142, 68, 173, 0.7)';
+            for (let i = 0; i < 3; i++) {
+                ctx.beginPath();
+                ctx.arc(x + 17, y - 8 + i * 8, 3, 0, Math.PI * 2);
+                ctx.fill();
             }
-            
-            drawBattleWeapon(ctx, x, y, isAttacking) {
-                ctx.fillStyle = '#bdc3c7';
-                ctx.fillRect(x + 30, y - 25, 7, 60);
-                ctx.fillRect(x + 25, y - 30, 20, 15);
-                ctx.fillStyle = '#8B4513';
-                ctx.fillRect(x + 30, y + 35, 7, 25);
-            }
-            
-            drawBossBattle(ctx, isAttacking = false) {
-                ctx.clearRect(0, 0, 300, 300);
-                
-                ctx.fillStyle = 'rgba(26, 58, 95, 0.5)';
-                ctx.fillRect(0, 0, 300, 300);
-                
-                const centerX = 150;
-                const centerY = 150;
-                
-                // Corpo
-                ctx.fillStyle = '#2c3e50';
-                ctx.fillRect(centerX - 50, centerY - 25, 100, 75);
-                
-                // Detalhes da armadura
-                ctx.fillStyle = '#34495e';
-                ctx.fillRect(centerX - 48, centerY - 23, 96, 71);
-                
-                // Capacete
-                ctx.fillStyle = '#ecf0f1';
-                ctx.fillRect(centerX - 30, centerY - 55, 60, 30);
-                
-                // Visor do capacete
-                ctx.fillStyle = '#3498db';
-                ctx.fillRect(centerX - 25, centerY - 53, 50, 15);
-                
-                // Escudo
-                ctx.fillStyle = '#34495e';
-                ctx.fillRect(centerX - 75, centerY - 20, 30, 55);
-                
-                // Detalhe do escudo
-                ctx.fillStyle = '#f8c555';
-                ctx.fillRect(centerX - 73, centerY - 10, 26, 45);
-                
-                this.drawBossBattleWeapon(ctx, centerX, centerY, isAttacking);
-                
-                ctx.strokeStyle = '#1c2833';
-                ctx.lineWidth = 2;
-                ctx.strokeRect(centerX - 50, centerY - 25, 100, 75);
-            }
-            
-            drawBossBattleWeapon(ctx, x, y, isAttacking) {
-                ctx.fillStyle = '#bdc3c7';
-                ctx.fillRect(x + 35, y - 30, 9, 70);
-                ctx.fillRect(x + 30, y - 35, 25, 18);
-                ctx.fillStyle = '#8B4513';
-                ctx.fillRect(x + 35, y + 40, 9, 30);
-            }
+        } else if (this.weapon.name.includes("Longsword")) {
+            ctx.fillStyle = 'rgba(44, 62, 80, 0.7)';
+            ctx.beginPath();
+            ctx.arc(x + 35, y, 12, 0, Math.PI * 2);
+            ctx.fill();
+        }
+    }
+}
             
             move(dx, dy, worldMap) {
     if (this.moveCooldown > 0) return false;
@@ -5428,9 +5457,6 @@ drawBattleWeaponWithEquipment(ctx, x, y, isAttacking, weaponColor) {
                     } else if (rand < 0.9) {
                         // Névoa das Trevas - 20% de chance
                         player.addStatusEffect({ type: 'poison', duration: 3, damagePerTurn: 5 });
-                        if (Math.random() < 0.2) {
-                            player.addStatusEffect({ type: 'stun', duration: 1 });
-                        }
                         return { damage: 30, type: 'darkMist' };
                     } else {
                         // Revigoração Do Monarca - 10% de chance
@@ -6203,7 +6229,7 @@ drawBattleWeaponWithEquipment(ctx, x, y, isAttacking, weaponColor) {
             bossBattleScreen.style.display = 'flex';
             showBossMainBattleActions();
             
-            player.drawBossBattle(bossPlayerCtx);
+           
             currentBoss.drawBattle(bossEnemyCtx);
             
             setBossBattleButtonsLocked(false);
@@ -6393,6 +6419,7 @@ function playerBossAttack(attackType) {
         isCritical = damage > (5 + Math.floor(player.strength * 0.5));
         
         message = `<span class="log-player">Cavaleiro</span> usa <span class="log-skill">Espadada</span>!`;
+        createBossSwordEffect();
         
     } else if (attackType === 'charge') {
         attackResult = player.chargeAttack();
@@ -6408,6 +6435,7 @@ function playerBossAttack(attackType) {
         isCritical = attackResult.isCritical;
         
         message = `<span class="log-player">Cavaleiro</span> usa <span class="log-skill">Investida</span>!`;
+        createBossChargeEffect();
     } else if (attackType === 'heavyArmor') {
         attackResult = player.activateHeavyArmor();
         
@@ -6419,14 +6447,19 @@ function playerBossAttack(attackType) {
         }
         
         message = attackResult.message;
+        createBossHeavyArmorEffect();
     }
     
     addBossBattleLog(message, "player");
+    
+    // Esconder submenu imediatamente
+    bossAttackOptionsPokemon.style.display = 'none';
     
     setTimeout(() => {
         if (attackType === 'heavyArmor') {
             // Habilidade defensiva, não causa dano
             player.updateUI();
+            updateBossPlayerUI();
             isPlayerTurn = false;
             setTimeout(bossTurn, 1000);
             return;
@@ -6434,6 +6467,7 @@ function playerBossAttack(attackType) {
         
         if (Math.random() < currentBoss.dodgeChance) {
             addBossBattleLog(`<span class="log-enemy">${currentBoss.name}</span> desviou do ataque!`, "enemy");
+            createBossMissEffect();
         } else {
             const actualDamage = currentBoss.takeDamage(damage);
             
@@ -6443,7 +6477,9 @@ function playerBossAttack(attackType) {
                 addBossBattleLog(` Causou ${actualDamage} de dano!`, "system");
             }
             
+            // Atualizar UI do boss
             bossBattleEnemyHealth.textContent = currentBoss.health;
+            updateBossEnemyStatusEffects();
             
             if (currentBoss.health <= 0 && currentBoss.isTransformed) {
                 endBossBattle(true);
@@ -6451,8 +6487,8 @@ function playerBossAttack(attackType) {
             }
         }
         
-        currentBoss.updateStatusEffects();
-        player.updateUI();
+        // Atualizar UI do jogador
+        updateBossPlayerUI();
         
         isPlayerTurn = false;
         setTimeout(bossTurn, 1000);
@@ -6462,6 +6498,7 @@ function playerBossAttack(attackType) {
 function playerBossMagic(spellType) {
     if (!isPlayerTurn || buttonsLocked) return;
     setBossBattleButtonsLocked(true);
+    
     let damage = 0;
     let message = "";
     let manaCost = 0;
@@ -6486,6 +6523,7 @@ function playerBossMagic(spellType) {
             damage = 20 + Math.floor(player.magic * 0.8);
             message = `<span class="log-player">Cavaleiro</span> conjura <span class="log-skill">Bola de Fogo</span>!`;
             burnChance = 0.5;
+            createBossFireballEffect();
             break;
             
         case 'freeze':
@@ -6505,6 +6543,7 @@ function playerBossMagic(spellType) {
             damage = 10 + Math.floor(player.magic * 0.5);
             message = `<span class="log-player">Cavaleiro</span> invoca <span class="log-skill">Brisa Congelante</span>!`;
             statusEffect = { type: 'slow', duration: 3 };
+            createBossFreezeEffect();
             break;
             
         case 'possession':
@@ -6524,14 +6563,19 @@ function playerBossMagic(spellType) {
             damage = 25 + Math.floor(player.magic * 1.2);
             message = `<span class="log-player">Cavaleiro</span> lança <span class="log-skill">Posseção</span>!`;
             statusEffect = { type: 'stun', duration: 3 };
+            createBossPossessionEffect();
             break;
     }
     
     addBossBattleLog(message, "player");
     
+    // Esconder submenu imediatamente
+    bossMagicOptionsPokemon.style.display = 'none';
+    
     setTimeout(() => {
         if (Math.random() < currentBoss.dodgeChance) {
             addBossBattleLog(`<span class="log-enemy">${currentBoss.name}</span> desviou do feitiço!`, "enemy");
+            createBossMissEffect();
         } else {
             const actualDamage = currentBoss.takeDamage(damage);
             
@@ -6540,12 +6584,16 @@ function playerBossMagic(spellType) {
             if (spellType === 'fireball' && Math.random() < burnChance) {
                 currentBoss.addStatusEffect({ type: 'burn', duration: 3 });
                 addBossBattleLog(` <span class="log-enemy">${currentBoss.name}</span> foi <span class="log-effect">queimado</span>!`, "system");
+                createBossBurnEffect();
             } else if (statusEffect) {
                 currentBoss.addStatusEffect(statusEffect);
                 addBossBattleLog(` <span class="log-enemy">${currentBoss.name}</span> foi afetado por <span class="log-effect">${statusEffect.type.toUpperCase()}</span>!`, "system");
+                createBossStatusEffect(statusEffect.type);
             }
             
+            // Atualizar UI do boss
             bossBattleEnemyHealth.textContent = currentBoss.health;
+            updateBossEnemyStatusEffects();
             
             if (currentBoss.health <= 0 && currentBoss.isTransformed) {
                 endBossBattle(true);
@@ -6553,8 +6601,8 @@ function playerBossMagic(spellType) {
             }
         }
         
-        currentBoss.updateStatusEffects();
-        player.updateUI();
+        // Atualizar UI do jogador
+        updateBossPlayerUI();
         
         isPlayerTurn = false;
         setTimeout(bossTurn, 1000);
@@ -7095,83 +7143,130 @@ function playerBossAct(actionType) {
         }
 
         function bossTurn() {
-            if (isPlayerTurn) return;
+    if (isPlayerTurn) return;
+    
+    player.recoverStamina(10);
+    player.updateUI();
+    
+    if (currentBoss.hasStatusEffect('stun')) {
+        addBossBattleLog(`<span class="log-enemy">${currentBoss.name}</span> está <span class="log-effect">atordoado</span> e perdeu a vez!`, "system");
+        currentBoss.updateStatusEffects();
+        
+        isPlayerTurn = true;
+        bossBattleRound++;
+        bossRoundIndicator.textContent = `Round ${bossBattleRound}`;
+        showBossMainBattleActions();
+        setBossBattleButtonsLocked(false);
+        return;
+    }
+    
+    // Bloquear botões durante o ataque do boss
+    setBossBattleButtonsLocked(true);
+    
+    const rand = Math.random();
+    let attackResult;
+    let message = "";
+    
+    if (rand < 0.7) {
+        // Carga Imperial - 70% de chance
+        attackResult = { damage: currentBoss.attack, type: 'imperialCharge' };
+        message = `<span class="log-enemy">${currentBoss.name}</span> usa <span class="log-skill">Carga Imperial</span>!`;
+        createBossImperialChargeEffect();
+    } else if (rand < 0.9) {
+        // Névoa das Trevas - 20% de chance
+        player.addStatusEffect({ type: 'poison', duration: 3, damagePerTurn: 5 });
+        attackResult = { damage: 30, type: 'darkMist' };
+        message = `<span class="log-enemy">${currentBoss.name}</span> invoca <span class="log-skill">Névoa das Trevas</span>!`;
+        createBossDarkMistEffect();
+    } else {
+        // Revigoração Do Monarca - 10% de chance
+        currentBoss.health = Math.min(currentBoss.maxHealth, currentBoss.health + 100);
+        attackResult = { damage: 0, type: 'monarchRevival' };
+        message = `<span class="log-enemy">${currentBoss.name}</span> usa <span class="log-skill">Revigoração Do Monarca</span> e recupera 100 de HP!`;
+        createBossRevivalEffect();
+    }
+    
+    addBossBattleLog(message, "enemy");
+    
+    // Animar ataque do boss
+    animateBossAttack();
+    
+    setTimeout(() => {
+        if (Math.random() < player.dodgeChance) {
+            addBossBattleLog(`<span class="log-player">Cavaleiro</span> desviou do ataque!`, "player");
+            createBossMissEffect();
+        } else {
+            let actualDamage = 0;
             
-            player.recoverStamina(10);
-            player.updateUI();
+            if (attackResult.damage > 0) {
+                actualDamage = player.takeDamage(attackResult.damage);
+                addBossBattleLog(` Causou ${actualDamage} de dano!`, "system");
+            }
             
-            if (currentBoss.hasStatusEffect('stun')) {
-                addBossBattleLog(`<span class="log-enemy">${currentBoss.name}</span> está <span class="log-effect">atordoado</span> e perdeu a vez!`, "system");
-                currentBoss.updateStatusEffects();
-                
-                isPlayerTurn = true;
-                bossBattleRound++;
-                bossRoundIndicator.textContent = `Round ${bossBattleRound}`;
-                showBossMainBattleActions();
-                setBossBattleButtonsLocked(false);
+            if (attackResult.type === 'darkMist') {
+                addBossBattleLog(` <span class="log-player">Cavaleiro</span> foi <span class="log-effect">envenenado</span>!`, "system");
+            }
+            
+            // Atualizar UI do jogador
+            bossBattlePlayerHealth.textContent = player.health;
+            bossBattlePlayerMana.textContent = player.mana;
+            bossBattlePlayerStamina.textContent = player.stamina;
+            updateBossPlayerStatusEffects();
+            
+            if (player.health <= 0) {
+                endBossBattle(false);
                 return;
             }
-            
-            const attackResult = currentBoss.attackPlayer(player);
-            let message = "";
-            
-            if (typeof attackResult === 'number') {
-                // Ataque normal na fase 1
-                message = `<span class="log-enemy">${currentBoss.name}</span> ataca!`;
-            } else {
-                // Ataques na fase 2
-                switch(attackResult.type) {
-                    case 'imperialCharge':
-                        message = `<span class="log-enemy">${currentBoss.name}</span> usa <span class="log-skill">Carga Imperial</span>!`;
-                        break;
-                    case 'darkMist':
-                        message = `<span class="log-enemy">${currentBoss.name}</span> invoca <span class="log-skill">Névoa das Trevas</span>!`;
-                        break;
-                    case 'monarchRevival':
-                        message = `<span class="log-enemy">${currentBoss.name}</span> usa <span class="log-skill">Revigoração Do Monarca</span> e recupera 100 de HP!`;
-                        break;
-                }
-            }
-            
-            addBossBattleLog(message, "enemy");
-            
-            setTimeout(() => {
-                if (Math.random() < player.dodgeChance) {
-                    addBossBattleLog(`<span class="log-player">Cavaleiro</span> desviou do ataque!`, "player");
-                } else {
-                    let actualDamage = 0;
-                    
-                    if (typeof attackResult === 'number') {
-                        actualDamage = player.takeDamage(attackResult);
-                    } else {
-                        actualDamage = player.takeDamage(attackResult.damage);
-                        
-                        if (attackResult.type === 'darkMist') {
-                            addBossBattleLog(` <span class="log-player">Cavaleiro</span> foi <span class="log-effect">envenenado</span>!`, "system");
-                        }
-                    }
-                    
-                    if (actualDamage > 0) {
-                        addBossBattleLog(` Causou ${actualDamage} de dano!`, "system");
-                    }
-                    
-                    player.updateUI();
-                    
-                    if (player.health <= 0) {
-                        endBossBattle(false);
-                        return;
-                    }
-                }
-                
-                player.updateStatusEffects();
-                
-                isPlayerTurn = true;
-                bossBattleRound++;
-                bossRoundIndicator.textContent = `Round ${bossBattleRound}`;
-                showBossMainBattleActions();
-                setBossBattleButtonsLocked(false);
-            }, 800);
         }
+        
+        // Atualizar UI do boss
+        bossBattleEnemyHealth.textContent = currentBoss.health;
+        updateBossEnemyStatusEffects();
+        
+        player.updateStatusEffects();
+        
+        isPlayerTurn = true;
+        bossBattleRound++;
+        bossRoundIndicator.textContent = `Round ${bossBattleRound}`;
+        
+        // Redesenhar personagens com equipamentos
+        player.drawBossBattle(bossPlayerCtx);
+        currentBoss.drawBattle(bossEnemyCtx);
+        
+        showBossMainBattleActions();
+        setBossBattleButtonsLocked(false);
+    }, 1500);
+}
+
+        function updateBossPlayerUI() {
+    bossBattlePlayerHealth.textContent = player.health;
+    bossBattlePlayerMaxHealth.textContent = player.maxHealth;
+    bossBattlePlayerMana.textContent = player.mana;
+    bossBattlePlayerMaxMana.textContent = player.maxMana;
+    bossBattlePlayerStamina.textContent = player.stamina;
+    bossBattlePlayerMaxStamina.textContent = player.maxStamina;
+    updateBossPlayerStatusEffects();
+}
+
+function updateBossPlayerStatusEffects() {
+    bossPlayerStatusEffects.innerHTML = '';
+    player.statusEffects.forEach(effect => {
+        const effectElement = document.createElement('div');
+        effectElement.className = `status-effect ${effect.type}`;
+        effectElement.textContent = effect.type.toUpperCase() + ` (${effect.duration})`;
+        bossPlayerStatusEffects.appendChild(effectElement);
+    });
+}
+
+function updateBossEnemyStatusEffects() {
+    bossEnemyStatusEffects.innerHTML = '';
+    currentBoss.statusEffects.forEach(effect => {
+        const effectElement = document.createElement('div');
+        effectElement.className = `status-effect ${effect.type}`;
+        effectElement.textContent = effect.type.toUpperCase() + ` (${effect.duration})`;
+        bossEnemyStatusEffects.appendChild(effectElement);
+    });
+}
 
         // Funções de efeitos visuais
         function createSwordEffect() {
