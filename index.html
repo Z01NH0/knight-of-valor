@@ -1746,26 +1746,52 @@
         }
         
         .boss-battle-action-btn {
-            background: linear-gradient(to bottom, #e74c3c, #c0392b);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-family: 'MedievalSharp', cursive;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-        }
-        
-        .boss-battle-action-btn:hover {
-            background: linear-gradient(to bottom, #ff6b6b, #e74c3c);
-            transform: translateY(-2px);
-        }
-        
-        .boss-battle-action-btn:active {
-            transform: translateY(0);
-        }
+    background: linear-gradient(to bottom, #e74c3c, #c0392b);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'MedievalSharp', cursive;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.boss-battle-action-btn:hover {
+    background: linear-gradient(to bottom, #ff6b6b, #e74c3c);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px rgba(231, 76, 60, 0.4);
+}
+
+.boss-battle-action-btn:active {
+    transform: translateY(0);
+}
+
+.boss-battle-action-btn:disabled {
+    background: #666;
+    color: #999;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Submenus do Boss */
+.boss-attack-options, .boss-magic-options, .boss-items-options, .boss-act-options {
+    display: none;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    height: 80px;
+}
+
+/* Container de itens da batalha do boss */
+.boss-items-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 10px;
+}
         
         .boss-transformation {
             position: absolute;
@@ -2266,11 +2292,38 @@
                     </div>
                     
                     <div class="boss-battle-actions-pokemon" id="bossBattleActionsPokemon">
-                        <button class="boss-battle-action-btn" id="bossAttackBtnPokemon">ATACAR</button>
-                        <button class="boss-battle-action-btn" id="bossMagicBtnPokemon">PODER MÁGICO</button>
-                        <button class="boss-battle-action-btn" id="bossItemsBtnPokemon">ITENS</button>
-                        <button class="boss-battle-action-btn" id="bossActBtnPokemon">AGIR</button>
-                    </div>
+    <button class="boss-battle-action-btn" id="bossAttackBtnPokemon">ATACAR</button>
+    <button class="boss-battle-action-btn" id="bossMagicBtnPokemon">PODER MÁGICO</button>
+    <button class="boss-battle-action-btn" id="bossItemsBtnPokemon">ITENS</button>
+    <button class="boss-battle-action-btn" id="bossActBtnPokemon">AGIR</button>
+</div>
+
+<div class="boss-attack-options" id="bossAttackOptionsPokemon" style="display: none;">
+    <button class="boss-battle-action-btn" id="bossSwordAttackBtnPokemon">ESPADADA</button>
+    <button class="boss-battle-action-btn" id="bossChargeBtnPokemon">INVESTIDA</button>
+    <button class="boss-battle-action-btn" id="bossHeavyArmorBtnPokemon">ARMADURA PESADA</button>
+    <button class="boss-battle-action-btn" id="bossBackFromAttackBtnPokemon">VOLTAR</button>
+</div>
+
+<div class="boss-magic-options" id="bossMagicOptionsPokemon" style="display: none;">
+    <button class="boss-battle-action-btn" id="bossFireballBtnPokemon">BOLA DE FOGO</button>
+    <button class="boss-battle-action-btn" id="bossFreezeBtnPokemon">BRISA CONGELANTE</button>
+    <button class="boss-battle-action-btn" id="bossPossessionBtnPokemon">POSSEÇÃO</button>
+    <button class="boss-battle-action-btn" id="bossBackFromMagicBtnPokemon">VOLTAR</button>
+</div>
+
+<div class="boss-items-options" id="bossItemsOptionsPokemon" style="display: none;">
+    <div class="boss-items-grid" id="bossBattleItemsGridPokemon">
+    </div>
+    <button class="boss-battle-action-btn" id="bossBackFromItemsBtnPokemon">VOLTAR</button>
+</div>
+
+<div class="boss-act-options" id="bossActOptionsPokemon" style="display: none;">
+    <button class="boss-battle-action-btn" id="bossMeditateBtnPokemon">MEDITAR</button>
+    <button class="boss-battle-action-btn" id="bossRestBtnPokemon">DESCANSAR</button>
+    <button class="boss-battle-action-btn" id="bossFleeBtnPokemon">TENTAR FUGIR</button>
+    <button class="boss-battle-action-btn" id="bossBackFromActBtnPokemon">VOLTAR</button>
+</div>
                     
                     <div class="boss-transformation" id="bossTransformation">
                         <div class="transformation-text">TRANSFORMAÇÃO DO REI CORROMPIDO!</div>
@@ -2601,47 +2654,191 @@
                 const centerX = canvas.width / 2;
                 const centerY = canvas.height / 2;
                 
-                this.drawKnight(centerX, centerY);
-            }
+                this.drawKnightWithEquipment(centerX, centerY);
+}
             
-            drawKnight(x, y) {
-                ctx.save();
-                
-                // Corpo
-                ctx.fillStyle = '#34495e';
-                ctx.fillRect(x - 20, y - 15, 40, 30);
-                
-                // Detalhes da armadura
-                ctx.fillStyle = '#2c3e50';
-                ctx.fillRect(x - 18, y - 13, 36, 26);
-                
-                // Capacete
-                ctx.fillStyle = '#ecf0f1';
-                ctx.fillRect(x - 10, y - 25, 20, 10);
-                
-                // Visor do capacete
-                ctx.fillStyle = '#3498db';
-                ctx.fillRect(x - 8, y - 24, 16, 4);
-                
-                // Escudo
-                ctx.fillStyle = '#2c3e50';
-                ctx.fillRect(x - 25, y - 10, 8, 20);
-                
-                // Detalhe do escudo
-                ctx.fillStyle = '#f8c555';
-                ctx.fillRect(x - 23, y - 5, 4, 10);
-                
-                this.drawWeapon(x, y);
-                
-                ctx.restore();
-            }
             
-            drawWeapon(x, y) {
-                ctx.fillStyle = '#bdc3c7';
-                ctx.fillRect(x + 15, y - 12, 3, 24);
-                ctx.fillRect(x + 10, y - 15, 13, 6);
-            }
             
+            drawKnightWithEquipment(x, y) {
+    ctx.save();
+    
+    // Determinar cores baseadas no equipamento
+    let armorColor = '#34495e';
+    let armorDetailColor = '#2c3e50';
+    let helmetColor = '#ecf0f1';
+    let shieldColor = '#2c3e50';
+    let weaponColor = '#bdc3c7';
+    
+    // Verificar equipamentos e ajustar cores
+    if (this.armor.name.includes("Ouro")) {
+        armorColor = '#f39c12';
+        armorDetailColor = '#d35400';
+        helmetColor = '#f1c40f';
+        shieldColor = '#f39c12';
+    } else if (this.armor.name.includes("Diamante")) {
+        armorColor = '#3498db';
+        armorDetailColor = '#2980b9';
+        helmetColor = '#85c1e9';
+        shieldColor = '#3498db';
+    } else if (this.armor.name.includes("Malha")) {
+        armorColor = '#7f8c8d';
+        armorDetailColor = '#95a5a6';
+        helmetColor = '#bdc3c7';
+        shieldColor = '#7f8c8d';
+    } else if (this.armor.name.includes("Lobo Negro")) {
+        armorColor = '#2c3e50';
+        armorDetailColor = '#34495e';
+        helmetColor = '#e74c3c';
+        shieldColor = '#2c3e50';
+    } else if (this.armor.name.includes("Imperial")) {
+        armorColor = '#e74c3c';
+        armorDetailColor = '#c0392b';
+        helmetColor = '#f1c40f';
+        shieldColor = '#e74c3c';
+    } else if (this.armor.name.includes("Almas")) {
+        armorColor = '#8e44ad';
+        armorDetailColor = '#9b59b6';
+        helmetColor = '#d7bde2';
+        shieldColor = '#8e44ad';
+    }
+    
+    // Ajustar cor da arma
+    if (this.weapon.name.includes("Ouro")) {
+        weaponColor = '#f1c40f';
+    } else if (this.weapon.name.includes("Diamante")) {
+        weaponColor = '#3498db';
+    } else if (this.weapon.name.includes("Pedra")) {
+        weaponColor = '#95a5a6';
+    } else if (this.weapon.name.includes("Dragon")) {
+        weaponColor = '#e74c3c';
+    } else if (this.weapon.name.includes("Perdição")) {
+        weaponColor = '#8e44ad';
+    } else if (this.weapon.name.includes("Longsword")) {
+        weaponColor = '#2c3e50';
+    }
+    
+    // Corpo com equipamento
+    ctx.fillStyle = armorColor;
+    ctx.fillRect(x - 20, y - 15, 40, 30);
+    
+    // Detalhes da armadura
+    ctx.fillStyle = armorDetailColor;
+    ctx.fillRect(x - 18, y - 13, 36, 26);
+    
+    // Capacete
+    ctx.fillStyle = helmetColor;
+    ctx.fillRect(x - 10, y - 25, 20, 10);
+    
+    // Visor do capacete
+    ctx.fillStyle = '#3498db';
+    ctx.fillRect(x - 8, y - 24, 16, 4);
+    
+    // Escudo
+    ctx.fillStyle = shieldColor;
+    ctx.fillRect(x - 25, y - 10, 8, 20);
+    
+    // Detalhe do escudo
+    ctx.fillStyle = '#f8c555';
+    ctx.fillRect(x - 23, y - 5, 4, 10);
+    
+    this.drawWeaponWithEquipment(x, y, weaponColor);
+    
+    ctx.restore();
+}
+
+drawWeaponWithEquipment(x, y, weaponColor) {
+    ctx.fillStyle = weaponColor;
+    ctx.fillRect(x + 15, y - 12, 3, 24);
+    ctx.fillRect(x + 10, y - 15, 13, 6);
+    
+    // Adicionar detalhes especiais para armas lendárias
+    if (this.weapon.name.includes("Dragon")) {
+        ctx.fillStyle = '#e74c3c';
+        ctx.beginPath();
+        ctx.arc(x + 18, y, 8, 0, Math.PI * 2);
+        ctx.fill();
+    } else if (this.weapon.name.includes("Perdição")) {
+        ctx.fillStyle = '#8e44ad';
+        for (let i = 0; i < 3; i++) {
+            ctx.beginPath();
+            ctx.arc(x + 17, y - 8 + i * 8, 3, 0, Math.PI * 2);
+            ctx.fill();
+        }
+    }
+}
+
+// Atualizar também os métodos de batalha
+drawBattle(ctx, isAttacking = false, attackType = null) {
+    ctx.clearRect(0, 0, 250, 250);
+    
+    ctx.fillStyle = 'rgba(26, 58, 95, 0.5)';
+    ctx.fillRect(0, 0, 250, 250);
+    
+    const centerX = 125;
+    const centerY = 125;
+    
+    // Determinar cores baseadas no equipamento (mesma lógica do método anterior)
+    let armorColor = '#2c3e50';
+    let armorDetailColor = '#34495e';
+    let helmetColor = '#ecf0f1';
+    let shieldColor = '#34495e';
+    let weaponColor = '#bdc3c7';
+    
+    // Aplicar mesma lógica de cores do método drawKnightWithEquipment
+    if (this.armor.name.includes("Ouro")) {
+        armorColor = '#f39c12';
+        armorDetailColor = '#d35400';
+        helmetColor = '#f1c40f';
+        shieldColor = '#f39c12';
+    }
+    // ... (repetir a mesma lógica para todos os equipamentos)
+    
+    // Corpo
+    ctx.fillStyle = armorColor;
+    ctx.fillRect(centerX - 40, centerY - 20, 80, 60);
+    
+    // Detalhes da armadura
+    ctx.fillStyle = armorDetailColor;
+    ctx.fillRect(centerX - 38, centerY - 18, 76, 56);
+    
+    // Capacete
+    ctx.fillStyle = helmetColor;
+    ctx.fillRect(centerX - 25, centerY - 45, 50, 25);
+    
+    // Visor do capacete
+    ctx.fillStyle = '#3498db';
+    ctx.fillRect(centerX - 20, centerY - 43, 40, 12);
+    
+    // Escudo
+    ctx.fillStyle = shieldColor;
+    ctx.fillRect(centerX - 60, centerY - 15, 25, 45);
+    
+    // Detalhe do escudo
+    ctx.fillStyle = '#f8c555';
+    ctx.fillRect(centerX - 58, centerY - 5, 21, 35);
+    
+    this.drawBattleWeaponWithEquipment(ctx, centerX, centerY, isAttacking, weaponColor);
+    
+    ctx.strokeStyle = '#1c2833';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(centerX - 40, centerY - 20, 80, 60);
+}
+
+drawBattleWeaponWithEquipment(ctx, x, y, isAttacking, weaponColor) {
+    ctx.fillStyle = weaponColor;
+    ctx.fillRect(x + 30, y - 25, 7, 60);
+    ctx.fillRect(x + 25, y - 30, 20, 15);
+    ctx.fillStyle = '#8B4513';
+    ctx.fillRect(x + 30, y + 35, 7, 25);
+    
+    // Efeitos especiais para armas lendárias
+    if (this.weapon.name.includes("Dragon") && isAttacking) {
+        ctx.fillStyle = 'rgba(231, 76, 60, 0.7)';
+        ctx.beginPath();
+        ctx.arc(x + 35, y, 15, 0, Math.PI * 2);
+        ctx.fill();
+    }
+}
             drawBattle(ctx, isAttacking = false, attackType = null) {
                 ctx.clearRect(0, 0, 250, 250);
                 
@@ -4904,136 +5101,196 @@
                 this.phase = 1; // Fase 1: ???, Fase 2: Rei Corrompido
             }
             
-            drawBattle(ctx, isAttacking = false) {
-                ctx.clearRect(0, 0, 300, 300);
+           drawBattle(ctx, isAttacking = false) {
+    ctx.clearRect(0, 0, 300, 300);
+    
+    ctx.fillStyle = 'rgba(26, 58, 95, 0.5)';
+    ctx.fillRect(0, 0, 300, 300);
+    
+    const centerX = 150;
+    const centerY = 150;
+    
+    if (!this.isTransformed) {
+        // Fase 1: Personagem misterioso
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, 80, 0, Math.PI * 2);
+        ctx.fill();
+        
+        ctx.fillStyle = 'rgba(231, 76, 60, 0.5)';
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, 70, 0, Math.PI * 2);
+        ctx.fill();
+        
+        ctx.fillStyle = 'rgba(142, 68, 173, 0.7)';
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, 60, 0, Math.PI * 2);
+        ctx.fill();
+        
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.9)';
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, 50, 0, Math.PI * 2);
+        ctx.fill();
+        
+        ctx.fillStyle = '#e74c3c';
+        ctx.beginPath();
+        ctx.arc(centerX - 15, centerY - 10, 8, 0, Math.PI * 2);
+        ctx.arc(centerX + 15, centerY - 10, 8, 0, Math.PI * 2);
+        ctx.fill();
+        
+        ctx.fillStyle = '#c0392b';
+        ctx.beginPath();
+        ctx.arc(centerX, centerY + 5, 12, 0, Math.PI, false);
+        ctx.fill();
+        
+        // Aura maléfica
+        ctx.strokeStyle = 'rgba(231, 76, 60, 0.7)';
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, 90, 0, Math.PI * 2);
+        ctx.stroke();
+        
+        ctx.strokeStyle = 'rgba(142, 68, 173, 0.5)';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, 95, 0, Math.PI * 2);
+        ctx.stroke();
+    } else {
+        // Fase 2: Rei Corrompido - Design Aprimorado
+        
+        // Capa imperial majestosa (desenhada primeiro para ficar atrás)
+        ctx.fillStyle = 'rgba(30, 30, 30, 0.9)';
+        ctx.beginPath();
+        ctx.moveTo(centerX - 80, centerY - 20);
+        ctx.lineTo(centerX - 100, centerY + 120);
+        ctx.lineTo(centerX + 100, centerY + 120);
+        ctx.lineTo(centerX + 80, centerY - 20);
+        ctx.closePath();
+        ctx.fill();
+        
+        // Detalhes da capa - forro vermelho
+        ctx.fillStyle = 'rgba(192, 57, 43, 0.8)';
+        ctx.beginPath();
+        ctx.moveTo(centerX - 75, centerY - 15);
+        ctx.lineTo(centerX - 95, centerY + 115);
+        ctx.lineTo(centerX + 95, centerY + 115);
+        ctx.lineTo(centerX + 75, centerY - 15);
+        ctx.closePath();
+        ctx.fill();
+        
+        // Corpo musculoso e imponente
+        ctx.fillStyle = '#2c3e50';
+        ctx.beginPath();
+        ctx.ellipse(centerX, centerY, 65, 90, 0, 0, Math.PI * 2);
+        ctx.fill();
+        
+        // Armadura negra detalhada
+        ctx.fillStyle = '#1c2833';
+        ctx.beginPath();
+        ctx.ellipse(centerX, centerY, 60, 85, 0, 0, Math.PI * 2);
+        ctx.fill();
+        
+        // Peitoral ornamentado
+        ctx.fillStyle = '#e74c3c';
+        ctx.beginPath();
+        ctx.moveTo(centerX - 40, centerY - 30);
+        ctx.lineTo(centerX - 20, centerY - 50);
+        ctx.lineTo(centerX + 20, centerY - 50);
+        ctx.lineTo(centerX + 40, centerY - 30);
+        ctx.lineTo(centerX + 40, centerY + 10);
+        ctx.lineTo(centerX - 40, centerY + 10);
+        ctx.closePath();
+        ctx.fill();
+        
+        // Detalhes do peitoral
+        ctx.fillStyle = '#c0392b';
+        ctx.beginPath();
+        ctx.arc(centerX, centerY - 20, 15, 0, Math.PI * 2);
+        ctx.fill();
+        
+        // Ombreiras imponentes
+        ctx.fillStyle = '#34495e';
+        ctx.beginPath();
+        ctx.ellipse(centerX - 50, centerY - 20, 25, 15, 0, 0, Math.PI * 2);
+        ctx.ellipse(centerX + 50, centerY - 20, 25, 15, 0, 0, Math.PI * 2);
+        ctx.fill();
+        
+        // Coroa demoníaca detalhada
+        ctx.fillStyle = '#f39c12';
+        ctx.beginPath();
+        ctx.moveTo(centerX - 35, centerY - 75);
+        ctx.lineTo(centerX - 25, centerY - 95);
+        ctx.lineTo(centerX - 15, centerY - 75);
+        ctx.lineTo(centerX - 5, centerY - 100);
+        ctx.lineTo(centerX + 5, centerY - 75);
+        ctx.lineTo(centerX + 15, centerY - 95);
+        ctx.lineTo(centerX + 25, centerY - 75);
+        ctx.lineTo(centerX + 35, centerY - 100);
+        ctx.lineTo(centerX + 45, centerY - 75);
+        ctx.lineTo(centerX + 35, centerY - 65);
+        ctx.lineTo(centerX - 35, centerY - 65);
+        ctx.closePath();
+        ctx.fill();
+        
+        // Detalhes da coroa
+        ctx.fillStyle = '#e74c3c';
+        for (let i = 0; i < 5; i++) {
+            ctx.beginPath();
+            ctx.arc(centerX - 30 + i * 15, centerY - 85, 4, 0, Math.PI * 2);
+            ctx.fill();
+        }
+        
+        // Espada longa das trevas
+        ctx.fillStyle = '#2c3e50';
+        ctx.fillRect(centerX + 45, centerY - 60, 12, 120);
+        
+        ctx.fillStyle = '#e74c3c';
+        ctx.fillRect(centerX + 40, centerY - 65, 22, 20);
+        
+        ctx.fillStyle = 'rgba(231, 76, 60, 0.7)';
+        ctx.beginPath();
+        ctx.arc(centerX + 51, centerY - 60, 18, 0, Math.PI * 2);
+        ctx.fill();
+        
+        // Aura avassaladora e brilhante
+        const gradient = ctx.createRadialGradient(centerX, centerY, 80, centerX, centerY, 120);
+        gradient.addColorStop(0, 'rgba(231, 76, 60, 0.8)');
+        gradient.addColorStop(0.5, 'rgba(142, 68, 173, 0.6)');
+        gradient.addColorStop(1, 'rgba(52, 152, 219, 0.4)');
+        
+        ctx.strokeStyle = gradient;
+        ctx.lineWidth = 6;
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, 100, 0, Math.PI * 2);
+        ctx.stroke();
+        
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, 110, 0, Math.PI * 2);
+        ctx.stroke();
+        
+        // Efeitos brilhantes adicionais
+        if (isAttacking) {
+            ctx.fillStyle = 'rgba(231, 76, 60, 0.4)';
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, 80, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Partículas brilhantes
+            for (let i = 0; i < 8; i++) {
+                const angle = (i / 8) * Math.PI * 2;
+                const particleX = centerX + Math.cos(angle) * 70;
+                const particleY = centerY + Math.sin(angle) * 70;
                 
-                ctx.fillStyle = 'rgba(26, 58, 95, 0.5)';
-                ctx.fillRect(0, 0, 300, 300);
-                
-                const centerX = 150;
-                const centerY = 150;
-                
-                if (!this.isTransformed) {
-                    // Fase 1: Personagem misterioso
-                    ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
-                    ctx.beginPath();
-                    ctx.arc(centerX, centerY, 80, 0, Math.PI * 2);
-                    ctx.fill();
-                    
-                    ctx.fillStyle = 'rgba(231, 76, 60, 0.5)';
-                    ctx.beginPath();
-                    ctx.arc(centerX, centerY, 70, 0, Math.PI * 2);
-                    ctx.fill();
-                    
-                    ctx.fillStyle = 'rgba(142, 68, 173, 0.7)';
-                    ctx.beginPath();
-                    ctx.arc(centerX, centerY, 60, 0, Math.PI * 2);
-                    ctx.fill();
-                    
-                    ctx.fillStyle = 'rgba(0, 0, 0, 0.9)';
-                    ctx.beginPath();
-                    ctx.arc(centerX, centerY, 50, 0, Math.PI * 2);
-                    ctx.fill();
-                    
-                    ctx.fillStyle = '#e74c3c';
-                    ctx.beginPath();
-                    ctx.arc(centerX - 15, centerY - 10, 8, 0, Math.PI * 2);
-                    ctx.arc(centerX + 15, centerY - 10, 8, 0, Math.PI * 2);
-                    ctx.fill();
-                    
-                    ctx.fillStyle = '#c0392b';
-                    ctx.beginPath();
-                    ctx.arc(centerX, centerY + 5, 12, 0, Math.PI, false);
-                    ctx.fill();
-                    
-                    // Aura maléfica
-                    ctx.strokeStyle = 'rgba(231, 76, 60, 0.7)';
-                    ctx.lineWidth = 3;
-                    ctx.beginPath();
-                    ctx.arc(centerX, centerY, 90, 0, Math.PI * 2);
-                    ctx.stroke();
-                    
-                    ctx.strokeStyle = 'rgba(142, 68, 173, 0.5)';
-                    ctx.lineWidth = 2;
-                    ctx.beginPath();
-                    ctx.arc(centerX, centerY, 95, 0, Math.PI * 2);
-                    ctx.stroke();
-                } else {
-                    // Fase 2: Rei Corrompido
-                    // Corpo musculoso
-                    ctx.fillStyle = '#2c3e50';
-                    ctx.beginPath();
-                    ctx.ellipse(centerX, centerY, 60, 80, 0, 0, Math.PI * 2);
-                    ctx.fill();
-                    
-                    // Detalhes da armadura negra
-                    ctx.fillStyle = '#1c2833';
-                    ctx.beginPath();
-                    ctx.ellipse(centerX, centerY, 55, 75, 0, 0, Math.PI * 2);
-                    ctx.fill();
-                    
-                    // Capa imperial
-                    ctx.fillStyle = 'rgba(231, 76, 60, 0.7)';
-                    ctx.beginPath();
-                    ctx.moveTo(centerX - 60, centerY - 40);
-                    ctx.lineTo(centerX - 80, centerY + 80);
-                    ctx.lineTo(centerX + 80, centerY + 80);
-                    ctx.lineTo(centerX + 60, centerY - 40);
-                    ctx.closePath();
-                    ctx.fill();
-                    
-                    // Detalhes da capa
-                    ctx.fillStyle = 'rgba(192, 57, 43, 0.8)';
-                    for (let i = 0; i < 5; i++) {
-                        ctx.beginPath();
-                        ctx.arc(centerX - 40 + i * 20, centerY + 20, 8, 0, Math.PI * 2);
-                        ctx.fill();
-                    }
-                    
-                    // Capacete/Coroa
-                    ctx.fillStyle = '#e74c3c';
-                    ctx.beginPath();
-                    ctx.arc(centerX, centerY - 60, 25, 0, Math.PI * 2);
-                    ctx.fill();
-                    
-                    ctx.fillStyle = '#c0392b';
-                    ctx.beginPath();
-                    ctx.arc(centerX, centerY - 60, 20, 0, Math.PI * 2);
-                    ctx.fill();
-                    
-                    // Espada longa das trevas
-                    ctx.fillStyle = '#2c3e50';
-                    ctx.fillRect(centerX + 40, centerY - 50, 10, 100);
-                    
-                    ctx.fillStyle = '#e74c3c';
-                    ctx.fillRect(centerX + 35, centerY - 55, 20, 15);
-                    
-                    ctx.fillStyle = 'rgba(231, 76, 60, 0.7)';
-                    ctx.beginPath();
-                    ctx.arc(centerX + 45, centerY - 50, 15, 0, Math.PI * 2);
-                    ctx.fill();
-                    
-                    // Aura avassaladora
-                    ctx.strokeStyle = 'rgba(231, 76, 60, 0.8)';
-                    ctx.lineWidth = 4;
-                    ctx.beginPath();
-                    ctx.arc(centerX, centerY, 100, 0, Math.PI * 2);
-                    ctx.stroke();
-                    
-                    ctx.strokeStyle = 'rgba(142, 68, 173, 0.6)';
-                    ctx.lineWidth = 3;
-                    ctx.beginPath();
-                    ctx.arc(centerX, centerY, 110, 0, Math.PI * 2);
-                    ctx.stroke();
-                    
-                    if (isAttacking) {
-                        ctx.fillStyle = 'rgba(231, 76, 60, 0.5)';
-                        ctx.beginPath();
-                        ctx.arc(centerX, centerY, 70, 0, Math.PI * 2);
-                        ctx.fill();
-                    }
-                }
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+                ctx.beginPath();
+                ctx.arc(particleX, particleY, 3, 0, Math.PI * 2);
+                ctx.fill();
             }
+        }
+    }
+}
             
             updateStatusEffects() {
                 for (let i = this.statusEffects.length - 1; i >= 0; i--) {
@@ -5069,20 +5326,95 @@
             }
             
             transform() {
-                this.isTransformed = true;
-                this.name = "Rei Corrompido";
-                this.maxHealth = 1500;
-                this.health = 1500;
-                this.attack = 76;
-                this.defense = 20;
-                this.agility = 15;
-                this.dodgeChance = 0.1;
-                
-                // Mostrar animação de transformação
-                showBossTransformation();
+    this.isTransformed = true;
+    this.name = "Rei Corrompido";
+    this.maxHealth = 1500;
+    this.health = 1500;
+    this.attack = 76;
+    this.defense = 20;
+    this.agility = 15;
+    this.dodgeChance = 0.1;
+    
+    // Mostrar animação de transformação sem texto
+    showBossTransformation();
+
+          function showBossTransformation() {
+    bossTransformation.style.display = 'flex';
+    
+    // Remover o texto de transformação
+    const transformationText = bossTransformation.querySelector('.transformation-text');
+    if (transformationText) {
+        transformationText.remove();
+    }
+    
+    // Adicionar efeitos visuais
+    const effectsContainer = document.createElement('div');
+    effectsContainer.style.position = 'absolute';
+    effectsContainer.style.width = '100%';
+    effectsContainer.style.height = '100%';
+    effectsContainer.style.pointerEvents = 'none';
+    
+    // Criar partículas brilhantes
+    for (let i = 0; i < 50; i++) {
+        const particle = document.createElement('div');
+        particle.style.position = 'absolute';
+        particle.style.width = '10px';
+        particle.style.height = '10px';
+        particle.style.background = 'radial-gradient(circle, #ff6b6b, #e74c3c, #8e44ad)';
+        particle.style.borderRadius = '50%';
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.top = Math.random() * 100 + '%';
+        particle.style.animation = `particleFloat ${1 + Math.random() * 2}s infinite alternate`;
+        
+        effectsContainer.appendChild(particle);
+    }
+    
+    // Adicionar brilho pulsante
+    const glow = document.createElement('div');
+    glow.style.position = 'absolute';
+    glow.style.width = '100%';
+    glow.style.height = '100%';
+    glow.style.background = 'radial-gradient(circle, rgba(231, 76, 60, 0.3) 0%, rgba(142, 68, 173, 0.2) 50%, transparent 70%)';
+    glow.style.animation = 'glowPulse 1s infinite alternate';
+    
+    effectsContainer.appendChild(glow);
+    bossTransformation.appendChild(effectsContainer);
+    
+    // Adicionar estilos CSS para animações
+    if (!document.querySelector('#transformation-styles')) {
+        const style = document.createElement('style');
+        style.id = 'transformation-styles';
+        style.textContent = `
+            @keyframes particleFloat {
+                0% { transform: translateY(0) scale(1); opacity: 1; }
+                100% { transform: translateY(-50px) scale(1.5); opacity: 0; }
             }
+            @keyframes glowPulse {
+                0% { opacity: 0.3; transform: scale(1); }
+                100% { opacity: 0.7; transform: scale(1.1); }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+    
+    setTimeout(() => {
+        bossTransformation.style.display = 'none';
+        effectsContainer.remove();
+        
+        // Atualizar stats do boss após transformação
+        bossEnemyName.textContent = currentBoss.name;
+        bossBattleEnemyHealth.textContent = currentBoss.health;
+        bossBattleEnemyMaxHealth.textContent = currentBoss.maxHealth;
+        bossBattleEnemyAgility.textContent = currentBoss.agility;
+        
+        // Redesenhar o boss
+        currentBoss.drawBattle(bossEnemyCtx);
+        
+        addBossBattleLog(`<span class="log-enemy">${currentBoss.name}</span> liberou todo o seu poder!`, "system");
+    }, 3000);
+}
             
-            attackPlayer(player) {
+            attackPlayer(player) ;
                 if (!this.isTransformed) {
                     // Ataque normal na fase 1
                     return this.attack;
@@ -6021,70 +6353,271 @@
             }, 800);
         }
 
-        function playerBossAttack(attackType) {
-            if (!isPlayerTurn || buttonsLocked) return;
+       function showBossAttackOptions() {
+    bossBattleActionsPokemon.style.display = 'none';
+    bossAttackOptionsPokemon.style.display = 'grid';
+    setBossBattleButtonsLocked(false);
+}
+
+function showBossMagicOptions() {
+    bossBattleActionsPokemon.style.display = 'none';
+    bossMagicOptionsPokemon.style.display = 'grid';
+    setBossBattleButtonsLocked(false);
+}
+
+function showBossItemsOptions() {
+    bossBattleActionsPokemon.style.display = 'none';
+    bossItemsOptionsPokemon.style.display = 'grid';
+    player.updateBossBattleItems();
+    setBossBattleButtonsLocked(false);
+}
+
+function showBossActOptions() {
+    bossBattleActionsPokemon.style.display = 'none';
+    bossActOptionsPokemon.style.display = 'grid';
+    setBossBattleButtonsLocked(false);
+}
+
+function playerBossAttack(attackType) {
+    if (!isPlayerTurn || buttonsLocked) return;
+    
+    setBossBattleButtonsLocked(true);
+    
+    let damage = 0;
+    let isCritical = false;
+    let message = "";
+    let attackResult = null;
+    
+    if (attackType === 'sword') {
+        damage = player.swordAttack();
+        isCritical = damage > (5 + Math.floor(player.strength * 0.5));
+        
+        message = `<span class="log-player">Cavaleiro</span> usa <span class="log-skill">Espadada</span>!`;
+        
+    } else if (attackType === 'charge') {
+        attackResult = player.chargeAttack();
+        
+        if (!attackResult.success) {
+            addBossBattleLog(attackResult.message, "system");
+            showBossMainBattleActions();
+            setBossBattleButtonsLocked(false);
+            return;
+        }
+        
+        damage = attackResult.damage;
+        isCritical = attackResult.isCritical;
+        
+        message = `<span class="log-player">Cavaleiro</span> usa <span class="log-skill">Investida</span>!`;
+    } else if (attackType === 'heavyArmor') {
+        attackResult = player.activateHeavyArmor();
+        
+        if (!attackResult.success) {
+            addBossBattleLog(attackResult.message, "system");
+            showBossMainBattleActions();
+            setBossBattleButtonsLocked(false);
+            return;
+        }
+        
+        message = attackResult.message;
+    }
+    
+    addBossBattleLog(message, "player");
+    
+    setTimeout(() => {
+        if (attackType === 'heavyArmor') {
+            // Habilidade defensiva, não causa dano
+            player.updateUI();
+            isPlayerTurn = false;
+            setTimeout(bossTurn, 1000);
+            return;
+        }
+        
+        if (Math.random() < currentBoss.dodgeChance) {
+            addBossBattleLog(`<span class="log-enemy">${currentBoss.name}</span> desviou do ataque!`, "enemy");
+        } else {
+            const actualDamage = currentBoss.takeDamage(damage);
             
-            // Bloquear botões imediatamente
-            setBossBattleButtonsLocked(true);
-            
-            let damage = 0;
-            let isCritical = false;
-            let message = "";
-            let attackResult = null;
-            
-            if (attackType === 'sword') {
-                damage = player.swordAttack();
-                isCritical = damage > (5 + Math.floor(player.strength * 0.5));
-                
-                message = `<span class="log-player">Cavaleiro</span> usa <span class="log-skill">Espadada</span>!`;
-                
-            } else if (attackType === 'charge') {
-                attackResult = player.chargeAttack();
-                
-                if (!attackResult.success) {
-                    addBossBattleLog(attackResult.message, "system");
-                    showBossMainBattleActions();
-                    // Desbloquear botões se falhou
-                    setBossBattleButtonsLocked(false);
-                    return;
-                }
-                
-                damage = attackResult.damage;
-                isCritical = attackResult.isCritical;
-                
-                message = `<span class="log-player">Cavaleiro</span> usa <span class="log-skill">Investida</span>!`;
+            if (isCritical) {
+                addBossBattleLog(` <span class="log-effect">CRÍTICO!</span> Causou ${actualDamage} de dano!`, "system");
+            } else {
+                addBossBattleLog(` Causou ${actualDamage} de dano!`, "system");
             }
             
-            addBossBattleLog(message, "player");
+            bossBattleEnemyHealth.textContent = currentBoss.health;
             
-            setTimeout(() => {
-                if (Math.random() < currentBoss.dodgeChance) {
-                    addBossBattleLog(`<span class="log-enemy">${currentBoss.name}</span> desviou do ataque!`, "enemy");
-                } else {
-                    const actualDamage = currentBoss.takeDamage(damage);
-                    
-                    if (isCritical) {
-                        addBossBattleLog(` <span class="log-effect">CRÍTICO!</span> Causou ${actualDamage} de dano!`, "system");
-                    } else {
-                        addBossBattleLog(` Causou ${actualDamage} de dano!`, "system");
-                    }
-                    
-                    bossBattleEnemyHealth.textContent = currentBoss.health;
-                    
-                    // Verificar se o boss foi derrotado
-                    if (currentBoss.health <= 0 && currentBoss.isTransformed) {
-                        endBossBattle(true);
-                        return;
-                    }
-                }
-                
-                currentBoss.updateStatusEffects();
-                player.updateUI();
-                
-                isPlayerTurn = false;
-                setTimeout(bossTurn, 1000);
-            }, 800);
+            if (currentBoss.health <= 0 && currentBoss.isTransformed) {
+                endBossBattle(true);
+                return;
+            }
         }
+        
+        currentBoss.updateStatusEffects();
+        player.updateUI();
+        
+        isPlayerTurn = false;
+        setTimeout(bossTurn, 1000);
+    }, 800);
+}
+
+function playerBossMagic(spellType) {
+    if (!isPlayerTurn || buttonsLocked) return;
+    setBossBattleButtonsLocked(true);
+    let damage = 0;
+    let message = "";
+    let manaCost = 0;
+    let statusEffect = null;
+    let burnChance = 0;
+    
+    switch(spellType) {
+        case 'fireball':
+            if (player.baseMag < 12) {
+                addBossBattleLog("Você precisa de pelo menos 12 pontos em Magia para usar Bola de Fogo!", "system");
+                showBossMainBattleActions();
+                return;
+            }
+            
+            manaCost = 30;
+            if (!player.useMana(manaCost)) {
+                addBossBattleLog("Mana insuficiente para lançar Bola de Fogo!", "system");
+                showBossMainBattleActions();
+                return;
+            }
+            
+            damage = 20 + Math.floor(player.magic * 0.8);
+            message = `<span class="log-player">Cavaleiro</span> conjura <span class="log-skill">Bola de Fogo</span>!`;
+            burnChance = 0.5;
+            break;
+            
+        case 'freeze':
+            if (player.baseMag < 15) {
+                addBossBattleLog("Você precisa de pelo menos 15 pontos em Magia para usar Brisa Congelante!", "system");
+                showBossMainBattleActions();
+                return;
+            }
+            
+            manaCost = 40;
+            if (!player.useMana(manaCost)) {
+                addBossBattleLog("Mana insuficiente para lançar Brisa Congelante!", "system");
+                showBossMainBattleActions();
+                return;
+            }
+            
+            damage = 10 + Math.floor(player.magic * 0.5);
+            message = `<span class="log-player">Cavaleiro</span> invoca <span class="log-skill">Brisa Congelante</span>!`;
+            statusEffect = { type: 'slow', duration: 3 };
+            break;
+            
+        case 'possession':
+            if (player.baseMag < 20) {
+                addBossBattleLog("Você precisa de pelo menos 20 pontos em Magia para usar Posseção!", "system");
+                showBossMainBattleActions();
+                return;
+            }
+            
+            manaCost = 65;
+            if (!player.useMana(manaCost)) {
+                addBossBattleLog("Mana insuficiente para lançar Posseção!", "system");
+                showBossMainBattleActions();
+                return;
+            }
+            
+            damage = 25 + Math.floor(player.magic * 1.2);
+            message = `<span class="log-player">Cavaleiro</span> lança <span class="log-skill">Posseção</span>!`;
+            statusEffect = { type: 'stun', duration: 3 };
+            break;
+    }
+    
+    addBossBattleLog(message, "player");
+    
+    setTimeout(() => {
+        if (Math.random() < currentBoss.dodgeChance) {
+            addBossBattleLog(`<span class="log-enemy">${currentBoss.name}</span> desviou do feitiço!`, "enemy");
+        } else {
+            const actualDamage = currentBoss.takeDamage(damage);
+            
+            addBossBattleLog(` O feitiço causou ${actualDamage} de dano!`, "system");
+            
+            if (spellType === 'fireball' && Math.random() < burnChance) {
+                currentBoss.addStatusEffect({ type: 'burn', duration: 3 });
+                addBossBattleLog(` <span class="log-enemy">${currentBoss.name}</span> foi <span class="log-effect">queimado</span>!`, "system");
+            } else if (statusEffect) {
+                currentBoss.addStatusEffect(statusEffect);
+                addBossBattleLog(` <span class="log-enemy">${currentBoss.name}</span> foi afetado por <span class="log-effect">${statusEffect.type.toUpperCase()}</span>!`, "system");
+            }
+            
+            bossBattleEnemyHealth.textContent = currentBoss.health;
+            
+            if (currentBoss.health <= 0 && currentBoss.isTransformed) {
+                endBossBattle(true);
+                return;
+            }
+        }
+        
+        currentBoss.updateStatusEffects();
+        player.updateUI();
+        
+        isPlayerTurn = false;
+        setTimeout(bossTurn, 1000);
+    }, 1000);
+}
+
+function playerBossUseItem(itemType) {
+    if (!isPlayerTurn || buttonsLocked) return;
+    
+    setBossBattleButtonsLocked(true);
+    
+    const result = player.useItem(itemType);
+    
+    if (result.success) {
+        addBossBattleLog(result.message, "player");
+        
+        player.updateUI();
+        
+        isPlayerTurn = false;
+        setTimeout(bossTurn, 1000);
+    } else {
+        addBossBattleLog(result.message, "system");
+        showBossMainBattleActions();
+        setBossBattleButtonsLocked(false);
+    }
+}
+
+function playerBossAct(actionType) {
+    if (!isPlayerTurn || buttonsLocked) return;
+    
+    setBossBattleButtonsLocked(true);
+    
+    let message = "";
+    
+    if (actionType === 'meditate') {
+        message = player.meditate();
+        addBossBattleLog(message, "player");
+        
+        player.updateUI();
+        
+        isPlayerTurn = false;
+        setTimeout(bossTurn, 1000);
+    } else if (actionType === 'rest') {
+        if (player.baseStr < 16) {
+            addBossBattleLog("Você precisa de pelo menos 16 pontos em Força para usar Descansar!", "system");
+            showBossMainBattleActions();
+            setBossBattleButtonsLocked(false);
+            return;
+        }
+        
+        message = player.rest();
+        addBossBattleLog(message, "player");
+        
+        player.updateUI();
+        
+        isPlayerTurn = false;
+        setTimeout(bossTurn, 1000);
+    } else if (actionType === 'flee') {
+        addBossBattleLog("Você não pode fugir desta batalha!", "system");
+        showBossMainBattleActions();
+        setBossBattleButtonsLocked(false);
+    }
+}
 
         function playerMagic(spellType) {
             if (!isPlayerTurn || battleAnimation) return;
@@ -7280,57 +7813,59 @@
         }
 
         function showDialogue(index) {
-            if (index === -1) {
-                // Fim do diálogo
-                endDialogue();
-                return;
-            }
+    if (index === -1) {
+        // Fim do diálogo - apenas fecha sem marcar como interagido
+        endDialogue();
+        return;
+    }
+    
+    if (index >= currentDialogue.length) {
+        // Iniciar batalha com o boss
+        startBossBattle();
+        dialogueScreen.style.display = 'none';
+        isInDialogue = false;
+        // Marcar que interagiu apenas quando inicia a batalha
+        mysteriousCharacter.hasInteracted = true;
+        return;
+    }
+    
+    const dialogue = currentDialogue[index];
+    dialogueCharacterName.textContent = dialogue.character;
+    
+    // Limpar texto anterior
+    dialogueText.textContent = "";
+    dialogueOptions.innerHTML = "";
+    
+    // Digitar texto letra por letra
+    isTyping = true;
+    let charIndex = 0;
+    const text = dialogue.text;
+    
+    function typeWriter() {
+        if (charIndex < text.length) {
+            dialogueText.textContent += text.charAt(charIndex);
+            charIndex++;
+            setTimeout(typeWriter, 100);
+        } else {
+            isTyping = false;
             
-            if (index >= currentDialogue.length) {
-                // Iniciar batalha com o boss
-                startBossBattle();
-                dialogueScreen.style.display = 'none';
-                isInDialogue = false;
-                return;
-            }
-            
-            const dialogue = currentDialogue[index];
-            dialogueCharacterName.textContent = dialogue.character;
-            
-            // Limpar texto anterior
-            dialogueText.textContent = "";
-            dialogueOptions.innerHTML = "";
-            
-            // Digitar texto letra por letra
-            isTyping = true;
-            let charIndex = 0;
-            const text = dialogue.text;
-            
-            function typeWriter() {
-                if (charIndex < text.length) {
-                    dialogueText.textContent += text.charAt(charIndex);
-                    charIndex++;
-                    setTimeout(typeWriter, 100);
-                } else {
-                    isTyping = false;
-                    
-                    // Mostrar opções após terminar de digitar
-                    dialogue.options.forEach(option => {
-                        const optionButton = document.createElement('button');
-                        optionButton.className = 'dialogue-option';
-                        optionButton.textContent = option.text;
-                        optionButton.addEventListener('click', () => {
-                            if (!isTyping) {
-                                showDialogue(option.next);
-                            }
-                        });
-                        dialogueOptions.appendChild(optionButton);
-                    });
-                }
-            }
-            
-            typeWriter();
+            // Mostrar opções após terminar de digitar
+            dialogue.options.forEach(option => {
+                const optionButton = document.createElement('button');
+                optionButton.className = 'dialogue-option';
+                optionButton.textContent = option.text;
+                optionButton.addEventListener('click', () => {
+                    if (!isTyping) {
+                        showDialogue(option.next);
+                    }
+                });
+                dialogueOptions.appendChild(optionButton);
+            });
         }
+    }
+    
+    typeWriter();
+}
 
         function endDialogue() {
             dialogueScreen.style.display = 'none';
@@ -7590,8 +8125,118 @@
                 }
             });
         }
+function saveGame() {
+    const saveData = {
+        level: player.level,
+        x: player.x,
+        y: player.y,
+        money: player.money,
+        exp: player.exp,
+        expToNextLevel: player.expToNextLevel,
+        upgradePoints: player.upgradePoints,
+        baseHp: player.baseHp,
+        baseStr: player.baseStr,
+        baseAgi: player.baseAgi,
+        baseDef: player.baseDef,
+        baseMag: player.baseMag,
+        health: player.health,
+        maxHealth: player.maxHealth,
+        mana: player.mana,
+        maxMana: player.maxMana,
+        stamina: player.stamina,
+        maxStamina: player.maxStamina,
+        items: player.items,
+        recipes: player.recipes,
+        equipmentCollection: player.equipmentCollection,
+        purchasedItems: player.purchasedItems,
+        hasDragonSlayer: player.hasDragonSlayer,
+        hasBlackWolfArmor: player.hasBlackWolfArmor,
+        hasImperialArmor: player.hasImperialArmor,
+        hasDarkLongsword: player.hasDarkLongsword,
+        weapon: player.weapon,
+        armor: player.armor,
+        mysteriousCharacterInteracted: mysteriousCharacter ? mysteriousCharacter.hasInteracted : false
+    };
+    
+    localStorage.setItem('knightOfValorSave', JSON.stringify(saveData));
+    showNotification("Jogo Salvo", "Progresso salvo com sucesso!");
+}
 
-        // Inicialização do jogo
+function loadGame() {
+    const saveData = localStorage.getItem('knightOfValorSave');
+    
+    if (saveData) {
+        const data = JSON.parse(saveData);
+        
+        player.level = data.level || 1;
+        player.x = data.x || 15;
+        player.y = data.y || 15;
+        player.money = data.money || 0;
+        player.exp = data.exp || 0;
+        player.expToNextLevel = data.expToNextLevel || 40;
+        player.upgradePoints = data.upgradePoints || 0;
+        player.baseHp = data.baseHp || 10;
+        player.baseStr = data.baseStr || 10;
+        player.baseAgi = data.baseAgi || 10;
+        player.baseDef = data.baseDef || 10;
+        player.baseMag = data.baseMag || 10;
+        player.health = data.health || player.maxHealth;
+        player.maxHealth = data.maxHealth || Math.floor(player.baseHp * 10);
+        player.mana = data.mana || player.maxMana;
+        player.maxMana = data.maxMana || Math.floor(50 * Math.pow(1.05, player.baseMag - 10));
+        player.stamina = data.stamina || player.maxStamina;
+        player.maxStamina = data.maxStamina || 30 + (player.baseAgi - 10) * 2;
+        player.items = data.items || { mace: 2, ham: 0, steak: 0, strengthPotion: 0, luckPotion: 0, dragonScales: 0 };
+        player.recipes = data.recipes || { dragonSlayer: false, blackWolfArmor: false };
+        player.equipmentCollection = data.equipmentCollection || player.equipmentCollection;
+        player.purchasedItems = data.purchasedItems || player.purchasedItems;
+        player.hasDragonSlayer = data.hasDragonSlayer || false;
+        player.hasBlackWolfArmor = data.hasBlackWolfArmor || false;
+        player.hasImperialArmor = data.hasImperialArmor || false;
+        player.hasDarkLongsword = data.hasDarkLongsword || false;
+        player.weapon = data.weapon || player.weapon;
+        player.armor = data.armor || player.armor;
+        
+        // Recarregar stats
+        player.recalculateStats();
+        
+        // Atualizar estado do personagem misterioso
+        if (mysteriousCharacter && data.mysteriousCharacterInteracted) {
+            mysteriousCharacter.hasInteracted = data.mysteriousCharacterInteracted;
+        }
+        
+        player.updateUI();
+        showNotification("Jogo Carregado", "Progresso carregado com sucesso!");
+        return true;
+    }
+    return false;
+}
+
+function deleteSave() {
+    localStorage.removeItem('knightOfValorSave');
+    showNotification("Save Deletado", "Progresso salvo foi deletado.");
+}
+
+// Adicionar botões de save/load no inventário
+function addSaveLoadButtons() {
+    const saveLoadSection = document.createElement('div');
+    saveLoadSection.className = 'upgrade-points';
+    saveLoadSection.innerHTML = `
+        <h3>Gerenciar Progresso</h3>
+        <div style="display: flex; gap: 10px; justify-content: center;">
+            <button class="battle-btn" id="saveGameBtn">Salvar Jogo</button>
+            <button class="battle-btn" id="loadGameBtn">Carregar Jogo</button>
+            <button class="battle-btn" id="deleteSaveBtn" style="background: linear-gradient(to bottom, #e74c3c, #c0392b);">Deletar Save</button>
+        </div>
+    `;
+    
+    document.querySelector('.inventory-container').appendChild(saveLoadSection);
+    
+    document.getElementById('saveGameBtn').addEventListener('click', saveGame);
+    document.getElementById('loadGameBtn').addEventListener('click', loadGame);
+    document.getElementById('deleteSaveBtn').addEventListener('click', deleteSave);
+}
+        
         function initGame() {
             player = new Player();
             worldMap = generateWorldMap();
@@ -7599,20 +8244,24 @@
             merchantMountain = new Merchant(worldMap, 3);
             darkMerchant = new Merchant(worldMap, 9, true);
             
-            player.updateUI();
+            if (!loadGame()) {
+        player.updateUI();
+    }
+          
+          
             
             // Simular carregamento
-            let progress = 0;
-            const loadingInterval = setInterval(() => {
-                progress += 2;
-                loadingProgress.style.width = `${progress}%`;
-                
-                if (progress >= 100) {
-                    clearInterval(loadingInterval);
-                    startBtn.disabled = false;
-                }
-            }, 50);
+             let progress = 0;
+    const loadingInterval = setInterval(() => {
+        progress += 2;
+        loadingProgress.style.width = `${progress}%`;
+        
+        if (progress >= 100) {
+            clearInterval(loadingInterval);
+            startBtn.disabled = false;
         }
+    }, 50);
+}
 
         // Event Listeners
         document.addEventListener('keydown', (e) => {
@@ -7705,24 +8354,60 @@
         backFromActBtnPokemon.addEventListener('click', showMainBattleActions);
 
         // Event listeners de batalha do boss
-        bossAttackBtnPokemon.addEventListener('click', () => {
-            playerBossAttack('sword');
-        });
+        bossAttackBtnPokemon.addEventListener('click', showBossAttackOptions);
+bossMagicBtnPokemon.addEventListener('click', showBossMagicOptions);
+bossItemsBtnPokemon.addEventListener('click', showBossItemsOptions);
+bossActBtnPokemon.addEventListener('click', showBossActOptions);
 
-        bossMagicBtnPokemon.addEventListener('click', () => {
-            // Aqui você pode implementar um sistema de seleção de magia similar ao normal
-            playerBossMagic('fireball');
-        });
+bossSwordAttackBtnPokemon.addEventListener('click', () => {
+    showBossMainBattleActions();
+    playerBossAttack('sword');
+});
 
-        bossItemsBtnPokemon.addEventListener('click', () => {
-            // Aqui você pode implementar um sistema de seleção de itens similar ao normal
-            playerBossUseItem('mace');
-        });
+bossChargeBtnPokemon.addEventListener('click', () => {
+    showBossMainBattleActions();
+    playerBossAttack('charge');
+});
 
-        bossActBtnPokemon.addEventListener('click', () => {
-            // Aqui você pode implementar um sistema de seleção de ações similar ao normal
-            playerBossAct('meditate');
-        });
+bossHeavyArmorBtnPokemon.addEventListener('click', () => {
+    showBossMainBattleActions();
+    playerBossAttack('heavyArmor');
+});
+
+bossFireballBtnPokemon.addEventListener('click', () => {
+    showBossMainBattleActions();
+    playerBossMagic('fireball');
+});
+
+bossFreezeBtnPokemon.addEventListener('click', () => {
+    showBossMainBattleActions();
+    playerBossMagic('freeze');
+});
+
+bossPossessionBtnPokemon.addEventListener('click', () => {
+    showBossMainBattleActions();
+    playerBossMagic('possession');
+});
+
+bossMeditateBtnPokemon.addEventListener('click', () => {
+    showBossMainBattleActions();
+    playerBossAct('meditate');
+});
+
+bossRestBtnPokemon.addEventListener('click', () => {
+    showBossMainBattleActions();
+    playerBossAct('rest');
+});
+
+bossFleeBtnPokemon.addEventListener('click', () => {
+    showBossMainBattleActions();
+    playerBossAct('flee');
+});
+
+bossBackFromAttackBtnPokemon.addEventListener('click', showBossMainBattleActions);
+bossBackFromMagicBtnPokemon.addEventListener('click', showBossMainBattleActions);
+bossBackFromItemsBtnPokemon.addEventListener('click', showBossMainBattleActions);
+bossBackFromActBtnPokemon.addEventListener('click', showBossMainBattleActions);
 
         // Event listeners de inventário
         inventoryBtn.addEventListener('click', () => {
@@ -7862,6 +8547,8 @@
                     startSwampBattle();
                 }
             }
+          
+            
             
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             
@@ -7872,7 +8559,7 @@
             requestAnimationFrame(gameLoop);
         }
 
-        // Iniciar o jogo
+        addSaveLoadButtons();
         initGame();
         requestAnimationFrame(gameLoop);
     </script>
