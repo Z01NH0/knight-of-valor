@@ -1792,7 +1792,41 @@
     gap: 10px;
     margin-bottom: 10px;
 }
-        
+        .boss-battle-submenu {
+    display: none;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    height: 80px;
+    margin-top: 20px;
+}
+
+.boss-items-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.use-boss-item-btn {
+    background: linear-gradient(to bottom, #2ecc71, #27ae60);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: all 0.3s;
+    width: 100%;
+    margin-top: 5px;
+}
+
+.use-boss-item-btn:hover:not(:disabled) {
+    background: linear-gradient(to bottom, #58d68d, #2ecc71);
+}
+
+.use-boss-item-btn:disabled {
+    background: #666;
+    cursor: not-allowed;
+}
         .boss-transformation {
             position: absolute;
             top: 0;
@@ -2207,11 +2241,13 @@
             <div class="start-screen" id="startScreen">
                 <h1 class="start-title">Knight of Valor</h1>
                 <p class="start-message">Embarque em uma jornada épica como um cavaleiro destinado a restaurar a paz no reino. Enfrente monstros terríveis, descubra tesouros lendários e torne-se uma lenda!</p>
+              <p class="start-message">⚠️Acesse seu inventário e vá até o final para salvar seu progresso!⚠️</p>
                 <div class="loading-bar">
                     <div class="loading-progress" id="loadingProgress"></div>
                 </div>
                 <button class="start-btn" id="startBtn">Iniciar Jornada</button>
             </div>
+          
             
             <!-- Novas telas para o Pântano Abissal -->
             <div class="level-required-message" id="levelRequiredMessage" style="display: none;">
@@ -2326,7 +2362,7 @@
 </div>
                     
                     <div class="boss-transformation" id="bossTransformation">
-                        <div class="transformation-text">TRANSFORMAÇÃO DO REI CORROMPIDO!</div>
+                        <div class="transformation-text"></div>
                     </div>
                     
                     <div class="boss-final-dialog" id="bossFinalDialog">
@@ -2349,7 +2385,7 @@
         const WORLD_SIZE = 120;
         const MOVE_COOLDOWN = 120;
         const MONSTER_SPAWN_CHANCE = 0.1;
-        const GOLDEN_MONSTER_CHANCE = 0.0001;
+        const GOLDEN_MONSTER_CHANCE = 0.0005;
 
         // Seleção de elementos do DOM
         const canvas = document.getElementById('gameCanvas');
@@ -5437,6 +5473,7 @@ drawBattleWeaponWithEquipment(ctx, x, y, isAttacking, weaponColor) {
         bossBattleEnemyAgility.textContent = currentBoss.agility;
         
         // Redesenhar o boss
+        player.drawBossBattle(bossPlayerCtx);
         currentBoss.drawBattle(bossEnemyCtx);
         
         addBossBattleLog(`<span class="log-enemy">${currentBoss.name}</span> liberou todo o seu poder!`, "system");
@@ -5471,6 +5508,27 @@ drawBattleWeaponWithEquipment(ctx, x, y, isAttacking, weaponColor) {
             }
         }
 
+      function playerHeavyArmor() {
+    if (!isPlayerTurn || battleAnimation || buttonsLocked) return;
+    
+    setBattleButtonsLocked(true);
+    
+    const result = player.activateHeavyArmor();
+    
+    if (result.success) {
+        addBattleLog(result.message, "player");
+        createHeavyArmorEffect();
+        player.updateUI();
+        
+        isPlayerTurn = false;
+        setTimeout(monsterTurn, 1000);
+    } else {
+        addBattleLog(result.message, "system");
+        showMainBattleActions();
+        setBattleButtonsLocked(false);
+    }
+}
+        
         // Classe do Mercador
         class Merchant {
             constructor(worldMap, biome, isDarkShop = false) {
@@ -6790,108 +6848,7 @@ function playerBossAct(actionType) {
             }, 1000);
         }
 
-        function playerBossMagic(spellType) {
-            if (!isPlayerTurn || buttonsLocked) return;
-            setBossBattleButtonsLocked(true);
-            let damage = 0;
-            let message = "";
-            let manaCost = 0;
-            let statusEffect = null;
-            let burnChance = 0;
-            
-            switch(spellType) {
-                case 'fireball':
-                    if (player.baseMag < 12) {
-                        addBossBattleLog("Você precisa de pelo menos 12 pontos em Magia para usar Bola de Fogo!", "system");
-                        showBossMainBattleActions();
-                        return;
-                    }
-                    
-                    manaCost = 30;
-                    if (!player.useMana(manaCost)) {
-                        addBossBattleLog("Mana insuficiente para lançar Bola de Fogo!", "system");
-                        showBossMainBattleActions();
-                        return;
-                    }
-                    
-                    damage = 20 + Math.floor(player.magic * 0.8);
-                    message = `<span class="log-player">Cavaleiro</span> conjura <span class="log-skill">Bola de Fogo</span>!`;
-                    burnChance = 0.5;
-                    break;
-                    
-                case 'freeze':
-                    if (player.baseMag < 15) {
-                        addBossBattleLog("Você precisa de pelo menos 15 pontos em Magia para usar Brisa Congelante!", "system");
-                        showBossMainBattleActions();
-                        return;
-                    }
-                    
-                    manaCost = 40;
-                    if (!player.useMana(manaCost)) {
-                        addBossBattleLog("Mana insuficiente para lançar Brisa Congelante!", "system");
-                        showBossMainBattleActions();
-                        return;
-                    }
-                    
-                    damage = 10 + Math.floor(player.magic * 0.5);
-                    message = `<span class="log-player">Cavaleiro</span> invoca <span class="log-skill">Brisa Congelante</span>!`;
-                    statusEffect = { type: 'slow', duration: 3 };
-                    break;
-                    
-                case 'possession':
-                    if (player.baseMag < 20) {
-                        addBossBattleLog("Você precisa de pelo menos 20 pontos em Magia para usar Posseção!", "system");
-                        showBossMainBattleActions();
-                        return;
-                    }
-                    
-                    manaCost = 65;
-                    if (!player.useMana(manaCost)) {
-                        addBossBattleLog("Mana insuficiente para lançar Posseção!", "system");
-                        showBossMainBattleActions();
-                        return;
-                    }
-                    
-                    damage = 25 + Math.floor(player.magic * 1.2);
-                    message = `<span class="log-player">Cavaleiro</span> lança <span class="log-skill">Posseção</span>!`;
-                    statusEffect = { type: 'stun', duration: 3 };
-                    break;
-            }
-            
-            addBossBattleLog(message, "player");
-            
-            setTimeout(() => {
-                if (Math.random() < currentBoss.dodgeChance) {
-                    addBossBattleLog(`<span class="log-enemy">${currentBoss.name}</span> desviou do feitiço!`, "enemy");
-                } else {
-                    const actualDamage = currentBoss.takeDamage(damage);
-                    
-                    addBossBattleLog(` O feitiço causou ${actualDamage} de dano!`, "system");
-                    
-                    if (spellType === 'fireball' && Math.random() < burnChance) {
-                        currentBoss.addStatusEffect({ type: 'burn', duration: 3 });
-                        addBossBattleLog(` <span class="log-enemy">${currentBoss.name}</span> foi <span class="log-effect">queimado</span>!`, "system");
-                    } else if (statusEffect) {
-                        currentBoss.addStatusEffect(statusEffect);
-                        addBossBattleLog(` <span class="log-enemy">${currentBoss.name}</span> foi afetado por <span class="log-effect">${statusEffect.type.toUpperCase()}</span>!`, "system");
-                    }
-                    
-                    bossBattleEnemyHealth.textContent = currentBoss.health;
-                    
-                    // Verificar se o boss foi derrotado
-                    if (currentBoss.health <= 0 && currentBoss.isTransformed) {
-                        endBossBattle(true);
-                        return;
-                    }
-                }
-                
-                currentBoss.updateStatusEffects();
-                player.updateUI();
-                
-                isPlayerTurn = false;
-                setTimeout(bossTurn, 1000);
-            }, 1000);
-        }
+        
 
         function playerUseItem(itemType) {
             if (!isPlayerTurn || battleAnimation || buttonsLocked) return;
@@ -6917,27 +6874,7 @@ function playerBossAct(actionType) {
             }
         }
 
-        function playerBossUseItem(itemType) {
-            if (!isPlayerTurn || buttonsLocked) return;
-            
-            // Bloquear botões imediatamente
-            setBossBattleButtonsLocked(true);
-            
-            const result = player.useItem(itemType);
-            
-            if (result.success) {
-                addBossBattleLog(result.message, "player");
-                
-                player.updateUI();
-                
-                isPlayerTurn = false;
-                setTimeout(bossTurn, 1000);
-            } else {
-                addBossBattleLog(result.message, "system");
-                showBossMainBattleActions();
-                setBossBattleButtonsLocked(false);
-            }
-        }
+        
 
         function playerAct(actionType) {
             if (!isPlayerTurn || battleAnimation || buttonsLocked) return;
@@ -7004,43 +6941,7 @@ function playerBossAct(actionType) {
             }
         }
 
-        function playerBossAct(actionType) {
-            if (!isPlayerTurn || buttonsLocked) return;
-            
-            // Bloquear botões imediatamente
-            setBossBattleButtonsLocked(true);
-            
-            let message = "";
-            
-            if (actionType === 'meditate') {
-                message = player.meditate();
-                addBossBattleLog(message, "player");
-                
-                player.updateUI();
-                
-                isPlayerTurn = false;
-                setTimeout(bossTurn, 1000);
-            } else if (actionType === 'rest') {
-                if (player.baseStr < 16) {
-                    addBossBattleLog("Você precisa de pelo menos 16 pontos em Força para usar Descansar!", "system");
-                    showBossMainBattleActions();
-                    setBossBattleButtonsLocked(false);
-                    return;
-                }
-                
-                message = player.rest();
-                addBossBattleLog(message, "player");
-                
-                player.updateUI();
-                
-                isPlayerTurn = false;
-                setTimeout(bossTurn, 1000);
-            } else if (actionType === 'flee') {
-                addBossBattleLog("Você não pode fugir desta batalha!", "system");
-                showBossMainBattleActions();
-                setBossBattleButtonsLocked(false);
-            }
-        }
+       
 
         function monsterTurn() {
             if (isPlayerTurn) return;
@@ -7864,6 +7765,7 @@ function updateBossEnemyStatusEffects() {
                 bossBattleEnemyAgility.textContent = currentBoss.agility;
                 
                 // Redesenhar o boss
+                player.drawBossBattle(bossPlayerCtx);
                 currentBoss.drawBattle(bossEnemyCtx);
                 
                 addBossBattleLog(`<span class="log-enemy">${currentBoss.name}</span> se transformou! Sua vida foi restaurada para ${currentBoss.maxHealth}!`, "system");
@@ -8449,60 +8351,262 @@ function addSaveLoadButtons() {
         backFromActBtnPokemon.addEventListener('click', showMainBattleActions);
 
         // Event listeners de batalha do boss
-        bossAttackBtnPokemon.addEventListener('click', showBossAttackOptions);
-bossMagicBtnPokemon.addEventListener('click', showBossMagicOptions);
-bossItemsBtnPokemon.addEventListener('click', showBossItemsOptions);
-bossActBtnPokemon.addEventListener('click', showBossActOptions);
-
-bossSwordAttackBtnPokemon.addEventListener('click', () => {
-    showBossMainBattleActions();
-    playerBossAttack('sword');
+        bossAttackBtnPokemon.addEventListener('click', () => {
+    if (!isPlayerTurn || buttonsLocked) return;
+    
+    // Criar interface para seleção de ataques
+    const attackOptionsContainer = document.createElement('div');
+    attackOptionsContainer.className = 'boss-battle-submenu';
+    attackOptionsContainer.style.display = 'grid';
+    attackOptionsContainer.innerHTML = `
+        <button class="boss-battle-action-btn" id="bossSwordAttackBtnPokemon">
+            ESPADADA
+        </button>
+        <button class="boss-battle-action-btn" id="bossChargeBtnPokemon" ${player.baseStr < 13 ? 'disabled' : ''}>
+            ${player.baseStr < 13 ? 'INVESTIDA (Bloqueada)' : 'INVESTIDA'}
+        </button>
+        <button class="boss-battle-action-btn" id="bossHeavyArmorBtnPokemon" ${player.baseStr < 20 ? 'disabled' : ''}>
+            ${player.baseStr < 20 ? 'ARMADURA PESADA (Bloqueada)' : 'ARMADURA PESADA'}
+        </button>
+        <button class="boss-battle-action-btn" id="bossBackFromAttackBtnPokemon">
+            VOLTAR
+        </button>
+    `;
+    
+    // Esconder botões principais e mostrar opções de ataque
+    bossBattleActionsPokemon.style.display = 'none';
+    bossBattleActionsPokemon.parentNode.insertBefore(attackOptionsContainer, bossBattleActionsPokemon.nextSibling);
+    
+    // Event Listener para ESPADADA
+    document.getElementById('bossSwordAttackBtnPokemon').addEventListener('click', () => {
+        if (!buttonsLocked) {
+            attackOptionsContainer.remove();
+            playerBossAttack('sword');
+        }
+    });
+    
+    // Event Listener para INVESTIDA
+    document.getElementById('bossChargeBtnPokemon').addEventListener('click', () => {
+        if (player.baseStr >= 13 && !buttonsLocked) {
+            attackOptionsContainer.remove();
+            playerBossAttack('charge');
+        }
+    });
+    
+    // Event Listener para ARMADURA PESADA
+    document.getElementById('bossHeavyArmorBtnPokemon').addEventListener('click', () => {
+        if (player.baseStr >= 20 && !buttonsLocked) {
+            attackOptionsContainer.remove();
+            playerBossHeavyArmor();
+        }
+    });
+    
+    // Event Listener para VOLTAR
+    document.getElementById('bossBackFromAttackBtnPokemon').addEventListener('click', () => {
+        attackOptionsContainer.remove();
+        bossBattleActionsPokemon.style.display = 'grid';
+    });
+});
+      bossMagicBtnPokemon.addEventListener('click', () => {
+    if (!isPlayerTurn || buttonsLocked) return;
+    
+    // Criar interface para seleção de magia
+    const magicOptionsContainer = document.createElement('div');
+    magicOptionsContainer.className = 'boss-battle-submenu';
+    magicOptionsContainer.style.display = 'grid';
+    magicOptionsContainer.innerHTML = `
+        <button class="boss-battle-action-btn" id="bossFireballBtnPokemon" ${player.baseMag < 12 ? 'disabled' : ''}>
+            ${player.baseMag < 12 ? 'BOLA DE FOGO (Bloqueada)' : 'BOLA DE FOGO'}
+        </button>
+        <button class="boss-battle-action-btn" id="bossFreezeBtnPokemon" ${player.baseMag < 15 ? 'disabled' : ''}>
+            ${player.baseMag < 15 ? 'BRISA CONGELANTE (Bloqueada)' : 'BRISA CONGELANTE'}
+        </button>
+        <button class="boss-battle-action-btn" id="bossPossessionBtnPokemon" ${player.baseMag < 20 ? 'disabled' : ''}>
+            ${player.baseMag < 20 ? 'POSSEÇÃO (Bloqueada)' : 'POSSEÇÃO'}
+        </button>
+        <button class="boss-battle-action-btn" id="bossBackFromMagicBtnPokemon">VOLTAR</button>
+    `;
+    
+    // Esconder botões principais e mostrar opções de magia
+    bossBattleActionsPokemon.style.display = 'none';
+    bossBattleActionsPokemon.parentNode.insertBefore(magicOptionsContainer, bossBattleActionsPokemon.nextSibling);
+    
+    // Event Listeners para as magias
+    document.getElementById('bossFireballBtnPokemon').addEventListener('click', () => {
+        if (player.baseMag >= 12 && !buttonsLocked) {
+            magicOptionsContainer.remove();
+            playerBossMagic('fireball');
+        }
+    });
+    
+    document.getElementById('bossFreezeBtnPokemon').addEventListener('click', () => {
+        if (player.baseMag >= 15 && !buttonsLocked) {
+            magicOptionsContainer.remove();
+            playerBossMagic('freeze');
+        }
+    });
+    
+    document.getElementById('bossPossessionBtnPokemon').addEventListener('click', () => {
+        if (player.baseMag >= 20 && !buttonsLocked) {
+            magicOptionsContainer.remove();
+            playerBossMagic('possession');
+        }
+    });
+    
+    document.getElementById('bossBackFromMagicBtnPokemon').addEventListener('click', () => {
+        magicOptionsContainer.remove();
+        bossBattleActionsPokemon.style.display = 'grid';
+    });
 });
 
-bossChargeBtnPokemon.addEventListener('click', () => {
-    showBossMainBattleActions();
-    playerBossAttack('charge');
+// Botão de ITENS do Boss - Sistema completo
+bossItemsBtnPokemon.addEventListener('click', () => {
+    if (!isPlayerTurn || buttonsLocked) return;
+    
+    // Criar container para itens
+    const itemsContainer = document.createElement('div');
+    itemsContainer.className = 'boss-battle-submenu';
+    itemsContainer.style.display = 'block';
+    itemsContainer.innerHTML = `
+        <div class="boss-items-grid" id="bossBattleItemsGridPokemon" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 10px;"></div>
+        <button class="boss-battle-action-btn" id="bossBackFromItemsBtnPokemon" style="width: 100%;">VOLTAR</button>
+    `;
+    
+    // Esconder botões principais e mostrar itens
+    bossBattleActionsPokemon.style.display = 'none';
+    bossBattleActionsPokemon.parentNode.insertBefore(itemsContainer, bossBattleActionsPokemon.nextSibling);
+    
+    // Preencher grid de itens
+    const bossItemsGrid = document.getElementById('bossBattleItemsGridPokemon');
+    updateBossBattleItems(bossItemsGrid);
+    
+    // Event listener para voltar
+    document.getElementById('bossBackFromItemsBtnPokemon').addEventListener('click', () => {
+        itemsContainer.remove();
+        bossBattleActionsPokemon.style.display = 'grid';
+    });
 });
 
-bossHeavyArmorBtnPokemon.addEventListener('click', () => {
-    showBossMainBattleActions();
-    playerBossAttack('heavyArmor');
+// Botão de AÇÕES do Boss - Sistema completo
+bossActBtnPokemon.addEventListener('click', () => {
+    if (!isPlayerTurn || buttonsLocked) return;
+    
+    // Criar interface para seleção de ações
+    const actOptionsContainer = document.createElement('div');
+    actOptionsContainer.className = 'boss-battle-submenu';
+    actOptionsContainer.style.display = 'grid';
+    actOptionsContainer.innerHTML = `
+        <button class="boss-battle-action-btn" id="bossMeditateBtnPokemon">MEDITAR</button>
+        <button class="boss-battle-action-btn" id="bossRestBtnPokemon" ${player.baseStr < 16 ? 'disabled' : ''}>
+            ${player.baseStr < 16 ? 'DESCANSAR (Bloqueada)' : 'DESCANSAR'}
+        </button>
+        <button class="boss-battle-action-btn" id="bossFleeBtnPokemon" disabled>NÃO PODE FUGIR</button>
+        <button class="boss-battle-action-btn" id="bossBackFromActBtnPokemon">VOLTAR</button>
+    `;
+    
+    // Esconder botões principais e mostrar opções de ação
+    bossBattleActionsPokemon.style.display = 'none';
+    bossBattleActionsPokemon.parentNode.insertBefore(actOptionsContainer, bossBattleActionsPokemon.nextSibling);
+    
+    // Event Listeners para as ações
+    document.getElementById('bossMeditateBtnPokemon').addEventListener('click', () => {
+        actOptionsContainer.remove();
+        playerBossAct('meditate');
+    });
+    
+    document.getElementById('bossRestBtnPokemon').addEventListener('click', () => {
+        if (player.baseStr >= 16 && !buttonsLocked) {
+            actOptionsContainer.remove();
+            playerBossAct('rest');
+        }
+    });
+    
+    document.getElementById('bossBackFromActBtnPokemon').addEventListener('click', () => {
+        actOptionsContainer.remove();
+        bossBattleActionsPokemon.style.display = 'grid';
+    });
 });
 
-bossFireballBtnPokemon.addEventListener('click', () => {
-    showBossMainBattleActions();
-    playerBossMagic('fireball');
-});
+// =============================================
+// FUNÇÃO PARA ATUALIZAR ITENS NA BATALHA DO BOSS
+// =============================================
 
-bossFreezeBtnPokemon.addEventListener('click', () => {
-    showBossMainBattleActions();
-    playerBossMagic('freeze');
-});
-
-bossPossessionBtnPokemon.addEventListener('click', () => {
-    showBossMainBattleActions();
-    playerBossMagic('possession');
-});
-
-bossMeditateBtnPokemon.addEventListener('click', () => {
-    showBossMainBattleActions();
-    playerBossAct('meditate');
-});
-
-bossRestBtnPokemon.addEventListener('click', () => {
-    showBossMainBattleActions();
-    playerBossAct('rest');
-});
-
-bossFleeBtnPokemon.addEventListener('click', () => {
-    showBossMainBattleActions();
-    playerBossAct('flee');
-});
-
-bossBackFromAttackBtnPokemon.addEventListener('click', showBossMainBattleActions);
-bossBackFromMagicBtnPokemon.addEventListener('click', showBossMainBattleActions);
-bossBackFromItemsBtnPokemon.addEventListener('click', showBossMainBattleActions);
-bossBackFromActBtnPokemon.addEventListener('click', showBossMainBattleActions);
+function updateBossBattleItems(container) {
+    container.innerHTML = '';
+    
+    // Maçã
+    if (player.items.mace > 0) {
+        const itemSlot = document.createElement('div');
+        itemSlot.className = 'item-slot';
+        itemSlot.innerHTML = `
+            <div class="item-icon">🍎</div>
+            <div>Maçã (x${player.items.mace})</div>
+            <button class="boss-battle-action-btn use-boss-item-btn" data-item="mace">Usar</button>
+        `;
+        container.appendChild(itemSlot);
+    }
+    
+    // Pernil
+    if (player.items.ham > 0) {
+        const itemSlot = document.createElement('div');
+        itemSlot.className = 'item-slot';
+        itemSlot.innerHTML = `
+            <div class="item-icon">🍗</div>
+            <div>Pernil (x${player.items.ham})</div>
+            <button class="boss-battle-action-btn use-boss-item-btn" data-item="ham">Usar</button>
+        `;
+        container.appendChild(itemSlot);
+    }
+    
+    // Bife
+    if (player.items.steak > 0) {
+        const itemSlot = document.createElement('div');
+        itemSlot.className = 'item-slot';
+        itemSlot.innerHTML = `
+            <div class="item-icon">🥩</div>
+            <div>Bife (x${player.items.steak})</div>
+            <button class="boss-battle-action-btn use-boss-item-btn" data-item="steak">Usar</button>
+        `;
+        container.appendChild(itemSlot);
+    }
+    
+    // Poção de Força
+    if (player.items.strengthPotion > 0) {
+        const itemSlot = document.createElement('div');
+        itemSlot.className = 'item-slot';
+        itemSlot.innerHTML = `
+            <div class="item-icon">🧪</div>
+            <div>Poção de Força (x${player.items.strengthPotion})</div>
+            <button class="boss-battle-action-btn use-boss-item-btn" data-item="strengthPotion">Usar</button>
+        `;
+        container.appendChild(itemSlot);
+    }
+    
+    // Poção da Sorte
+    if (player.items.luckPotion > 0) {
+        const itemSlot = document.createElement('div');
+        itemSlot.className = 'item-slot';
+        itemSlot.innerHTML = `
+            <div class="item-icon">🍀</div>
+            <div>Poção da Sorte (x${player.items.luckPotion})</div>
+            <button class="boss-battle-action-btn use-boss-item-btn" data-item="luckPotion">Usar</button>
+        `;
+        container.appendChild(itemSlot);
+    }
+    
+    // Adicionar event listeners para os botões de usar item
+    document.querySelectorAll('.use-boss-item-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const item = e.target.getAttribute('data-item');
+            // Remover todos os submenus
+            const submenus = document.querySelectorAll('.boss-battle-submenu');
+            submenus.forEach(menu => menu.remove());
+            
+            // Usar o item
+            playerBossUseItem(item);
+        });
+    });
+}
 
         // Event listeners de inventário
         inventoryBtn.addEventListener('click', () => {
