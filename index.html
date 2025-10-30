@@ -2698,110 +2698,214 @@
             drawKnightWithEquipment(x, y) {
     ctx.save();
     
-    // Determinar cores baseadas no equipamento
-    let armorColor = '#34495e';
-    let armorDetailColor = '#2c3e50';
-    let helmetColor = '#ecf0f1';
-    let shieldColor = '#2c3e50';
-    let weaponColor = '#bdc3c7';
-    
-    // Verificar equipamentos e ajustar cores
-    if (this.armor.name.includes("Ouro")) {
-        armorColor = '#f39c12';
-        armorDetailColor = '#d35400';
-        helmetColor = '#f1c40f';
-        shieldColor = '#f39c12';
-    } else if (this.armor.name.includes("Diamante")) {
-        armorColor = '#3498db';
-        armorDetailColor = '#2980b9';
-        helmetColor = '#85c1e9';
-        shieldColor = '#3498db';
-    } else if (this.armor.name.includes("Malha")) {
-        armorColor = '#7f8c8d';
-        armorDetailColor = '#95a5a6';
-        helmetColor = '#bdc3c7';
-        shieldColor = '#7f8c8d';
-    } else if (this.armor.name.includes("Lobo Negro")) {
-        armorColor = '#2c3e50';
-        armorDetailColor = '#34495e';
-        helmetColor = '#e74c3c';
-        shieldColor = '#2c3e50';
-    } else if (this.armor.name.includes("Imperial")) {
-        armorColor = '#e74c3c';
-        armorDetailColor = '#c0392b';
-        helmetColor = '#f1c40f';
-        shieldColor = '#e74c3c';
-    } else if (this.armor.name.includes("Almas")) {
-        armorColor = '#8e44ad';
-        armorDetailColor = '#9b59b6';
-        helmetColor = '#d7bde2';
-        shieldColor = '#8e44ad';
-    }
-    
-    // Ajustar cor da arma
-    if (this.weapon.name.includes("Ouro")) {
-        weaponColor = '#f1c40f';
-    } else if (this.weapon.name.includes("Diamante")) {
-        weaponColor = '#3498db';
-    } else if (this.weapon.name.includes("Pedra")) {
-        weaponColor = '#95a5a6';
-    } else if (this.weapon.name.includes("Dragon")) {
-        weaponColor = '#e74c3c';
-    } else if (this.weapon.name.includes("Perdição")) {
-        weaponColor = '#8e44ad';
-    } else if (this.weapon.name.includes("Longsword")) {
-        weaponColor = '#2c3e50';
-    }
-    
-    // Corpo com equipamento
-    ctx.fillStyle = armorColor;
-    ctx.fillRect(x - 20, y - 15, 40, 30);
+    // Corpo base
+    ctx.fillStyle = '#2c3e50';
+    ctx.fillRect(x - 15, y - 10, 30, 40);
     
     // Detalhes da armadura
-    ctx.fillStyle = armorDetailColor;
-    ctx.fillRect(x - 18, y - 13, 36, 26);
+    ctx.fillStyle = '#34495e';
+    ctx.fillRect(x - 13, y - 8, 26, 36);
     
-    // Capacete
-    ctx.fillStyle = helmetColor;
-    ctx.fillRect(x - 10, y - 25, 20, 10);
+    // Cinto
+    ctx.fillStyle = '#8B4513';
+    ctx.fillRect(x - 16, y + 15, 32, 6);
+    
+    // Fivela do cinto
+    ctx.fillStyle = '#d4af37';
+    ctx.fillRect(x - 3, y + 16, 6, 4);
+    
+    // Pernas
+    ctx.fillStyle = '#2c3e50';
+    ctx.fillRect(x - 12, y + 21, 10, 25);
+    ctx.fillRect(x + 2, y + 21, 10, 25);
+    
+    // Botas
+    ctx.fillStyle = '#1a1a1a';
+    ctx.fillRect(x - 13, y + 46, 12, 8);
+    ctx.fillRect(x + 1, y + 46, 12, 8);
+    
+    // Braços
+    ctx.fillStyle = '#2c3e50';
+    ctx.fillRect(x - 25, y - 5, 12, 30);
+    ctx.fillRect(x + 13, y - 5, 12, 30);
+    
+    // Luvas
+    ctx.fillStyle = '#1a1a1a';
+    ctx.fillRect(x - 26, y + 25, 14, 8);
+    ctx.fillRect(x + 12, y + 25, 14, 8);
+    
+    // Capacete base
+    ctx.fillStyle = '#34495e';
+    ctx.fillRect(x - 12, y - 25, 24, 18);
     
     // Visor do capacete
+    ctx.fillStyle = '#1a1a1a';
+    ctx.fillRect(x - 8, y - 22, 16, 8);
+    
+    // Detalhe do visor
     ctx.fillStyle = '#3498db';
-    ctx.fillRect(x - 8, y - 24, 16, 4);
+    ctx.fillRect(x - 6, y - 20, 12, 4);
     
-    // Escudo
-    ctx.fillStyle = shieldColor;
-    ctx.fillRect(x - 25, y - 10, 8, 20);
     
-    // Detalhe do escudo
-    ctx.fillStyle = '#f8c555';
-    ctx.fillRect(x - 23, y - 5, 4, 10);
     
-    this.drawWeaponWithEquipment(x, y, weaponColor);
+    
+    
+            }
+
+
+    
+    drawArmorDetails(ctx, x, y, armorType) {
+    ctx.save();
+    
+    switch(armorType) {
+        case 'basic':
+            // Detalhes básicos em prata
+            ctx.fillStyle = '#bdc3c7';
+            // Ombreiras
+            ctx.fillRect(x - 25, y - 8, 12, 8);
+            ctx.fillRect(x + 13, y - 8, 12, 8);
+            // Peitoral
+            ctx.fillRect(x - 12, y - 5, 24, 15);
+            break;
+            
+        case 'chain':
+            // Armadura de malha
+            ctx.fillStyle = '#7f8c8d';
+            // Padrão de malha
+            for (let i = 0; i < 5; i++) {
+                for (let j = 0; j < 3; j++) {
+                    ctx.fillRect(x - 12 + i * 5, y - 5 + j * 5, 3, 3);
+                }
+            }
+            break;
+            
+        case 'gold':
+            // Armadura de ouro
+            ctx.fillStyle = '#f39c12';
+            // Detalhes ornamentados
+            ctx.fillRect(x - 15, y - 8, 30, 20);
+            // Padrão de relevo
+            ctx.fillStyle = '#d35400';
+            ctx.fillRect(x - 12, y - 5, 24, 4);
+            ctx.fillRect(x - 12, y + 3, 24, 4);
+            ctx.fillRect(x - 12, y + 11, 24, 4);
+            break;
+            
+        case 'diamond':
+            // Armadura de diamante
+            ctx.fillStyle = '#3498db';
+            // Brilho do diamante
+            const gradient = ctx.createLinearGradient(x - 20, y - 10, x + 20, y + 20);
+            gradient.addColorStop(0, '#3498db');
+            gradient.addColorStop(0.5, '#85c1e9');
+            gradient.addColorStop(1, '#3498db');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(x - 18, y - 8, 36, 25);
+            
+            // Reflexos
+            ctx.fillStyle = '#ecf0f1';
+            ctx.fillRect(x - 10, y - 3, 8, 4);
+            ctx.fillRect(x + 5, y + 8, 6, 3);
+            break;
+            
+        case 'imperial':
+            // Armadura imperial
+            ctx.fillStyle = '#e74c3c';
+            ctx.fillRect(x - 20, y - 10, 40, 30);
+            
+            // Insígnias reais
+            ctx.fillStyle = '#f39c12';
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+            ctx.lineTo(x - 8, y + 8);
+            ctx.lineTo(x, y + 16);
+            ctx.lineTo(x + 8, y + 8);
+            ctx.closePath();
+            ctx.fill();
+            
+            // Detalhes em ouro
+            ctx.fillStyle = '#f39c12';
+            ctx.fillRect(x - 18, y - 8, 36, 4);
+            ctx.fillRect(x - 18, y + 18, 36, 4);
+            break;
+    }
     
     ctx.restore();
-}
-
-drawWeaponWithEquipment(x, y, weaponColor) {
-    ctx.fillStyle = weaponColor;
-    ctx.fillRect(x + 15, y - 12, 3, 24);
-    ctx.fillRect(x + 10, y - 15, 13, 6);
-    
-    // Adicionar detalhes especiais para armas lendárias
-    if (this.weapon.name.includes("Dragon")) {
-        ctx.fillStyle = '#e74c3c';
-        ctx.beginPath();
-        ctx.arc(x + 18, y, 8, 0, Math.PI * 2);
-        ctx.fill();
-    } else if (this.weapon.name.includes("Perdição")) {
-        ctx.fillStyle = '#8e44ad';
-        for (let i = 0; i < 3; i++) {
-            ctx.beginPath();
-            ctx.arc(x + 17, y - 8 + i * 8, 3, 0, Math.PI * 2);
-            ctx.fill();
-        }
     }
-}
+    
+    drawWeaponDetails(ctx, x, y, weaponType) {
+    ctx.save();
+    
+    switch(weaponType) {
+        case 'basic':
+            // Espada básica
+            ctx.fillStyle = '#95a5a6';
+            ctx.fillRect(x + 15, y - 12, 4, 30);
+            ctx.fillRect(x + 10, y - 15, 14, 8);
+            break;
+            
+        case 'stone':
+            // Espada de pedra
+            ctx.fillStyle = '#7f8c8d';
+            ctx.fillRect(x + 15, y - 12, 6, 35);
+            ctx.fillRect(x + 8, y - 18, 20, 12);
+            // Textura de pedra
+            ctx.fillStyle = '#95a5a6';
+            ctx.fillRect(x + 12, y - 10, 2, 2);
+            ctx.fillRect(x + 18, y, 2, 2);
+            break;
+            
+        case 'gold':
+            // Espada de ouro
+            ctx.fillStyle = '#f39c12';
+            ctx.fillRect(x + 15, y - 12, 8, 40);
+            ctx.fillRect(x + 8, y - 20, 24, 16);
+            // Detalhes ornamentados
+            ctx.fillStyle = '#d35400';
+            ctx.fillRect(x + 17, y - 8, 4, 8);
+            ctx.fillRect(x + 17, y + 8, 4, 8);
+            break;
+            
+        case 'dragon':
+            // Dragon Slayer
+            ctx.fillStyle = '#e74c3c';
+            ctx.fillRect(x + 15, y - 15, 10, 45);
+            ctx.fillRect(x + 5, y - 25, 30, 20);
+            
+            // Detalhes de dragão
+            ctx.fillStyle = '#c0392b';
+            // Cabeca de dragão na empunhadura
+            ctx.fillRect(x + 8, y - 22, 4, 4);
+            ctx.fillRect(x + 18, y - 22, 4, 4);
+            // Escamas ao longo da lâmina
+            for (let i = 0; i < 6; i++) {
+                ctx.fillRect(x + 17, y - 10 + i * 8, 6, 4);
+            }
+            break;
+            
+        case 'dark':
+            // Longsword das Trevas
+            ctx.fillStyle = '#2c3e50';
+            ctx.fillRect(x + 15, y - 18, 12, 50);
+            ctx.fillRect(x + 5, y - 30, 32, 24);
+            
+            // Energia sombria
+            ctx.fillStyle = 'rgba(142, 68, 173, 0.6)';
+            ctx.beginPath();
+            ctx.arc(x + 21, y, 15, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Runas na lâmina
+            ctx.fillStyle = '#9b59b6';
+            for (let i = 0; i < 4; i++) {
+                ctx.fillRect(x + 18, y - 12 + i * 12, 6, 3);
+            }
+            break;
+    }
+    
+    ctx.restore();
+    }
+    
 
 // Atualizar também os métodos de batalha
 drawBattle(ctx, isAttacking = false, attackType = null) {
@@ -2999,7 +3103,127 @@ drawBattleWeaponWithEquipment(ctx, x, y, isAttacking, weaponColor) {
         }
     }
 }
-            
+            drawBossBattle(ctx, isAttacking = false) {
+    ctx.clearRect(0, 0, 300, 300);
+    
+    ctx.fillStyle = 'rgba(26, 58, 95, 0.5)';
+    ctx.fillRect(0, 0, 300, 300);
+    
+    const centerX = 150;
+    const centerY = 150;
+    
+    // Determinar cores baseadas no equipamento
+    let armorColor = '#34495e';
+    let armorDetailColor = '#2c3e50';
+    let helmetColor = '#ecf0f1';
+    let shieldColor = '#2c3e50';
+    let weaponColor = '#bdc3c7';
+    
+    // Aplicar cores baseadas na armadura equipada
+    if (this.armor.name.includes("Ouro")) {
+        armorColor = '#f39c12';
+        armorDetailColor = '#d35400';
+        helmetColor = '#f1c40f';
+        shieldColor = '#f39c12';
+    } else if (this.armor.name.includes("Diamante")) {
+        armorColor = '#3498db';
+        armorDetailColor = '#2980b9';
+        helmetColor = '#85c1e9';
+        shieldColor = '#3498db';
+    } else if (this.armor.name.includes("Malha")) {
+        armorColor = '#7f8c8d';
+        armorDetailColor = '#95a5a6';
+        helmetColor = '#bdc3c7';
+        shieldColor = '#7f8c8d';
+    } else if (this.armor.name.includes("Lobo Negro")) {
+        armorColor = '#2c3e50';
+        armorDetailColor = '#34495e';
+        helmetColor = '#e74c3c';
+        shieldColor = '#2c3e50';
+    } else if (this.armor.name.includes("Imperial")) {
+        armorColor = '#e74c3c';
+        armorDetailColor = '#c0392b';
+        helmetColor = '#f1c40f';
+        shieldColor = '#e74c3c';
+    } else if (this.armor.name.includes("Almas")) {
+        armorColor = '#8e44ad';
+        armorDetailColor = '#9b59b6';
+        helmetColor = '#d7bde2';
+        shieldColor = '#8e44ad';
+    }
+    
+    // Ajustar cor da arma
+    if (this.weapon.name.includes("Ouro")) {
+        weaponColor = '#f1c40f';
+    } else if (this.weapon.name.includes("Diamante")) {
+        weaponColor = '#3498db';
+    } else if (this.weapon.name.includes("Pedra")) {
+        weaponColor = '#95a5a6';
+    } else if (this.weapon.name.includes("Dragon")) {
+        weaponColor = '#e74c3c';
+    } else if (this.weapon.name.includes("Perdição")) {
+        weaponColor = '#8e44ad';
+    } else if (this.weapon.name.includes("Longsword")) {
+        weaponColor = '#2c3e50';
+    }
+    
+    // Corpo com equipamento (escala maior para boss battle)
+    ctx.fillStyle = armorColor;
+    ctx.fillRect(centerX - 50, centerY - 25, 100, 75);
+    
+    // Detalhes da armadura
+    ctx.fillStyle = armorDetailColor;
+    ctx.fillRect(centerX - 48, centerY - 23, 96, 71);
+    
+    // Capacete
+    ctx.fillStyle = helmetColor;
+    ctx.fillRect(centerX - 30, centerY - 55, 60, 30);
+    
+    // Visor do capacete
+    ctx.fillStyle = '#3498db';
+    ctx.fillRect(centerX - 25, centerY - 53, 50, 15);
+    
+    // Escudo
+    ctx.fillStyle = shieldColor;
+    ctx.fillRect(centerX - 75, centerY - 15, 30, 55);
+    
+    // Detalhe do escudo
+    ctx.fillStyle = '#f8c555';
+    ctx.fillRect(centerX - 72, centerY - 5, 24, 45);
+    
+    // Arma (escala maior)
+    ctx.fillStyle = weaponColor;
+    ctx.fillRect(centerX + 35, centerY - 30, 10, 75);
+    ctx.fillRect(centerX + 30, centerY - 35, 25, 20);
+    ctx.fillStyle = '#8B4513';
+    ctx.fillRect(centerX + 35, centerY + 45, 10, 30);
+    
+    // Efeitos especiais durante ataque
+    if (isAttacking) {
+        if (this.weapon.name.includes("Dragon")) {
+            ctx.fillStyle = 'rgba(231, 76, 60, 0.7)';
+            ctx.beginPath();
+            ctx.arc(centerX + 45, centerY, 20, 0, Math.PI * 2);
+            ctx.fill();
+        } else if (this.weapon.name.includes("Perdição")) {
+            ctx.fillStyle = 'rgba(142, 68, 173, 0.7)';
+            for (let i = 0; i < 3; i++) {
+                ctx.beginPath();
+                ctx.arc(centerX + 40, centerY - 10 + i * 10, 4, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        } else if (this.weapon.name.includes("Longsword")) {
+            ctx.fillStyle = 'rgba(44, 62, 80, 0.7)';
+            ctx.beginPath();
+            ctx.arc(centerX + 45, centerY, 15, 0, Math.PI * 2);
+            ctx.fill();
+        }
+    }
+    
+    ctx.strokeStyle = '#1c2833';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(centerX - 50, centerY - 25, 100, 75);
+}
             move(dx, dy, worldMap) {
     if (this.moveCooldown > 0) return false;
     
@@ -4130,206 +4354,306 @@ drawBattleWeaponWithEquipment(ctx, x, y, isAttacking, weaponColor) {
                 }
                 
                 if (this.type === 'weak') {
-                    ctx.fillStyle = '#27ae60';
-                    ctx.beginPath();
-                    ctx.ellipse(centerX, centerY, 40, 55, 0, 0, Math.PI * 2);
-                    ctx.fill();
-                    
-                    ctx.fillStyle = '#2ecc71';
-                    ctx.beginPath();
-                    ctx.arc(centerX, centerY - 35, 30, 0, Math.PI * 2);
-                    ctx.fill();
-                    
-                    ctx.fillStyle = '#e74c3c';
-                    ctx.beginPath();
-                    ctx.arc(centerX - 12, centerY - 38, 8, 0, Math.PI * 2);
-                    ctx.arc(centerX + 12, centerY - 38, 8, 0, Math.PI * 2);
-                    ctx.fill();
-                    
-                    ctx.fillStyle = '#c0392b';
-                    ctx.beginPath();
-                    ctx.arc(centerX, centerY - 25, 10, 0, Math.PI, false);
-                    ctx.fill();
-                    
-                    ctx.fillStyle = '#d35400';
-                    ctx.beginPath();
-                    ctx.moveTo(centerX - 25, centerY - 55);
-                    ctx.lineTo(centerX - 40, centerY - 75);
-                    ctx.lineTo(centerX - 20, centerY - 60);
-                    ctx.closePath();
-                    ctx.fill();
-                    
-                    ctx.beginPath();
-                    ctx.moveTo(centerX + 25, centerY - 55);
-                    ctx.lineTo(centerX + 40, centerY - 75);
-                    ctx.lineTo(centerX + 20, centerY - 60);
-                    ctx.closePath();
-                    ctx.fill();
-                    
-                    ctx.fillStyle = '#8B4513';
-                    ctx.fillRect(centerX + 30, centerY - 25, 6, 45);
-                    ctx.fillRect(centerX + 25, centerY - 30, 18, 12);
+                     ctx.save();
+   
+                        ctx.fillStyle = '#27ae60';
+                        ctx.fillRect(centerX - 20, centerY - 15, 40, 50);
+
+                        // Barriga mais clara
+                        ctx.fillStyle = '#2ecc71';
+                        ctx.fillRect(centerX - 15, centerY, 30, 25);
+
+                        // Cabeça
+                        ctx.fillStyle = '#229954';
+                        ctx.fillRect(centerX - 15, centerY - 35, 30, 25);
+
+                        // Olhos vermelhos
+                        ctx.fillStyle = '#e74c3c';
+                        ctx.fillRect(centerX - 8, centerY - 28, 6, 6);
+                        ctx.fillRect(centerX + 2, centerY - 28, 6, 6);
+
+                        // Boca
+                        ctx.fillStyle = '#c0392b';
+                        ctx.fillRect(centerX - 6, centerY - 18, 12, 4);
+
+                        // Orelhas pontudas
+                        ctx.fillStyle = '#229954';
+                        ctx.beginPath();
+                        ctx.moveTo(centerX - 18, centerY - 35);
+                        ctx.lineTo(centerX - 25, centerY - 45);
+                        ctx.lineTo(centerX - 12, centerY - 38);
+                        ctx.closePath();
+                        ctx.fill();
+
+                        ctx.beginPath();
+                        ctx.moveTo(centerX + 18, centerY - 35);
+                        ctx.lineTo(centerX + 25, centerY - 45);
+                        ctx.lineTo(centerX + 12, centerY - 38);
+                        ctx.closePath();
+                        ctx.fill();
+
+                        // Pernas curvas
+                        ctx.fillStyle = '#1e8449';
+                        ctx.fillRect(centerX - 15, centerY + 35, 12, 20);
+                        ctx.fillRect(centerX + 3, centerY + 35, 12, 20);
+
+                        // Pés
+                        ctx.fillStyle = '#145a32';
+                        ctx.fillRect(centerX - 18, centerY + 55, 18, 8);
+                        ctx.fillRect(centerX, centerY + 55, 18, 8);
+
+                        // Clava de madeira
+                        ctx.fillStyle = '#8B4513';
+                        ctx.fillRect(centerX + 25, centerY, 8, 35);
+                        ctx.fillRect(centerX + 20, centerY - 5, 18, 12);
+                        
+                            if (isAttacking) {
+        
+                              ctx.fillStyle = 'rgba(255, 0, 0, 0.3)';
+                              ctx.fillRect(centerX + 45, centerY - 10, 20, 20);
+                          }
+
+                          ctx.restore();
                     
                 } else if (this.type === 'strong') {
-                    ctx.fillStyle = '#34495e';
-                    ctx.beginPath();
-                    ctx.ellipse(centerX, centerY, 45, 60, 0, 0, Math.PI * 2);
-                    ctx.fill();
-                    
-                    ctx.fillStyle = '#2c3e50';
-                    ctx.beginPath();
-                    ctx.arc(centerX, centerY - 40, 35, 0, Math.PI * 2);
-                    ctx.fill();
-                    
-                    ctx.fillStyle = '#e74c3c';
-                    ctx.beginPath();
-                    ctx.arc(centerX - 15, centerY - 43, 10, 0, Math.PI * 2);
-                    ctx.arc(centerX + 15, centerY - 43, 10, 0, Math.PI * 2);
-                    ctx.fill();
-                    
-                    ctx.fillStyle = '#ecf0f1';
-                    ctx.beginPath();
-                    ctx.moveTo(centerX - 18, centerY - 25);
-                    ctx.lineTo(centerX - 25, centerY - 10);
-                    ctx.lineTo(centerX - 12, centerY - 20);
-                    ctx.closePath();
-                    ctx.fill();
-                    
-                    ctx.beginPath();
-                    ctx.moveTo(centerX + 18, centerY - 25);
-                    ctx.lineTo(centerX + 25, centerY - 10);
-                    ctx.lineTo(centerX + 12, centerY - 20);
-                    ctx.closePath();
-                    ctx.fill();
-                    
-                    ctx.fillStyle = '#bdc3c7';
-                    ctx.fillRect(centerX + 30, centerY - 40, 10, 60);
-                    ctx.fillRect(centerX + 25, centerY - 35, 22, 15);
-                    
-                    ctx.fillStyle = '#95a5a6';
-                    ctx.fillRect(centerX + 28, centerY - 30, 4, 40);
+                    ctx.save();
+    
+                        ctx.fillStyle = '#34495e';
+                        ctx.fillRect(centerX - 25, centerY - 20, 50, 60);
+
+                        // Peitoral definido
+                        ctx.fillStyle = '#2c3e50';
+                        ctx.fillRect(centerX - 22, centerY - 18, 44, 25);
+
+                        // Cabeça grande
+                        ctx.fillStyle = '#2c3e50';
+                        ctx.fillRect(centerX - 18, centerY - 45, 36, 30);
+
+                        // Testa proeminente
+                        ctx.fillStyle = '#1c2833';
+                        ctx.fillRect(centerX - 16, centerY - 48, 32, 8);
+
+                        // Olhos ameaçadores
+                        ctx.fillStyle = '#e74c3c';
+                        ctx.fillRect(centerX - 12, centerY - 38, 8, 8);
+                        ctx.fillRect(centerX + 4, centerY - 38, 8, 8);
+
+                        // Presas
+                        ctx.fillStyle = '#ecf0f1';
+                        ctx.fillRect(centerX - 10, centerY - 25, 4, 8);
+                        ctx.fillRect(centerX + 6, centerY - 25, 4, 8);
+
+                        // Braços musculosos
+                        ctx.fillStyle = '#2c3e50';
+                        ctx.fillRect(centerX - 35, centerY - 15, 15, 35);
+                        ctx.fillRect(centerX + 20, centerY - 15, 15, 35);
+
+                        // Mãos
+                        ctx.fillStyle = '#1c2833';
+                        ctx.fillRect(centerX - 37, centerY + 20, 19, 12);
+                        ctx.fillRect(centerX + 18, centerY + 20, 19, 12);
+
+                        // Machado
+                        ctx.fillStyle = '#7f8c8d';
+                        ctx.fillRect(centerX + 35, centerY, 10, 40);
+                        ctx.fillRect(centerX + 30, centerY - 10, 20, 15);
+
+                        // Lâmina do machado
+                        ctx.fillStyle = '#bdc3c7';
+                        ctx.beginPath();
+                        ctx.moveTo(centerX + 45, centerY - 15);
+                        ctx.lineTo(centerX + 60, centerY);
+                        ctx.lineTo(centerX + 45, centerY + 15);
+                        ctx.closePath();
+                        ctx.fill();
+                        
+                        if (isAttacking) {
+       
+                        ctx.fillStyle = 'rgba(255, 0, 0, 0.4)';
+                        ctx.beginPath();
+                        ctx.moveTo(centerX + 60, centerY - 25);
+                        ctx.lineTo(centerX + 80, centerY);
+                        ctx.lineTo(centerX + 60, centerY + 25);
+                        ctx.closePath();
+                        ctx.fill();
+                    }
+
+                    ctx.restore();
                     
                 } else if (this.type === 'elite') {
-                    ctx.fillStyle = '#e74c3c';
-                    ctx.beginPath();
-                    ctx.ellipse(centerX, centerY, 50, 40, 0, 0, Math.PI * 2);
-                    ctx.fill();
-                    
-                    ctx.fillStyle = '#c0392b';
-                    ctx.beginPath();
-                    ctx.arc(centerX, centerY - 45, 30, 0, Math.PI * 2);
-                    ctx.fill();
-                    
-                    ctx.fillStyle = '#f39c12';
-                    ctx.beginPath();
-                    ctx.arc(centerX - 12, centerY - 47, 10, 0, Math.PI * 2);
-                    ctx.arc(centerX + 12, centerY - 47, 10, 0, Math.PI * 2);
-                    ctx.fill();
-                    
-                    ctx.fillStyle = '#2c3e50';
-                    ctx.beginPath();
-                    ctx.arc(centerX - 12, centerY - 47, 5, 0, Math.PI * 2);
-                    ctx.arc(centerX + 12, centerY - 47, 5, 0, Math.PI * 2);
-                    ctx.fill();
-                    
-                    ctx.fillStyle = '#d35400';
-                    ctx.beginPath();
-                    ctx.moveTo(centerX - 18, centerY - 60);
-                    ctx.lineTo(centerX - 30, centerY - 80);
-                    ctx.lineTo(centerX - 12, centerY - 65);
-                    ctx.closePath();
-                    ctx.fill();
-                    
-                    ctx.beginPath();
-                    ctx.moveTo(centerX + 18, centerY - 60);
-                    ctx.lineTo(centerX + 30, centerY - 80);
-                    ctx.lineTo(centerX + 12, centerY - 65);
-                    ctx.closePath();
-                    ctx.fill();
-                    
-                    ctx.fillStyle = 'rgba(231, 76, 60, 0.7)';
-                    ctx.beginPath();
-                    ctx.ellipse(centerX - 45, centerY - 20, 30, 25, Math.PI/4, 0, Math.PI * 2);
-                    ctx.ellipse(centerX + 45, centerY - 20, 30, 25, -Math.PI/4, 0, Math.PI * 2);
-                    ctx.fill();
-                    
-                    if (isAttacking) {
-                        ctx.fillStyle = '#f39c12';
-                        ctx.beginPath();
-                        ctx.arc(centerX, centerY - 40, 15, 0, Math.PI * 2);
-                        ctx.fill();
-                        
-                        ctx.fillStyle = '#ff6b6b';
-                        ctx.beginPath();
-                        ctx.arc(centerX, centerY - 40, 10, 0, Math.PI * 2);
-                        ctx.fill();
-                    }
-                    
-                    ctx.fillStyle = '#c0392b';
-                    for (let i = 0; i < 10; i++) {
-                        ctx.beginPath();
-                        ctx.arc(centerX - 25 + i * 5, centerY, 6, 0, Math.PI * 2);
-                        ctx.fill();
-                    }
+                    ctx.save();
+    
+    // Corpo alongado
+    ctx.fillStyle = '#e74c3c';
+    ctx.fillRect(centerX - 35, centerY - 15, 70, 40);
+    
+    // Escamas
+    ctx.fillStyle = '#c0392b';
+    for (let i = 0; i < 7; i++) {
+        for (let j = 0; j < 4; j++) {
+            ctx.fillRect(centerX - 30 + i * 10, centerY - 10 + j * 8, 6, 4);
+        }
+    }
+    
+    // Cabeça de dragão
+    ctx.fillStyle = '#c0392b';
+    ctx.fillRect(centerX - 15, centerY - 40, 30, 30);
+    
+    // Chifres
+    ctx.fillStyle = '#f39c12';
+    ctx.beginPath();
+    ctx.moveTo(centerX - 10, centerY - 40);
+    ctx.lineTo(centerX - 20, centerY - 55);
+    ctx.lineTo(centerX - 5, centerY - 45);
+    ctx.closePath();
+    ctx.fill();
+    
+    ctx.beginPath();
+    ctx.moveTo(centerX + 10, centerY - 40);
+    ctx.lineTo(centerX + 20, centerY - 55);
+    ctx.lineTo(centerX + 5, centerY - 45);
+    ctx.closePath();
+    ctx.fill();
+    
+    // Olhos ardentes
+    ctx.fillStyle = '#f1c40f';
+    ctx.fillRect(centerX - 8, centerY - 32, 6, 6);
+    ctx.fillRect(centerX + 2, centerY - 32, 6, 6);
+    
+    // Pupilas
+    ctx.fillStyle = '#e74c3c';
+    ctx.fillRect(centerX - 6, centerY - 30, 2, 2);
+    ctx.fillRect(centerX + 4, centerY - 30, 2, 2);
+    
+    // Asas
+    ctx.fillStyle = 'rgba(231, 76, 60, 0.7)';
+    ctx.beginPath();
+    ctx.moveTo(centerX - 35, centerY - 10);
+    ctx.lineTo(centerX - 60, centerY - 30);
+    ctx.lineTo(centerX - 45, centerY + 10);
+    ctx.closePath();
+    ctx.fill();
+    
+    ctx.beginPath();
+    ctx.moveTo(centerX + 35, centerY - 10);
+    ctx.lineTo(centerX + 60, centerY - 30);
+    ctx.lineTo(centerX + 45, centerY + 10);
+    ctx.closePath();
+    ctx.fill();
+    
+    // Cauda
+    ctx.fillStyle = '#c0392b';
+    ctx.beginPath();
+    ctx.moveTo(centerX + 35, centerY + 25);
+    ctx.lineTo(centerX + 55, centerY + 15);
+    ctx.lineTo(centerX + 50, centerY + 35);
+    ctx.closePath();
+    ctx.fill();
+    
+    if (isAttacking) {
+        // Fogo saindo da boca
+        ctx.fillStyle = '#f39c12';
+        ctx.beginPath();
+        ctx.moveTo(centerX, centerY - 25);
+        ctx.lineTo(centerX - 20, centerY - 45);
+        ctx.lineTo(centerX + 20, centerY - 45);
+        ctx.closePath();
+        ctx.fill();
+        
+        ctx.fillStyle = '#e74c3c';
+        ctx.beginPath();
+        ctx.moveTo(centerX, centerY - 25);
+        ctx.lineTo(centerX - 15, centerY - 40);
+        ctx.lineTo(centerX + 15, centerY - 40);
+        ctx.closePath();
+        ctx.fill();
+        
+        ctx.fillStyle = '#ff6b6b';
+        ctx.beginPath();
+        ctx.moveTo(centerX, centerY - 25);
+        ctx.lineTo(centerX - 10, centerY - 35);
+        ctx.lineTo(centerX + 10, centerY - 35);
+        ctx.closePath();
+        ctx.fill();
+    }
+    
+    ctx.restore();
                 } else if (this.type === 'darkMage') {
-                    ctx.fillStyle = '#4b0082';
-                    ctx.beginPath();
-                    ctx.ellipse(centerX, centerY, 45, 60, 0, 0, Math.PI * 2);
-                    ctx.fill();
-                    
-                    ctx.fillStyle = '#6a0dad';
-                    ctx.beginPath();
-                    ctx.arc(centerX, centerY - 40, 35, 0, Math.PI * 2);
-                    ctx.fill();
-                    
-                    ctx.fillStyle = '#9370db';
-                    ctx.beginPath();
-                    ctx.arc(centerX - 15, centerY - 43, 10, 0, Math.PI * 2);
-                    ctx.arc(centerX + 15, centerY - 43, 10, 0, Math.PI * 2);
-                    ctx.fill();
-                    
-                    ctx.fillStyle = '#d8bfd8';
-                    ctx.beginPath();
-                    ctx.arc(centerX, centerY - 30, 15, 0, Math.PI, false);
-                    ctx.fill();
-                    
-                    ctx.fillStyle = '#4b0082';
-                    ctx.beginPath();
-                    ctx.arc(centerX, centerY - 40, 20, 0, Math.PI * 2);
-                    ctx.fill();
-                    
-                    ctx.fillStyle = '#9370db';
-                    ctx.beginPath();
-                    ctx.moveTo(centerX - 25, centerY - 55);
-                    ctx.lineTo(centerX - 40, centerY - 75);
-                    ctx.lineTo(centerX - 20, centerY - 60);
-                    ctx.closePath();
-                    ctx.fill();
-                    
-                    ctx.beginPath();
-                    ctx.moveTo(centerX + 25, centerY - 55);
-                    ctx.lineTo(centerX + 40, centerY - 75);
-                    ctx.lineTo(centerX + 20, centerY - 60);
-                    ctx.closePath();
-                    ctx.fill();
-                    
-                    ctx.fillStyle = '#6a0dad';
-                    ctx.fillRect(centerX + 30, centerY - 40, 10, 60);
-                    ctx.fillRect(centerX + 25, centerY - 35, 22, 15);
-                    
-                    if (isAttacking) {
-                        ctx.fillStyle = '#9370db';
-                        ctx.beginPath();
-                        ctx.arc(centerX, centerY - 40, 15, 0, Math.PI * 2);
-                        ctx.fill();
-                        
-                        ctx.fillStyle = '#d8bfd8';
-                        ctx.beginPath();
-                        ctx.arc(centerX, centerY - 40, 10, 0, Math.PI * 2);
-                        ctx.fill();
-                    }
-                }
-            }
+                    ctx.save();
+    
+                          // Robes negras
+                          ctx.fillStyle = '#2c3e50';
+                          ctx.fillRect(centerX - 20, centerY - 15, 40, 55);
+
+                          // Capa
+                          ctx.fillStyle = '#1c2833';
+                          ctx.beginPath();
+                          ctx.moveTo(centerX - 25, centerY - 10);
+                          ctx.lineTo(centerX - 35, centerY - 25);
+                          ctx.lineTo(centerX + 35, centerY - 25);
+                          ctx.lineTo(centerX + 25, centerY - 10);
+                          ctx.closePath();
+                          ctx.fill();
+
+                          // Capuz
+                          ctx.fillStyle = '#1c2833';
+                          ctx.fillRect(centerX - 15, centerY - 40, 30, 30);
+
+                          // Rosto sob o capuz (sombrio)
+                          ctx.fillStyle = '#34495e';
+                          ctx.fillRect(centerX - 10, centerY - 35, 20, 20);
+
+                          // Olhos brilhantes
+                          ctx.fillStyle = '#9b59b6';
+                          ctx.fillRect(centerX - 6, centerY - 28, 4, 4);
+                          ctx.fillRect(centerX + 2, centerY - 28, 4, 4);
+
+                          // Mãos com luvas
+                          ctx.fillStyle = '#1c2833';
+                          ctx.fillRect(centerX - 30, centerY + 5, 12, 15);
+                          ctx.fillRect(centerX + 18, centerY + 5, 12, 15);
+
+                          // Cajado místico
+                          ctx.fillStyle = '#8e44ad';
+                          ctx.fillRect(centerX + 25, centerY - 20, 8, 45);
+
+                          // Cristal no cajado
+                          ctx.fillStyle = '#9b59b6';
+                          ctx.beginPath();
+                          ctx.arc(centerX + 29, centerY - 25, 10, 0, Math.PI * 2);
+                          ctx.fill();
+
+                          // Detalhes do cristal
+                          ctx.fillStyle = '#d7bde2';
+                          ctx.beginPath();
+                          ctx.arc(centerX + 29, centerY - 25, 5, 0, Math.PI * 2);
+                          ctx.fill();
+
+                          if (isAttacking) {
+                              // Orbe de energia mágica
+                              ctx.fillStyle = 'rgba(155, 89, 182, 0.6)';
+                              ctx.beginPath();
+                              ctx.arc(centerX + 29, centerY - 25, 20, 0, Math.PI * 2);
+                              ctx.fill();
+
+                              // Raios de energia
+                              for (let i = 0; i < 8; i++) {
+                                  const angle = (i / 8) * Math.PI * 2;
+                                  ctx.beginPath();
+                                  ctx.moveTo(centerX + 29, centerY - 25);
+                                  ctx.lineTo(
+                                      centerX + 29 + Math.cos(angle) * 35,
+                                      centerY - 25 + Math.sin(angle) * 35
+                                  );
+                                  ctx.strokeStyle = '#9b59b6';
+                                  ctx.lineWidth = 2;
+                                  ctx.stroke();
+                              }
+                          }
+
+                          ctx.restore();
+                                      }
+                                  }
             
             updateStatusEffects() {
                 for (let i = this.statusEffects.length - 1; i >= 0; i--) {
@@ -5175,173 +5499,139 @@ drawBattleWeaponWithEquipment(ctx, x, y, isAttacking, weaponColor) {
     const centerX = 150;
     const centerY = 150;
     
+     ctx.save();
+    
     if (!this.isTransformed) {
-        // Fase 1: Personagem misterioso
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
-        ctx.beginPath();
-        ctx.arc(centerX, centerY, 80, 0, Math.PI * 2);
-        ctx.fill();
+        // Fase 1 - Forma Humanoide Corrompida
+        ctx.fillStyle = '#4a235a';
+        ctx.fillRect(centerX - 25, centerY - 20, 50, 60);
         
-        ctx.fillStyle = 'rgba(231, 76, 60, 0.5)';
-        ctx.beginPath();
-        ctx.arc(centerX, centerY, 70, 0, Math.PI * 2);
-        ctx.fill();
+        // Armadura ornamentada
+        ctx.fillStyle = '#6c3483';
+        ctx.fillRect(centerX - 22, centerY - 18, 44, 25);
         
-        ctx.fillStyle = 'rgba(142, 68, 173, 0.7)';
-        ctx.beginPath();
-        ctx.arc(centerX, centerY, 60, 0, Math.PI * 2);
-        ctx.fill();
-        
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.9)';
-        ctx.beginPath();
-        ctx.arc(centerX, centerY, 50, 0, Math.PI * 2);
-        ctx.fill();
-        
-        ctx.fillStyle = '#e74c3c';
-        ctx.beginPath();
-        ctx.arc(centerX - 15, centerY - 10, 8, 0, Math.PI * 2);
-        ctx.arc(centerX + 15, centerY - 10, 8, 0, Math.PI * 2);
-        ctx.fill();
-        
-        ctx.fillStyle = '#c0392b';
-        ctx.beginPath();
-        ctx.arc(centerX, centerY + 5, 12, 0, Math.PI, false);
-        ctx.fill();
-        
-        // Aura maléfica
-        ctx.strokeStyle = 'rgba(231, 76, 60, 0.7)';
-        ctx.lineWidth = 3;
-        ctx.beginPath();
-        ctx.arc(centerX, centerY, 90, 0, Math.PI * 2);
-        ctx.stroke();
-        
-        ctx.strokeStyle = 'rgba(142, 68, 173, 0.5)';
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.arc(centerX, centerY, 95, 0, Math.PI * 2);
-        ctx.stroke();
-    } else {
-        // Fase 2: Rei Corrompido - Design Aprimorado
-        
-        // Capa imperial majestosa (desenhada primeiro para ficar atrás)
-        ctx.fillStyle = 'rgba(30, 30, 30, 0.9)';
-        ctx.beginPath();
-        ctx.moveTo(centerX - 80, centerY - 20);
-        ctx.lineTo(centerX - 100, centerY + 120);
-        ctx.lineTo(centerX + 100, centerY + 120);
-        ctx.lineTo(centerX + 80, centerY - 20);
-        ctx.closePath();
-        ctx.fill();
-        
-        // Detalhes da capa - forro vermelho
-        ctx.fillStyle = 'rgba(192, 57, 43, 0.8)';
-        ctx.beginPath();
-        ctx.moveTo(centerX - 75, centerY - 15);
-        ctx.lineTo(centerX - 95, centerY + 115);
-        ctx.lineTo(centerX + 95, centerY + 115);
-        ctx.lineTo(centerX + 75, centerY - 15);
-        ctx.closePath();
-        ctx.fill();
-        
-        // Corpo musculoso e imponente
+        // Capa real
         ctx.fillStyle = '#2c3e50';
         ctx.beginPath();
-        ctx.ellipse(centerX, centerY, 65, 90, 0, 0, Math.PI * 2);
-        ctx.fill();
-        
-        // Armadura negra detalhada
-        ctx.fillStyle = '#1c2833';
-        ctx.beginPath();
-        ctx.ellipse(centerX, centerY, 60, 85, 0, 0, Math.PI * 2);
-        ctx.fill();
-        
-        // Peitoral ornamentado
-        ctx.fillStyle = '#e74c3c';
-        ctx.beginPath();
-        ctx.moveTo(centerX - 40, centerY - 30);
-        ctx.lineTo(centerX - 20, centerY - 50);
-        ctx.lineTo(centerX + 20, centerY - 50);
-        ctx.lineTo(centerX + 40, centerY - 30);
-        ctx.lineTo(centerX + 40, centerY + 10);
-        ctx.lineTo(centerX - 40, centerY + 10);
+        ctx.moveTo(centerX - 30, centerY - 15);
+        ctx.lineTo(centerX - 40, centerY - 35);
+        ctx.lineTo(centerX + 40, centerY - 35);
+        ctx.lineTo(centerX + 30, centerY - 15);
         ctx.closePath();
         ctx.fill();
         
-        // Detalhes do peitoral
-        ctx.fillStyle = '#c0392b';
-        ctx.beginPath();
-        ctx.arc(centerX, centerY - 20, 15, 0, Math.PI * 2);
-        ctx.fill();
-        
-        // Ombreiras imponentes
-        ctx.fillStyle = '#34495e';
-        ctx.beginPath();
-        ctx.ellipse(centerX - 50, centerY - 20, 25, 15, 0, 0, Math.PI * 2);
-        ctx.ellipse(centerX + 50, centerY - 20, 25, 15, 0, 0, Math.PI * 2);
-        ctx.fill();
-        
-        // Coroa demoníaca detalhada
+        // Coroa
         ctx.fillStyle = '#f39c12';
-        ctx.beginPath();
-        ctx.moveTo(centerX - 35, centerY - 75);
-        ctx.lineTo(centerX - 25, centerY - 95);
-        ctx.lineTo(centerX - 15, centerY - 75);
-        ctx.lineTo(centerX - 5, centerY - 100);
-        ctx.lineTo(centerX + 5, centerY - 75);
-        ctx.lineTo(centerX + 15, centerY - 95);
-        ctx.lineTo(centerX + 25, centerY - 75);
-        ctx.lineTo(centerX + 35, centerY - 100);
-        ctx.lineTo(centerX + 45, centerY - 75);
-        ctx.lineTo(centerX + 35, centerY - 65);
-        ctx.lineTo(centerX - 35, centerY - 65);
-        ctx.closePath();
-        ctx.fill();
+        ctx.fillRect(centerX - 18, centerY - 45, 36, 10);
         
-        // Detalhes da coroa
-        ctx.fillStyle = '#e74c3c';
+        // Espinhos da coroa
         for (let i = 0; i < 5; i++) {
             ctx.beginPath();
-            ctx.arc(centerX - 30 + i * 15, centerY - 85, 4, 0, Math.PI * 2);
+            ctx.moveTo(centerX - 15 + i * 7, centerY - 45);
+            ctx.lineTo(centerX - 12 + i * 7, centerY - 55);
+            ctx.lineTo(centerX - 8 + i * 7, centerY - 45);
+            ctx.closePath();
             ctx.fill();
         }
         
-        // Espada longa das trevas
-        ctx.fillStyle = '#2c3e50';
-        ctx.fillRect(centerX + 45, centerY - 60, 12, 120);
+        // Rosto sombrio
+        ctx.fillStyle = '#34495e';
+        ctx.fillRect(centerX - 12, centerY - 35, 24, 20);
         
+        // Olhos vazios
         ctx.fillStyle = '#e74c3c';
-        ctx.fillRect(centerX + 40, centerY - 65, 22, 20);
+        ctx.fillRect(centerX - 8, centerY - 28, 6, 6);
+        ctx.fillRect(centerX + 2, centerY - 28, 6, 6);
         
-        ctx.fillStyle = 'rgba(231, 76, 60, 0.7)';
+    } else {
+        // Fase 2 - Forma Demoníaca
+        ctx.fillStyle = '#922b21';
+        ctx.fillRect(centerX - 30, centerY - 25, 60, 70);
+        
+        // Armadura demoníaca
+        ctx.fillStyle = '#641e16';
+        ctx.fillRect(centerX - 27, centerY - 22, 54, 30);
+        
+        // Chifres
+        ctx.fillStyle = '#1c2833';
         ctx.beginPath();
-        ctx.arc(centerX + 51, centerY - 60, 18, 0, Math.PI * 2);
+        ctx.moveTo(centerX - 15, centerY - 45);
+        ctx.lineTo(centerX - 25, centerY - 70);
+        ctx.lineTo(centerX - 5, centerY - 55);
+        ctx.closePath();
         ctx.fill();
         
-        // Aura avassaladora e brilhante
-        const gradient = ctx.createRadialGradient(centerX, centerY, 80, centerX, centerY, 120);
-        gradient.addColorStop(0, 'rgba(231, 76, 60, 0.8)');
-        gradient.addColorStop(0.5, 'rgba(142, 68, 173, 0.6)');
-        gradient.addColorStop(1, 'rgba(52, 152, 219, 0.4)');
-        
-        ctx.strokeStyle = gradient;
-        ctx.lineWidth = 6;
         ctx.beginPath();
-        ctx.arc(centerX, centerY, 100, 0, Math.PI * 2);
-        ctx.stroke();
+        ctx.moveTo(centerX + 15, centerY - 45);
+        ctx.lineTo(centerX + 25, centerY - 70);
+        ctx.lineTo(centerX + 5, centerY - 55);
+        ctx.closePath();
+        ctx.fill();
         
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
-        ctx.lineWidth = 3;
+        // Asas demoníacas
+        ctx.fillStyle = 'rgba(44, 62, 80, 0.8)';
         ctx.beginPath();
-        ctx.arc(centerX, centerY, 110, 0, Math.PI * 2);
-        ctx.stroke();
+        ctx.moveTo(centerX - 30, centerY - 10);
+        ctx.lineTo(centerX - 60, centerY - 30);
+        ctx.lineTo(centerX - 50, centerY + 20);
+        ctx.closePath();
+        ctx.fill();
         
-        // Efeitos brilhantes adicionais
-        if (isAttacking) {
-            ctx.fillStyle = 'rgba(231, 76, 60, 0.4)';
+        ctx.beginPath();
+        ctx.moveTo(centerX + 30, centerY - 10);
+        ctx.lineTo(centerX + 60, centerY - 30);
+        ctx.lineTo(centerX + 50, centerY + 20);
+        ctx.closePath();
+        ctx.fill();
+        
+        // Olhos flamejantes
+        ctx.fillStyle = '#f39c12';
+        ctx.fillRect(centerX - 12, centerY - 32, 8, 8);
+        ctx.fillRect(centerX + 4, centerY - 32, 8, 8);
+        
+        ctx.fillStyle = '#e74c3c';
+        ctx.fillRect(centerX - 10, centerY - 30, 4, 4);
+        ctx.fillRect(centerX + 6, centerY - 30, 4, 4);
+    }
+    
+    // Espada do boss
+    ctx.fillStyle = '#7f8c8d';
+    ctx.fillRect(centerX + 25, centerY - 15, 12, 50);
+    
+    // Empunhadura
+    ctx.fillStyle = '#d4af37';
+    ctx.fillRect(centerX + 22, centerY - 10, 18, 8);
+    
+    // Lâmina
+    ctx.fillStyle = '#bdc3c7';
+    ctx.beginPath();
+    ctx.moveTo(centerX + 37, centerY - 15);
+    ctx.lineTo(centerX + 50, centerY);
+    ctx.lineTo(centerX + 37, centerY + 15);
+    ctx.closePath();
+    ctx.fill();
+    
+    if (isAttacking) {
+        // Aura de poder
+        ctx.fillStyle = 'rgba(231, 76, 60, 0.3)';
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, 45, 0, Math.PI * 2);
+        ctx.fill();
+        
+        // Raios de energia
+        for (let i = 0; i < 12; i++) {
+            const angle = (i / 12) * Math.PI * 2;
             ctx.beginPath();
-            ctx.arc(centerX, centerY, 80, 0, Math.PI * 2);
-            ctx.fill();
-            
+            ctx.moveTo(centerX, centerY);
+            ctx.lineTo(
+                centerX + Math.cos(angle) * 60,
+                centerY + Math.sin(angle) * 60
+            );
+            ctx.strokeStyle = '#e74c3c';
+            ctx.lineWidth = 3;
+            ctx.stroke();
+        }
+  
             // Partículas brilhantes
             for (let i = 0; i < 8; i++) {
                 const angle = (i / 8) * Math.PI * 2;
@@ -5352,10 +5642,11 @@ drawBattleWeaponWithEquipment(ctx, x, y, isAttacking, weaponColor) {
                 ctx.beginPath();
                 ctx.arc(particleX, particleY, 3, 0, Math.PI * 2);
                 ctx.fill();
+              ctx.restore();
             }
         }
     }
-}
+
             
             updateStatusEffects() {
                 for (let i = this.statusEffects.length - 1; i >= 0; i--) {
@@ -5481,33 +5772,177 @@ drawBattleWeaponWithEquipment(ctx, x, y, isAttacking, weaponColor) {
 }
             
             attackPlayer(player) ;
-                if (!this.isTransformed) {
-                    // Ataque normal na fase 1
-                    return this.attack;
-                } else {
-                    // Ataques na fase 2
-                    const rand = Math.random();
-                    
-                    if (rand < 0.7) {
-                        // Carga Imperial - 70% de chance
-                        return { damage: this.attack, type: 'imperialCharge' };
-                    } else if (rand < 0.9) {
-                        // Névoa das Trevas - 20% de chance
-                        player.addStatusEffect({ type: 'poison', duration: 3, damagePerTurn: 5 });
-                        return { damage: 30, type: 'darkMist' };
-                    } else {
-                        // Revigoração Do Monarca - 10% de chance
-                        this.health = Math.min(this.maxHealth, this.health + 100);
-                        return { damage: 0, type: 'monarchRevival' };
-                    }
-                }
-            }
+    if (!this.isTransformed) {
+        // Ataque normal na fase 1
+        return this.attack;
+    } else {
+        // Ataques na fase 2
+        const rand = Math.random();
+        
+        if (rand < 0.7) {
+            // Carga Imperial - 70% de chance
+            return { damage: this.attack, type: 'imperialCharge' };
+        } else if (rand < 0.9) {
+            // Névoa das Trevas - 20% de chance
+            player.addStatusEffect({ type: 'poison', duration: 3, damagePerTurn: 5 });
+            return { damage: 30, type: 'darkMist' };
+        } else {
+            // Revigoração Do Monarca - 10% de chance
+            this.health = Math.min(this.maxHealth, this.health + 100);
+            return { damage: 0, type: 'monarchRevival' };
+        }
+    }
+}
             
             updateBattleStatusEffects() {
                 // Implementar se necessário
             }
         }
+function createBossSwordEffect() {
+    const effect = {
+        type: 'sword',
+        x: 300,
+        y: 200,
+        angle: 0,
+        step: 0,
+        maxSteps: 10
+    };
+    attackAnimations.push(effect);
+}
 
+function createBossChargeEffect() {
+    const effect = {
+        type: 'charge',
+        x: 150,
+        y: 200,
+        targetX: 400,
+        step: 0,
+        maxSteps: 15
+    };
+    attackAnimations.push(effect);
+}
+
+function createBossHeavyArmorEffect() {
+    const effect = {
+        type: 'heavy-armor',
+        x: 150,
+        y: 200,
+        step: 0,
+        maxSteps: 15
+    };
+    battleEffects.push(effect);
+}
+
+function createBossFireballEffect() {
+    const effect = {
+        type: 'fireball',
+        x: 150,
+        y: 200,
+        radius: 10,
+        step: 0,
+        maxSteps: 15
+    };
+    attackAnimations.push(effect);
+}
+
+function createBossFreezeEffect() {
+    const effect = {
+        type: 'freeze',
+        x: 400,
+        y: 200,
+        radius: 10,
+        step: 0,
+        maxSteps: 20
+    };
+    attackAnimations.push(effect);
+}
+
+function createBossPossessionEffect() {
+    const effect = {
+        type: 'possession',
+        x: 400,
+        y: 200,
+        radius: 10,
+        step: 0,
+        maxSteps: 20
+    };
+    attackAnimations.push(effect);
+}
+
+function createBossMissEffect() {
+    const effect = {
+        type: 'miss',
+        x: 400,
+        y: 150,
+        step: 0,
+        maxSteps: 60
+    };
+    battleEffects.push(effect);
+}
+
+function createBossBurnEffect() {
+    const effect = {
+        type: 'burn',
+        x: 400,
+        y: 120,
+        step: 0,
+        maxSteps: 60
+    };
+    battleEffects.push(effect);
+}
+
+function createBossStatusEffect(type) {
+    const effect = {
+        type: type,
+        x: 400,
+        y: 120,
+        step: 0,
+        maxSteps: 60
+    };
+    battleEffects.push(effect);
+}
+
+function createBossImperialChargeEffect() {
+    const effect = {
+        type: 'charge',
+        x: 400,
+        y: 200,
+        targetX: 150,
+        step: 0,
+        maxSteps: 15
+    };
+    attackAnimations.push(effect);
+}
+
+function createBossDarkMistEffect() {
+    const effect = {
+        type: 'possession',
+        x: 400,
+        y: 200,
+        radius: 10,
+        step: 0,
+        maxSteps: 20
+    };
+    attackAnimations.push(effect);
+}
+
+function createBossRevivalEffect() {
+    const effect = {
+        type: 'dark-heal',
+        x: 400,
+        y: 200,
+        radius: 10,
+        step: 0,
+        maxSteps: 20
+    };
+    attackAnimations.push(effect);
+}
+
+function animateBossAttack() {
+    // Animações específicas para ataques do boss
+    player.drawBossBattle(bossPlayerCtx);
+    currentBoss.drawBattle(bossEnemyCtx, true);
+}
       function playerHeavyArmor() {
     if (!isPlayerTurn || battleAnimation || buttonsLocked) return;
     
@@ -6293,6 +6728,28 @@ drawBattleWeaponWithEquipment(ctx, x, y, isAttacking, weaponColor) {
             setBossBattleButtonsLocked(false);
         }
 
+      function playerBossHeavyArmor() {
+    if (!isPlayerTurn || buttonsLocked) return;
+    
+    setBossBattleButtonsLocked(true);
+    
+    const result = player.activateHeavyArmor();
+    
+    if (result.success) {
+        addBossBattleLog(result.message, "player");
+        createBossHeavyArmorEffect();
+        player.updateUI();
+        updateBossPlayerUI();
+        
+        isPlayerTurn = false;
+        setTimeout(bossTurn, 1000);
+    } else {
+        addBossBattleLog(result.message, "system");
+        showBossMainBattleActions();
+        setBossBattleButtonsLocked(false);
+    }
+}
+      
         function showMainBattleActions() {
             battleActionsPokemon.style.display = 'grid';
             attackOptionsPokemon.style.display = 'none';
@@ -7753,24 +8210,81 @@ function updateBossEnemyStatusEffects() {
         }
 
         function showBossTransformation() {
-            bossTransformation.style.display = 'flex';
-            
-            setTimeout(() => {
-                bossTransformation.style.display = 'none';
-                
-                // Atualizar stats do boss após transformação
-                bossEnemyName.textContent = currentBoss.name;
-                bossBattleEnemyHealth.textContent = currentBoss.health;
-                bossBattleEnemyMaxHealth.textContent = currentBoss.maxHealth;
-                bossBattleEnemyAgility.textContent = currentBoss.agility;
-                
-                // Redesenhar o boss
-                player.drawBossBattle(bossPlayerCtx);
-                currentBoss.drawBattle(bossEnemyCtx);
-                
-                addBossBattleLog(`<span class="log-enemy">${currentBoss.name}</span> se transformou! Sua vida foi restaurada para ${currentBoss.maxHealth}!`, "system");
-            }, 3000);
-        }
+    bossTransformation.style.display = 'flex';
+    
+    // Remover o texto de transformação se existir
+    const transformationText = bossTransformation.querySelector('.transformation-text');
+    if (transformationText) {
+        transformationText.remove();
+    }
+    
+    // Adicionar efeitos visuais
+    const effectsContainer = document.createElement('div');
+    effectsContainer.style.position = 'absolute';
+    effectsContainer.style.width = '100%';
+    effectsContainer.style.height = '100%';
+    effectsContainer.style.pointerEvents = 'none';
+    
+    // Criar partículas brilhantes
+    for (let i = 0; i < 50; i++) {
+        const particle = document.createElement('div');
+        particle.style.position = 'absolute';
+        particle.style.width = '10px';
+        particle.style.height = '10px';
+        particle.style.background = 'radial-gradient(circle, #ff6b6b, #e74c3c, #8e44ad)';
+        particle.style.borderRadius = '50%';
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.top = Math.random() * 100 + '%';
+        particle.style.animation = `particleFloat ${1 + Math.random() * 2}s infinite alternate`;
+        
+        effectsContainer.appendChild(particle);
+    }
+    
+    // Adicionar brilho pulsante
+    const glow = document.createElement('div');
+    glow.style.position = 'absolute';
+    glow.style.width = '100%';
+    glow.style.height = '100%';
+    glow.style.background = 'radial-gradient(circle, rgba(231, 76, 60, 0.3) 0%, rgba(142, 68, 173, 0.2) 50%, transparent 70%)';
+    glow.style.animation = 'glowPulse 1s infinite alternate';
+    
+    effectsContainer.appendChild(glow);
+    bossTransformation.appendChild(effectsContainer);
+    
+    // Adicionar estilos CSS para animações
+    if (!document.querySelector('#transformation-styles')) {
+        const style = document.createElement('style');
+        style.id = 'transformation-styles';
+        style.textContent = `
+            @keyframes particleFloat {
+                0% { transform: translateY(0) scale(1); opacity: 1; }
+                100% { transform: translateY(-50px) scale(1.5); opacity: 0; }
+            }
+            @keyframes glowPulse {
+                0% { opacity: 0.3; transform: scale(1); }
+                100% { opacity: 0.7; transform: scale(1.1); }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+    
+    setTimeout(() => {
+        bossTransformation.style.display = 'none';
+        effectsContainer.remove();
+        
+        // Atualizar stats do boss após transformação
+        bossEnemyName.textContent = currentBoss.name;
+        bossBattleEnemyHealth.textContent = currentBoss.health;
+        bossBattleEnemyMaxHealth.textContent = currentBoss.maxHealth;
+        bossBattleEnemyAgility.textContent = currentBoss.agility;
+        
+        // Redesenhar o boss
+        player.drawBossBattle(bossPlayerCtx);
+        currentBoss.drawBattle(bossEnemyCtx);
+        
+        addBossBattleLog(`<span class="log-enemy">${currentBoss.name}</span> liberou todo o seu poder!`, "system");
+    }, 3000);
+}
 
         // Funções de diálogo
         function startDialogue() {
